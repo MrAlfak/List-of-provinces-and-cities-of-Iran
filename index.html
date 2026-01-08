@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد استان‌ها و شهرهای ایران</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; }
+        .province-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">🇮🇷 داشبورد تقسیمات کشوری ایران</h1>
+            <p class="text-gray-600 text-lg">دسترسی سریع به اطلاعات ۳۱ استان و شهرهای تابعه</p>
+        </header>
+
+        <!-- Search and Stats -->
+        <div class="flex flex-col md:flex-row gap-6 mb-8 items-center justify-between bg-white p-6 rounded-2xl shadow-sm">
+            <div class="relative w-full md:w-1/2">
+                <input type="text" id="searchInput" placeholder="جستجوی استان یا شهر..." 
+                    class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
+            </div>
+            <div class="flex gap-4">
+                <div class="text-center px-6 py-2 bg-blue-50 rounded-xl">
+                    <span class="block text-blue-600 font-bold text-xl" id="provinceCount">۰</span>
+                    <span class="text-sm text-blue-400">استان</span>
+                </div>
+                <div class="text-center px-6 py-2 bg-green-50 rounded-xl">
+                    <span class="block text-green-600 font-bold text-xl" id="cityCount">۰</span>
+                    <span class="text-sm text-green-400">شهر</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="provincesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        let allData = [];
+
+        async function init() {
+            try {
+                const response = await fetch('iran_cities.json');
+                allData = await response.json();
+                
+                updateStats(allData);
+                renderProvinces(allData);
+
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    const filtered = allData.filter(p => 
+                        p.province.includes(query) || 
+                        p.english_name.toLowerCase().includes(query) ||
+                        p.cities.some(c => c.includes(query))
+                    );
+                    renderProvinces(filtered, query);
+                });
+            } catch (err) {
+                console.error("خطا در بارگذاری داده‌ها:", err);
+            }
+        }
+
+        function updateStats(data) {
+            document.getElementById('provinceCount').textContent = data.length;
+            const totalCities = data.reduce((sum, p) => sum + p.cities.length, 0);
+            document.getElementById('cityCount').textContent = totalCities;
+        }
+
+        function renderProvinces(data, query = '') {
+            const grid = document.getElementById('provincesGrid');
+            grid.innerHTML = data.map(p => `
+                <div class="province-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl font-bold">${p.province}</h2>
+                            <span class="bg-white/20 px-3 py-1 rounded-lg text-sm">${p.phone_code}</span>
+                        </div>
+                        <p class="text-blue-100 text-sm mt-1">${p.english_name}</p>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <h3 class="text-gray-400 text-xs font-bold uppercase mb-3 tracking-wider">شهرهای مهم (${p.cities.length})</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${p.cities.map(c => `
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-blue-100 hover:text-blue-600 transition-colors">
+                                    ${c}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        init();
+    </script>
+</body>
+</html>
