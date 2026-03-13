@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استان‌ها و شهرهای ایران</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .search-box {
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            outline: none;
+        }
+        .provinces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .province-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .province-card:hover {
+            transform: translateY(-5px);
+        }
+        .province-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .province-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .cities-list {
+            margin-top: 20px;
+            display: none;
+        }
+        .city-item {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            color: #333;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇮🇷 استان‌ها و شهرهای ایران</h1>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="جستجوی استان یا شهر...">
+        </div>
+        
+        <div id="provincesContainer" class="provinces-grid">
+            <div class="loading">در حال بارگذاری...</div>
+        </div>
+        
+        <div id="citiesContainer" class="cities-list"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json';
+        
+        let allData = [];
+        
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL);
+                allData = await response.json();
+                displayProvinces(allData);
+            } catch (error) {
+                document.getElementById('provincesContainer').innerHTML = 
+                    '<div class="loading">خطا در بارگذاری داده‌ها</div>';
+            }
+        }
+        
+        // Display provinces
+        function displayProvinces(data) {
+            const container = document.getElementById('provincesContainer');
+            container.innerHTML = data.map(province => `
+                <div class="province-card" onclick="showCities(${province.id})">
+                    <div class="province-name">${province.province}</div>
+                    <div class="province-info">
+                        📞 ${province.phone_code}<br>
+                        🏙️ ${province.cities_count} شهر
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show cities
+        function showCities(provinceId) {
+            const province = allData.find(p => p.id === provinceId);
+            const container = document.getElementById('citiesContainer');
+            
+            container.style.display = 'block';
+            container.innerHTML = `
+                <h2 style="margin: 20px 0; color: #667eea;">شهرهای ${province.province}</h2>
+                ${province.cities.map(city => `
+                    <div class="city-item">
+                        ${city.is_capital ? '⭐ ' : ''}${city.name}
+                        ${city.english_name ? `(${city.english_name})` : ''}
+                    </div>
+                `).join('')}
+            `;
+            
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            
+            if (!query) {
+                displayProvinces(allData);
+                return;
+            }
+            
+            const filtered = allData.filter(province => 
+                province.province.toLowerCase().includes(query) ||
+                province.english_name.toLowerCase().includes(query) ||
+                province.cities.some(city => 
+                    city.name.toLowerCase().includes(query) ||
+                    (city.english_name && city.english_name.toLowerCase().includes(query))
+                )
+            );
+            
+            displayProvinces(filtered);
+        });
+        
+        // Load on page load
+        loadData();
+    </script>
+</body>
+</html>

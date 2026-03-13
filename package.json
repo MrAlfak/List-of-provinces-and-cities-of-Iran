@@ -1,0 +1,44 @@
+{
+  "name": "iran-cities-data",
+  "version": "2.0.0",
+  "description": "Complete list of Iranian provinces and cities with geographic coordinates",
+  "main": "iran_cities.json",
+  "scripts": {
+    "test": "python -m pytest tests/",
+    "generate": "python scripts/generate_all.py",
+    "serve": "python api_server.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git"
+  },
+  "keywords": [
+    "iran",
+    "cities",
+    "provinces",
+    "geography",
+    "coordinates",
+    "persian",
+    "farsi",
+    "geojson",
+    "api",
+    "data"
+  ],
+  "author": "MrAlfak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/issues"
+  },
+  "homepage": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran#readme",
+  "types": "index.d.ts",
+  "files": [
+    "iran_cities.json",
+    "iran_cities.min.json",
+    "iran_cities.sql",
+    "iran_cities.csv",
+    "iran_cities.geojson",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ]
+}

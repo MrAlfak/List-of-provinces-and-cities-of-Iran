@@ -1,0 +1,57 @@
+# Development files
+.github/
+tests/
+scripts/
+docs/
+examples/
+
+# Python files
+*.pyc
+__pycache__/
+*.py
+requirements.txt
+pytest.ini
+setup.py
+pyproject.toml
+MANIFEST.in
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Build files
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (keep only README)
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+ROADMAP.md
+QUICKSTART.md
+FINAL_REPORT.md
+COMPLETE_CHECKLIST.md
+PROJECT_SUMMARY.md
+CITATION.cff
+
+# Other
+Makefile
+.editorconfig
+.env.example
