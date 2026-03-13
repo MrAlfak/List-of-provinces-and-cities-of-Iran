@@ -1,0 +1,22 @@
+# This file defines code owners for the repository
+# These owners will be automatically requested for review when someone opens a pull request
+
+# Default owners for everything in the repo
+* @MrAlfak
+
+# Data files
+/iran_cities.json @MrAlfak
+/iran_cities.min.json @MrAlfak
+/iran_cities.sql @MrAlfak
+/iran_cities.csv @MrAlfak
+/iran_cities.geojson @MrAlfak
+
+# Scripts
+/scripts/ @MrAlfak
+
+# Tests
+/tests/ @MrAlfak
+
+# Documentation
+*.md @MrAlfak
+/docs/ @MrAlfak

@@ -3,8 +3,21 @@
 [![نسخه](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran)
 [![لایسنس](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![زبان](https://img.shields.io/badge/language-Persian-red.svg)](README.fa.md)
+[![تست‌ها](https://img.shields.io/badge/tests-9%20passed-brightgreen.svg)](tests/)
+[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/network/members)
 
 این مخزن شامل **کامل‌ترین و حرفه‌ای‌ترین** دیتای استان‌ها و شهرهای ایران برای توسعه‌دهندگان است.
+
+---
+
+## 🌟 ستاره بدهید!
+
+اگر این پروژه برایتان مفید بود، لطفاً با دادن ⭐️ از آن حمایت کنید! این کار به دیگران کمک می‌کند پروژه را پیدا کنند.
+
+[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+
+---
 
 ## ✨ ویژگی‌ها
 

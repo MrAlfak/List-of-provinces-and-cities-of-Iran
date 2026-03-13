@@ -3,10 +3,23 @@
 [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Persian](https://img.shields.io/badge/language-Persian-red.svg)](README.fa.md)
+[![Tests](https://img.shields.io/badge/tests-9%20passed-brightgreen.svg)](tests/)
+[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/network/members)
 
 The most **complete and professional** dataset of Iranian provinces and cities for developers.
 
 [فارسی](README.fa.md) | English
+
+---
+
+## 🌟 Star Us!
+
+If you find this project useful, please consider giving it a ⭐️ on GitHub! It helps others discover the project.
+
+[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+
+---
 
 ## ✨ Features
 
