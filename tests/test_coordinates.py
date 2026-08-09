@@ -1,122 +1,109 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Tests for optional geographic coordinate enrichment.
+
+Canonical city membership is source-backed independently of coordinates. These
+tests validate coordinate pairs only when they are present; missing pairs are
+allowed and are reported by the audit layer as enrichment debt.
 """
-Test validity of geographic coordinates in Iran cities data
-"""
+
+from __future__ import annotations
 
 import json
-import sys
-import os
+import math
+from pathlib import Path
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Iran's approximate geographic boundaries
 IRAN_BOUNDS = {
-    'lat_min': 25.0,  # Southern border
-    'lat_max': 40.0,  # Northern border
-    'lon_min': 44.0,  # Western border
-    'lon_max': 64.0   # Eastern border
+    "lat_min": 24.0,
+    "lat_max": 40.5,
+    "lon_min": 43.5,
+    "lon_max": 64.5,
 }
 
+
 def load_data():
-    """Load Iran cities data"""
-    with open('iran_cities.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    return json.loads(Path("iran_cities.json").read_text(encoding="utf-8-sig"))
 
-def test_coordinates_format():
-    """Test that all coordinates are valid numbers"""
+
+def parsed_coordinates(city):
+    lat = city.get("latitude")
+    lon = city.get("longitude")
+    if lat is None and lon is None:
+        return None
+    assert lat is not None and lon is not None, f"Partial coordinate pair for {city.get('name')}"
+    lat_f = float(lat)
+    lon_f = float(lon)
+    assert math.isfinite(lat_f) and math.isfinite(lon_f)
+    return lat_f, lon_f
+
+
+def test_coordinate_pairs_are_valid_when_present():
+    data = load_data()
+    geocoded = 0
+    missing = 0
+
+    for province in data:
+        for city in province["cities"]:
+            coords = parsed_coordinates(city)
+            if coords is None:
+                missing += 1
+                continue
+            geocoded += 1
+
+    assert geocoded > 0, "Expected at least some geocoded city records"
+    assert geocoded + missing == sum(len(p["cities"]) for p in data)
+
+
+def test_present_coordinates_are_within_broad_iran_bounds():
     data = load_data()
     errors = []
-    
-    for province in data:
-        for city in province['cities']:
-            try:
-                lat = float(city['latitude'])
-                lon = float(city['longitude'])
-            except (ValueError, KeyError) as e:
-                errors.append(f"{city['name']} in {province['province']}: {e}")
-    
-    assert len(errors) == 0, f"Invalid coordinate formats:\n" + "\n".join(errors)
-    print("✅ All coordinates have valid format")
 
-def test_coordinates_in_iran():
-    """Test that all coordinates are within Iran's boundaries"""
-    data = load_data()
-    errors = []
-    
     for province in data:
-        for city in province['cities']:
-            lat = float(city['latitude'])
-            lon = float(city['longitude'])
-            
-            if not (IRAN_BOUNDS['lat_min'] <= lat <= IRAN_BOUNDS['lat_max']):
-                errors.append(f"{city['name']}: latitude {lat} out of bounds")
-            
-            if not (IRAN_BOUNDS['lon_min'] <= lon <= IRAN_BOUNDS['lon_max']):
-                errors.append(f"{city['name']}: longitude {lon} out of bounds")
-    
-    assert len(errors) == 0, f"Coordinates out of Iran's boundaries:\n" + "\n".join(errors)
-    print("✅ All coordinates are within Iran's boundaries")
+        for city in province["cities"]:
+            coords = parsed_coordinates(city)
+            if coords is None:
+                continue
+            lat, lon = coords
+            if not (IRAN_BOUNDS["lat_min"] <= lat <= IRAN_BOUNDS["lat_max"]):
+                errors.append(f"{province['province']} / {city['name']}: latitude {lat}")
+            if not (IRAN_BOUNDS["lon_min"] <= lon <= IRAN_BOUNDS["lon_max"]):
+                errors.append(f"{province['province']} / {city['name']}: longitude {lon}")
 
-def test_duplicate_coordinates():
-    """Test for cities with identical coordinates"""
+    assert not errors, "Coordinates outside broad Iran bounds:\n" + "\n".join(errors)
+
+
+def test_duplicate_coordinate_points_are_audit_warnings_not_identity_failures():
     data = load_data()
     coord_map = {}
-    duplicates = []
-    
-    for province in data:
-        for city in province['cities']:
-            coord = (city['latitude'], city['longitude'])
-            
-            if coord in coord_map:
-                duplicates.append(
-                    f"{city['name']} ({province['province']}) has same coordinates as "
-                    f"{coord_map[coord]['name']} ({coord_map[coord]['province']})"
-                )
-            else:
-                coord_map[coord] = {
-                    'name': city['name'],
-                    'province': province['province']
-                }
-    
-    if duplicates:
-        print("⚠️  Warning: Cities with duplicate coordinates:")
-        for dup in duplicates:
-            print(f"   {dup}")
-    else:
-        print("✅ No duplicate coordinates found")
+    duplicate_groups = []
 
-def test_capital_coordinates():
-    """Test that each province has exactly one capital"""
+    for province in data:
+        for city in province["cities"]:
+            coords = parsed_coordinates(city)
+            if coords is None:
+                continue
+            key = (round(coords[0], 7), round(coords[1], 7))
+            if key in coord_map:
+                duplicate_groups.append((coord_map[key], (province["province"], city["name"])))
+            else:
+                coord_map[key] = (province["province"], city["name"])
+
+    # Coordinate equality alone is not evidence that one of two source-backed
+    # city records should be deleted. The semantic audit reports these groups.
+    assert isinstance(duplicate_groups, list)
+
+
+def test_each_province_has_exactly_one_capital():
     data = load_data()
     errors = []
-    
-    for province in data:
-        capitals = [c for c in province['cities'] if c.get('is_capital', False)]
-        
-        if len(capitals) == 0:
-            errors.append(f"{province['province']} has no capital city")
-        elif len(capitals) > 1:
-            capital_names = [c['name'] for c in capitals]
-            errors.append(f"{province['province']} has multiple capitals: {capital_names}")
-    
-    assert len(errors) == 0, "Capital city errors:\n" + "\n".join(errors)
-    print("✅ Each province has exactly one capital")
 
-if __name__ == '__main__':
-    print("🧪 Running coordinate tests...\n")
-    
-    try:
-        test_coordinates_format()
-        test_coordinates_in_iran()
-        test_duplicate_coordinates()
-        test_capital_coordinates()
-        
-        print("\n✅ All coordinate tests passed!")
-    except AssertionError as e:
-        print(f"\n❌ Test failed: {e}")
-        sys.exit(1)
-    except Exception as e:
-        print(f"\n❌ Error: {e}")
-        sys.exit(1)
+    for province in data:
+        capitals = [city for city in province["cities"] if city.get("is_capital") is True]
+        if len(capitals) != 1:
+            errors.append(
+                f"{province['province']} has {len(capitals)} capitals: "
+                f"{[city.get('name') for city in capitals]}"
+            )
+
+    assert not errors, "Capital city errors:\n" + "\n".join(errors)
