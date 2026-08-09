@@ -68,3 +68,43 @@ jobs:
           done
           docker logs iran-cities-api
           exit 1
+
+  source-probe:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/agent/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download 1402 source snapshot
+        run: curl --fail --location --retry 3 --output /tmp/list.json https://raw.githubusercontent.com/sajaddp/list-of-cities-in-Iran/main/offical/list.json
+      - name: Inspect CODEREC=5 semantics
+        run: |
+          python - <<'PY'
+          import json, re
+          from collections import Counter, defaultdict
+
+          rows = json.load(open('/tmp/list.json', encoding='utf-8-sig'))
+          cities = [r for r in rows if r.get('CODEREC') == 5]
+          print('rows_total=', len(rows))
+          print('coderec5=', len(cities))
+          print('diag=', Counter(str(r.get('DIAG')) for r in cities).most_common(30))
+          print('faricode_prefix=', Counter(str(r.get('FARICODE'))[:4] for r in cities).most_common(30))
+          print('digit_names=', sum(bool(re.search(r'\d|[۰-۹]', str(r.get('نام','')))) for r in cities))
+
+          probes = ['اراک', 'اراک 1', 'اراک 2', 'تهران', 'تهران 1', 'مشهد', 'مشهد 1']
+          for name in probes:
+              matches = [r for r in cities if str(r.get('نام','')).strip() == name]
+              print('PROBE', name, json.dumps(matches[:5], ensure_ascii=False))
+
+          # Print all DIAG/FARICODE combinations for digit-suffixed city names.
+          combos = Counter()
+          examples = defaultdict(list)
+          for r in cities:
+              name = str(r.get('نام','')).strip()
+              if re.search(r'(?:\s|[-–—])(?:\d+|[۰-۹]+)$', name):
+                  key = (str(r.get('DIAG')), str(r.get('FARICODE')))
+                  combos[key] += 1
+                  if len(examples[key]) < 5:
+                      examples[key].append(name)
+          print('digit_suffix_combos=', combos.most_common(50))
+          for key, count in combos.most_common(20):
+              print('COMBO', key, count, examples[key])
+          PY
