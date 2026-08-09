@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "canonical_membership_rule": "A record may be published as a city only when it appears as divisionType=5 in an identified administrative-division source snapshot.",
+  "current_legacy_dataset": {
+    "path": "iran_cities.json",
+    "status": "legacy-unverified",
+    "note": "The existing 883-record dataset predates a source-of-truth pipeline and must not be described as a complete official city registry until rebuilt and audited. Coordinates and English names are enrichment fields, not evidence of city status."
+  },
+  "supported_authoritative_baseline": {
+    "publisher": "Statistical Center of Iran",
+    "snapshot_year_jalali": 1398,
+    "source_file": "GEO98.xlsx",
+    "source_page": "https://www.amar.org.ir/",
+    "normalized_reference": {
+      "repository": "Hameds/IranCountryDivisions",
+      "license": "MIT",
+      "format": "id,parentCountryDivisionId,name,code,divisionType",
+      "note": "Use as a reproducible normalization reference for the 1398 SCI snapshot; prefer a newer official snapshot when available."
+    }
+  },
+  "refresh_policy": {
+    "required_evidence": [
+      "publisher/source URL or archival identifier",
+      "snapshot date/year",
+      "source checksum",
+      "import command and importer version",
+      "validation report"
+    ],
+    "forbidden_shortcuts": [
+      "using this repository's generated JSON as its own upstream source",
+      "classifying a record as a city from coordinates alone",
+      "deleting records only because coordinates or aliases are similar"
+    ]
+  }
+}
