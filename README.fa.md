@@ -6,108 +6,82 @@
 
 فارسی | [English](README.md)
 
-یک دیتاست توسعه‌دهنده‌محور برای شهرهای ایران با عضویت منبع‌دار، خروجی‌های JSON/CSV/GeoJSON/SQL، API فقط‌خواندنی، اعتبارسنجی، provenance و pipeline بازسازی قابل تکرار.
+دیتاست توسعه‌دهنده‌محور شهرهای ایران با عضویت منبع‌دار، خروجی‌های JSON/CSV/GeoJSON/SQL، API فقط‌خواندنی، اعتبارسنجی، provenance و بازسازی قابل تکرار.
 
 > [!IMPORTANT]
-> **وضعیت دیتاست اصلی:** فایل `iran_cities.json` بر اساس **snapshot تقسیمات کشوری سال ۱۴۰۲ مرکز آمار ایران** بازسازی شده است. منبع خام ۱٬۶۵۹ ردیف `CODEREC=5` دارد؛ ۲۰۹ ردیف که به‌صورت منبع‌محور زیرناحیه/منطقه شهری تشخیص داده می‌شوند فقط زمانی حذف می‌شوند که شهر پایه در همان استان و شهرستان وجود داشته باشد. نتیجه، **۱٬۴۵۰ شهر مستقل در ۳۱ استان** است. این دیتاست «تا سال ۱۴۰۲» منبع‌دار است و ادعا نمی‌کند تغییرات اداری بعد از آن را پوشش می‌دهد.
+> **وضعیت دیتاست اصلی:** `iran_cities.json` بر اساس **snapshot تقسیمات کشوری سال ۱۴۰۲ مرکز آمار ایران** بازسازی شده است. منبع خام ۱٬۶۵۹ ردیف `CODEREC=5` دارد؛ ۲۰۹ زیرناحیه/منطقه شهری فقط زمانی کنار گذاشته می‌شوند که شهر پایه در همان استان و شهرستان وجود داشته باشد. نتیجه **۱٬۴۵۰ شهر مستقل در ۳۱ استان** است. این snapshot «تا ۱۴۰۲» منبع‌دار است و پوشش تغییرات اداری بعد از آن را ادعا نمی‌کند.
 
-## وضعیت صحت داده
+## وضعیت صحت
 
-دیتاست فعلی audit سخت‌گیرانه عضویت را پاس می‌کند:
-
-- ۳۱ استان
-- ۱٬۴۵۰ شهر اصلی
+- ۳۱ استان / ۱٬۴۵۰ شهر canonical
 - ۰ رکورد بدون `official_code`
 - ۰ `official_code` تکراری
-- ۰ blocker مربوط به عضویت یا provenance
+- ۰ blocker عضویت/provenance
 - وضعیت provenance: `source-backed`
-- checksum و commit ثابت منبع در [`data/provenance.json`](data/provenance.json) ثبت شده است.
+- checksum و commit پین‌شده منبع در [`data/provenance.json`](data/provenance.json)
 
-کیفیت enrichment جداگانه سنجیده می‌شود. در حال حاضر **۷۰۳ شهر فاقد مختصات و نام انگلیسی تکمیلی هستند**، ۳۱۹ نام انگلیسی قدیمی به‌عنوان transliteration ضعیف/ماشینی علامت خورده‌اند و یک گروه مختصات تکراری برای بررسی باقی مانده است. هیچ‌کدام از این موارد برای تصمیم «شهر بودن یا نبودن» استفاده نمی‌شوند.
+Enrichment جداگانه سنجیده می‌شود: **۷۰۳ شهر فعلاً مختصات و نام انگلیسی تکمیلی ندارند**، ۳۱۹ transliteration انگلیسی قدیمی ضعیف علامت خورده و یک گروه مختصات تکراری برای بررسی باقی مانده است. این موارد برای تشخیص «شهر بودن» استفاده نمی‌شوند.
 
-## منبع و قابلیت بازتولید
-
-عضویت شهرها با [`scripts/rebuild_from_amar_1402.py`](scripts/rebuild_from_amar_1402.py) از snapshot پین‌شده ۱۴۰۲ بازسازی می‌شود:
+## منبع
 
 ```text
 ناشر: مرکز آمار ایران
 صفحه رسمی معرفی‌شده در منبع بالادستی: https://amar.org.ir/geo
 Mirror: sajaddp/list-of-cities-in-Iran
 Pinned commit: 474942269f75ec247e1af5684f5e3eca9f304431
-Pinned source path: offical/list.json
+Pinned path: offical/list.json
 Snapshot: 1402
 ```
 
-checksum دقیق، تعداد رکوردها و سیاست refresh در [`data/provenance.json`](data/provenance.json) ثبت شده است. ۲۰۹ ردیف حذف‌شده نیز برای audit در [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json) نگهداری می‌شوند.
+بازسازی با [`scripts/rebuild_from_amar_1402.py`](scripts/rebuild_from_amar_1402.py) انجام می‌شود. checksum، آمار و سیاست refresh در [`data/provenance.json`](data/provenance.json) و ۲۰۹ ردیف کنارگذاشته‌شده در [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json) ثبت شده‌اند.
 
-بازسازی داده دیگر با هر push اجرا نمی‌شود. برای بازسازی، workflow **Tests** را به‌صورت دستی با `rebuild_1402=true` اجرا کنید یا importer را محلی روی فایل پین‌شده اجرا کنید. importer سه invariant سخت دارد: ۱٬۶۵۹ ردیف خام، ۲۰۹ زیرناحیه حذف‌شده و ۱٬۴۵۰ شهر نهایی؛ اگر منبع یا قاعده عوض شود، build متوقف می‌شود.
+Rebuild با هر push اجرا نمی‌شود؛ workflow **Tests** را دستی با `rebuild_1402=true` اجرا کنید. importer اگر تعداد ۱٬۶۵۹ ردیف خام، ۲۰۹ حذف یا ۱٬۴۵۰ شهر نهایی تغییر غیرمنتظره کند، متوقف می‌شود.
 
-## تغییرات مهم نسخه ۲.۱
+## بهبودهای اصلی نسخه ۲.۱
 
-- حذف pipeline حلقوی که JSON خود مخزن را به‌عنوان منبع دوباره مصرف می‌کرد.
-- جایگزینی لیست دستی حذف رکورد با طبقه‌بندی منبع‌محور و محافظه‌کارانه.
-- حفظ ID عددی قدیمی فقط در match بدون ابهام؛ `uid` و `official_code` منبع‌دار شناسه‌های پایدار هستند.
-- اضافه‌شدن شهرستان و بخش به ساختار شهرها.
+- حذف self-download و لیست دستی خطرناک حذف رکوردها.
+- حفظ ID قدیمی فقط در match بدون ابهام؛ `uid` و `official_code` هویت منبع‌دار هستند.
+- اضافه‌شدن شهرستان و بخش.
 - جداسازی validation ساختاری، audit عضویت و audit enrichment.
-- امن‌ترشدن API با `/api/v1`، pagination، نرمال‌سازی فارسی، CORS اختیاری، health/meta و debug خاموش.
-- تولید جداگانه SQL برای MySQL و PostgreSQL با escaping صحیح.
-- GeoJSON فقط برای شهرهای دارای مختصات معتبر تولید می‌شود و مختصات ساختگی ایجاد نمی‌کند.
-- اجرای Docker با Gunicorn، کاربر non-root و healthcheck واقعی.
-- CI روی invariantهای ۳۱ استان / ۱٬۴۵۰ شهر، تست‌ها، تولید خروجی‌ها و smoke-test Docker کنترل دارد.
+- API نسخه‌بندی‌شده و امن‌تر، SQL جداگانه MySQL/PostgreSQL، Docker با Gunicorn/non-root.
+- GeoJSON فقط برای رکوردهای دارای مختصات معتبر.
+- CI برای invariantهای ۳۱ استان/۱٬۴۵۰ شهر، تست‌ها، تولید artifact و Docker health.
 
-## فایل‌های اصلی
+## فایل‌های مهم
 
 ```text
-iran_cities.json                         # دیتاست اصلی منبع‌دار ۱۴۰۲ - ۱٬۴۵۰ شهر
+iran_cities.json                         # دیتاست اصلی ۱۴۰۲ - ۱٬۴۵۰ شهر
 iran_cities.min.json                     # JSON فشرده
-iran_cities.csv                          # خروجی CSV
-iran_cities.geojson                      # فقط زیرمجموعه دارای مختصات
-iran_cities.mysql.sql                    # خروجی MySQL
-iran_cities.postgresql.sql               # خروجی PostgreSQL
-api_server.py                            # API فقط‌خواندنی
-scripts/rebuild_from_amar_1402.py        # importer پین‌شده ۱۴۰۲
-scripts/rebuild_from_divisions.py        # importer عمومی تقسیمات نرمال‌شده
-scripts/validate_data.py                 # اعتبارسنجی ساختاری
+iran_cities.csv                          # CSV
+iran_cities.geojson                      # زیرمجموعه geocoded
+iran_cities.mysql.sql                    # MySQL
+iran_cities.postgresql.sql               # PostgreSQL
+scripts/rebuild_from_amar_1402.py        # importer پین‌شده
+scripts/validate_data.py                 # validation ساختاری
 scripts/audit_data.py                    # audit عضویت/enrichment
-scripts/generate_all.py                  # تولید خروجی‌های مشتق‌شده
-data/provenance.json                     # منبع، checksum، آمار و سیاست داده
-data/audit-report.json                   # گزارش audit ثبت‌شده
-data/excluded-urban-subareas-1402.json   # ۲۰۹ زیرناحیه حذف‌شده
-DATA_LICENSE.md                          # مجوز و attribution داده
+data/provenance.json                     # منبع و checksum
+data/audit-report.json                   # گزارش audit
+data/excluded-urban-subareas-1402.json   # ۲۰۹ ردیف کنارگذاشته‌شده
+DATA_LICENSE.md                          # مجوز داده
 ```
 
 ## شروع سریع
 
 ```bash
-git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
-cd List-of-provinces-and-cities-of-Iran
 python -m pip install -r requirements.txt
 python scripts/validate_data.py
 python scripts/audit_data.py --strict
 python -m pytest tests/
-```
-
-برای بازتولید خروجی‌ها:
-
-```bash
 python scripts/generate_all.py
 ```
 
 ## API
 
-اجرای محلی:
-
 ```bash
 python api_server.py
-```
-
-اجرای مشابه production:
-
-```bash
+# یا
 docker compose up --build
 ```
-
-Endpointهای اصلی:
 
 ```text
 GET /health
@@ -119,51 +93,19 @@ GET /api/v1/cities/<id>
 GET /api/v1/search?q=<query>
 ```
 
-مسیرهای قدیمی `/api/...` برای سازگاری باقی مانده‌اند. CORS فقط با تنظیم صریح `CORS_ORIGINS` فعال می‌شود.
+مختصات و نام انگلیسی اختیاری‌اند و می‌توانند `null` باشند. برای هویت منبع‌دار از `official_code` / `uid` استفاده کنید؛ `id` عددی بیشتر برای سازگاری legacy حفظ شده است.
 
-## مدل داده
+## GeoJSON
 
-```json
-{
-  "id": 1,
-  "uid": "ir:province:1402:<province-code>",
-  "official_code": "1402:<province-code>",
-  "province": "...",
-  "cities": [
-    {
-      "id": 1,
-      "uid": "ir:city:1402:<province>:<county>:<district>:<city>",
-      "official_code": "1402:<province>:<county>:<district>:<city>",
-      "name": "...",
-      "county": "...",
-      "county_code": "...",
-      "district": "...",
-      "district_code": "...",
-      "latitude": null,
-      "longitude": null,
-      "english_name": null
-    }
-  ]
-}
-```
+`iran_cities.geojson` فقط شهرهای دارای مختصات معتبر را شامل می‌شود. برای فهرست کامل ۱٬۴۵۰ شهر از `iran_cities.json` استفاده کنید.
 
-`official_code` و سلسله‌مراتب منبع، عضویت رکورد را مشخص می‌کنند. مختصات و نام انگلیسی enrichment اختیاری هستند و می‌توانند `null` باشند.
+## تازگی داده و اصلاحات
 
-## نکته GeoJSON
-
-`iran_cities.geojson` فقط شهرهایی را شامل می‌شود که مختصات معتبر دارند. metadata فایل تعداد کل شهرهای canonical، تعداد featureهای geocoded و تعداد رکوردهای بدون مختصات را گزارش می‌کند. برای فهرست کامل ۱٬۴۵۰ شهر از `iran_cities.json` استفاده کنید.
-
-## اصلاح داده
-
-برای تغییر عضویت یا سلسله‌مراتب، منبع و تاریخ/snapshot ارائه کنید. یک رکورد فقط به دلیل مختصات یکسان، شباهت نوشتاری یا alias بودن حذف نمی‌شود. تغییرات اداری جدیدتر باید از snapshot جدیدتر یا delta منبع‌دار و reviewشده وارد شوند.
-
-## انتشار
-
-npm قبل از انتشار validate، test و regenerate می‌شود. PyPI تا زمان ساخت wheel مستقل و تست clean-install در CI غیرفعال باقی می‌ماند.
+هر تغییر عضویت/سلسله‌مراتب باید منبع و تاریخ/snapshot داشته باشد. رکوردی صرفاً به دلیل مختصات یکسان یا شباهت نام حذف نمی‌شود. تغییرات بعد از ۱۴۰۲ باید از snapshot جدیدتر یا delta منبع‌دار reviewشده وارد شوند.
 
 ## مجوز
 
-- **کد تولیدشده در این مخزن:** MIT — فایل [`LICENSE`](LICENSE).
-- **دیتاست منبع‌دار ۱۴۰۲ و خروجی‌های داده‌ای مشتق‌شده:** GPL-3.0 — فایل‌های [`DATA_LICENSE.md`](DATA_LICENSE.md) و [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0).
+- **کد مخزن:** MIT — [`LICENSE`](LICENSE)
+- **دیتاست منبع‌دار ۱۴۰۲ و مشتقات:** GPL-3.0 — [`DATA_LICENSE.md`](DATA_LICENSE.md)، [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0)
 
 **نسخه:** ۲.۱.۰
