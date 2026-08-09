@@ -1,7 +1,7 @@
 {
   "name": "iran-cities-data",
   "version": "2.1.0",
-  "description": "Source-backed Iran provinces and cities dataset (SCI 1402 snapshot) with JSON/CSV/GeoJSON/SQL outputs",
+  "description": "Source-backed Iran provinces and cities dataset: 31 provinces, 1450 cities, JSON, CSV, GeoJSON, MySQL, PostgreSQL and REST API",
   "main": "iran_cities.json",
   "types": "index.d.ts",
   "files": [
@@ -30,12 +30,25 @@
   },
   "keywords": [
     "iran",
+    "iran-cities",
+    "iran-provinces",
+    "iranian-cities",
+    "iranian-provinces",
     "cities",
     "provinces",
     "persian",
-    "geography",
+    "farsi",
+    "json",
+    "csv",
+    "geojson",
+    "mysql",
+    "postgresql",
+    "rest-api",
+    "location-data",
+    "geodata",
     "administrative-divisions",
-    "data"
+    "address-data",
+    "tehran"
   ],
   "author": "MrAlfak",
   "license": "SEE LICENSE IN DATA_LICENSE.md",
