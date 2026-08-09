@@ -1,19 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Fix and enhance Iran cities data
-- Add unique IDs
-- Add English names
-- Fix duplicate names
-- Add metadata fields
-- Clean up data
+"""Normalize an explicitly supplied Iran locations dataset safely.
+
+The old implementation downloaded ``iran_cities.json`` from this repository and
+then treated that copy as its own upstream source. That made provenance
+circular and could also renumber every city. This replacement is deliberately
+boring: callers must provide an input file, existing IDs are preserved, and new
+IDs are allocated only above the current maximum.
+
+This script performs structural cleanup only. It does not decide whether a
+record is legally a city, does not silently delete similar names, and does not
+invent English transliterations.
 """
 
+from __future__ import annotations
+
+import argparse
 import json
-import requests
 import re
+import unicodedata
+from pathlib import Path
+from typing import Any
 
-# English transliterations for provinces
+
+ARABIC_TO_PERSIAN = str.maketrans({"ي": "ی", "ى": "ی", "ك": "ک"})
+
 PROVINCE_ENGLISH_NAMES = {
     "آذربایجان شرقی": "East Azerbaijan",
     "آذربایجان غربی": "West Azerbaijan",
@@ -45,162 +56,120 @@ PROVINCE_ENGLISH_NAMES = {
     "هرمزگان": "Hormozgan",
     "همدان": "Hamadan",
     "چهارمحال و بختیاری": "Chaharmahal and Bakhtiari",
-    "یزد": "Yazd"
-}
-
-# Common city name transliterations
-CITY_ENGLISH_NAMES = {
-    "تهران": "Tehran",
-    "مشهد": "Mashhad",
-    "اصفهان": "Isfahan",
-    "کرج": "Karaj",
-    "تبریز": "Tabriz",
-    "شیراز": "Shiraz",
-    "قم": "Qom",
-    "اهواز": "Ahvaz",
-    "کرمانشاه": "Kermanshah",
-    "ارومیه": "Urmia",
-    "رشت": "Rasht",
-    "زاهدان": "Zahedan",
-    "همدان": "Hamadan",
-    "کرمان": "Kerman",
     "یزد": "Yazd",
-    "اردبیل": "Ardabil",
-    "بندر عباس": "Bandar Abbas",
-    "اراک": "Arak",
-    "قزوین": "Qazvin",
-    "زنجان": "Zanjan",
-    "سنندج": "Sanandaj",
-    "خرم‌آباد": "Khorramabad",
-    "گرگان": "Gorgan",
-    "ساری": "Sari",
-    "بیرجند": "Birjand",
-    "بجنورد": "Bojnord",
-    "سبزوار": "Sabzevar",
-    "نیشابور": "Neyshabur",
-    "بوشهر": "Bushehr",
-    "یاسوج": "Yasuj",
-    "شهرکرد": "Shahrekord"
 }
 
-def download_original_data():
-    """Download original data from GitHub"""
-    url = 'https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json'
-    print("📥 Downloading original data...")
-    response = requests.get(url)
-    return response.json()
 
-def clean_city_name(name):
-    """Clean city name (remove extra spaces, etc.)"""
-    # Remove extra spaces
-    name = re.sub(r'\s+', ' ', name).strip()
-    return name
+def clean_name(value: Any) -> str:
+    text = unicodedata.normalize("NFKC", str(value or "")).translate(ARABIC_TO_PERSIAN)
+    text = text.replace("ـ", "")
+    return re.sub(r"\s+", " ", text).strip()
 
-def generate_english_name(persian_name):
-    """Generate English transliteration for city name"""
-    # Check if we have a predefined translation
-    if persian_name in CITY_ENGLISH_NAMES:
-        return CITY_ENGLISH_NAMES[persian_name]
-    
-    # Otherwise, return None (to be filled manually later)
-    return None
 
-def fix_and_enhance_data(data):
-    """Fix and enhance the data"""
-    print("🔧 Fixing and enhancing data...")
-    
-    province_id = 1
-    city_global_id = 1
-    
-    enhanced_data = []
-    
-    for province in data:
-        # Clean province data
-        province_data = {
+def max_existing_id(data: list[dict[str, Any]], collection: str) -> int:
+    values: list[int] = []
+    if collection == "province":
+        values = [p["id"] for p in data if isinstance(p.get("id"), int)]
+    else:
+        values = [
+            c["id"]
+            for p in data
+            for c in p.get("cities", [])
+            if isinstance(c.get("id"), int)
+        ]
+    return max(values, default=0)
+
+
+def enhance_data(data: list[dict[str, Any]], source_date: str | None = None) -> list[dict[str, Any]]:
+    next_province_id = max_existing_id(data, "province") + 1
+    next_city_id = max_existing_id(data, "city") + 1
+    used_province_ids: set[int] = set()
+    used_city_ids: set[int] = set()
+    result: list[dict[str, Any]] = []
+
+    for raw_province in data:
+        province_name = clean_name(raw_province.get("province"))
+        if not province_name:
+            raise ValueError("Province without a name")
+
+        province_id = raw_province.get("id")
+        if not isinstance(province_id, int) or province_id in used_province_ids:
+            province_id = next_province_id
+            next_province_id += 1
+        used_province_ids.add(province_id)
+
+        province: dict[str, Any] = {
+            **raw_province,
             "id": province_id,
-            "province": province['province'],
-            "english_name": PROVINCE_ENGLISH_NAMES.get(province['province'], province.get('english_name', '')),
-            "phone_code": province['phone_code'],
-            "cities_count": len(province['cities']),
-            "last_updated": "2024-01-15",
-            "cities": []
+            "province": province_name,
+            "english_name": raw_province.get("english_name") or PROVINCE_ENGLISH_NAMES.get(province_name),
+            "phone_code": str(raw_province.get("phone_code", "")).strip(),
+            "cities": [],
         }
-        
-        # Track city names to avoid duplicates
-        seen_cities = set()
-        
-        for city in province['cities']:
-            # Clean city name
-            city_name = clean_city_name(city['name'])
-            
-            # Skip duplicates
-            if city_name in seen_cities:
-                print(f"  ⚠️  Skipping duplicate: {city_name} in {province['province']}")
-                continue
-            
-            seen_cities.add(city_name)
-            
-            # Generate English name
-            english_name = generate_english_name(city_name)
-            
-            # Create city data
-            city_data = {
-                "id": city_global_id,
+        if source_date:
+            province["last_updated"] = source_date
+
+        for raw_city in raw_province.get("cities", []):
+            if isinstance(raw_city, str):
+                raw_city = {"name": raw_city}
+            if not isinstance(raw_city, dict):
+                raise ValueError(f"Invalid city record in {province_name}: {raw_city!r}")
+
+            city_name = clean_name(raw_city.get("name"))
+            if not city_name:
+                raise ValueError(f"City without a name in {province_name}")
+
+            city_id = raw_city.get("id")
+            if not isinstance(city_id, int) or city_id in used_city_ids:
+                city_id = next_city_id
+                next_city_id += 1
+            used_city_ids.add(city_id)
+
+            province["cities"].append({
+                **raw_city,
+                "id": city_id,
                 "name": city_name,
-                "english_name": english_name,
-                "latitude": city['latitude'],
-                "longitude": city['longitude'],
-                "is_capital": city.get('is_capital', False),
-                "population": city.get('population'),
-                "postal_code": city.get('postal_code')
-            }
-            
-            province_data['cities'].append(city_data)
-            city_global_id += 1
-        
-        # Update cities count
-        province_data['cities_count'] = len(province_data['cities'])
-        
-        enhanced_data.append(province_data)
-        province_id += 1
-        
-        print(f"  ✅ {province['province']}: {province_data['cities_count']} cities")
-    
-    return enhanced_data
+                "english_name": raw_city.get("english_name"),
+                "is_capital": bool(raw_city.get("is_capital", False)),
+                "population": raw_city.get("population"),
+                "postal_code": raw_city.get("postal_code"),
+            })
 
-def save_data(data, filename='iran_cities.json'):
-    """Save enhanced data to file"""
-    print(f"\n💾 Saving to {filename}...")
-    with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"✅ Saved successfully!")
+        province["cities_count"] = len(province["cities"])
+        result.append(province)
 
-def main():
-    print("🇮🇷 Iran Cities Data - Fix and Enhance\n")
-    
-    try:
-        # Download original data
-        data = download_original_data()
-        print(f"✅ Downloaded {len(data)} provinces\n")
-        
-        # Fix and enhance
-        enhanced_data = fix_and_enhance_data(data)
-        
-        # Save
-        save_data(enhanced_data)
-        
-        # Statistics
-        total_cities = sum(p['cities_count'] for p in enhanced_data)
-        print(f"\n📊 Statistics:")
-        print(f"  Provinces: {len(enhanced_data)}")
-        print(f"  Cities: {total_cities}")
-        
-        print("\n✅ All done!")
-        
-    except Exception as e:
-        print(f"\n❌ Error: {e}")
-        import traceback
-        traceback.print_exc()
+    return result
 
-if __name__ == '__main__':
-    main()
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", required=True, help="Explicit upstream/local JSON file")
+    parser.add_argument("--output", default="iran_cities.json", help="Normalized output file")
+    parser.add_argument(
+        "--source-date",
+        help="Date belonging to the source snapshot (do not use the processing date by accident)",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    source_path = Path(args.input).resolve()
+    output_path = Path(args.output).resolve()
+
+    if source_path == output_path:
+        raise SystemExit("Refusing to use the output file as its own upstream source. Use a separate --input snapshot.")
+
+    data = json.loads(source_path.read_text(encoding="utf-8-sig"))
+    if not isinstance(data, list):
+        raise SystemExit("Expected a top-level JSON array of provinces.")
+
+    enhanced = enhance_data(data, args.source_date)
+    output_path.write_text(json.dumps(enhanced, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"✅ Wrote {len(enhanced)} provinces to {output_path}")
+    print(f"   Cities/locations: {sum(len(p['cities']) for p in enhanced)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
