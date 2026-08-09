@@ -13,17 +13,16 @@ A developer-friendly Iran city dataset with source-backed administrative members
 
 ## Integrity status
 
-The checked-in canonical dataset currently passes the strict membership audit:
+The checked-in canonical dataset passes the strict membership audit:
 
-- 31 provinces
-- 1,450 canonical city records
+- 31 provinces / 1,450 canonical city records
 - 0 records without `official_code`
 - 0 duplicate `official_code` values
 - 0 membership/provenance blockers
 - provenance status: `source-backed`
 - source SHA-256 and pinned mirror revision recorded in [`data/provenance.json`](data/provenance.json)
 
-Optional enrichment is intentionally tracked separately. **703 records currently lack coordinate and English-name enrichment**, 319 retained English names are flagged as weak/automatic transliterations, and one duplicate coordinate group remains for review. None of those fields are used to determine city membership.
+Optional enrichment is tracked separately. **703 records currently lack coordinate and English-name enrichment**, 319 retained English names are flagged as weak/automatic transliterations, and one duplicate coordinate group remains for review. None of those fields determine city membership.
 
 ## Source and reproducibility
 
@@ -38,22 +37,21 @@ Pinned source path: offical/list.json
 Snapshot: 1402
 ```
 
-The exact source checksum, counts, and refresh policy live in [`data/provenance.json`](data/provenance.json). The 209 excluded urban-subarea rows are retained as an audit trail in [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json).
+The exact source checksum and refresh policy live in [`data/provenance.json`](data/provenance.json). The 209 excluded source rows are retained in [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json).
 
-A rebuild is explicit rather than automatic on every push. Run the **Tests** workflow manually with `rebuild_1402=true`, or execute the importer locally against the pinned source file. Its hard invariants stop the rebuild if the expected 1,659 raw rows, 209 excluded subareas, or 1,450 canonical cities unexpectedly change.
+A rebuild is explicit rather than automatic on every push. Run the **Tests** workflow manually with `rebuild_1402=true`, or execute the importer locally against the pinned source. Hard invariants stop the rebuild if 1,659 raw rows, 209 exclusions, or 1,450 canonical cities unexpectedly change.
 
-## What changed in v2.1
+## Main improvements in v2.1
 
-- Replaced the circular self-download pipeline with a pinned, source-backed administrative snapshot.
-- Replaced the hand-written duplicate deletion list with conservative source-relative classification.
-- Preserved legacy numeric IDs only when an unambiguous match exists; source-backed `uid` / `official_code` identifiers are canonical.
-- Added county/district hierarchy to city records.
-- Separated structural validation, source-membership audit, and optional enrichment audit.
-- Hardened the API: `/api/v1`, pagination, Persian normalization, opt-in CORS, health/meta endpoints, no default debug mode.
-- Split SQL generation into real MySQL and PostgreSQL dialects with correct escaping.
-- Made GeoJSON a geocoded subset instead of fabricating coordinates for un-enriched records.
-- Docker runs Gunicorn as a non-root user and includes a working healthcheck.
-- CI validates the 31/1,450 source-backed invariants, tests, regenerates outputs, and smoke-tests Docker.
+- Replaced circular self-download and hand-maintained deletion logic with a pinned source-backed pipeline.
+- Preserved legacy numeric IDs only for unambiguous matches; source-backed `uid` / `official_code` are canonical identifiers.
+- Added county/district hierarchy.
+- Separated structural validation, membership audit, and optional enrichment audit.
+- Hardened API (`/api/v1`, pagination, Persian normalization, opt-in CORS, health/meta, debug off).
+- Split SQL into MySQL/PostgreSQL dialects with correct escaping.
+- GeoJSON exports only geocoded records instead of fabricating coordinates.
+- Docker runs Gunicorn as non-root with a real healthcheck.
+- CI verifies source-backed 31/1,450 invariants, tests, artifact generation, SQL regression, and Docker health.
 
 ## Files
 
@@ -66,12 +64,12 @@ iran_cities.mysql.sql                    # MySQL derivative
 iran_cities.postgresql.sql               # PostgreSQL derivative
 api_server.py                            # Read-only API
 scripts/rebuild_from_amar_1402.py        # Pinned SCI 1402 importer
-scripts/rebuild_from_divisions.py        # Generic normalized division importer
+scripts/rebuild_from_divisions.py        # Generic normalized importer
 scripts/validate_data.py                 # Structural validation
 scripts/audit_data.py                    # Membership/enrichment audit
 scripts/generate_all.py                  # Derived artifact generation
 data/provenance.json                     # Source, checksum, counts, policy
-data/audit-report.json                   # Checked-in audit report
+data/audit-report.json                   # Audit report
 data/excluded-urban-subareas-1402.json   # 209 excluded source subareas
 DATA_LICENSE.md                          # Data licensing/attribution
 ```
@@ -85,25 +83,14 @@ python -m pip install -r requirements.txt
 python scripts/validate_data.py
 python scripts/audit_data.py --strict
 python -m pytest tests/
-```
-
-Regenerate derived files:
-
-```bash
 python scripts/generate_all.py
 ```
 
 ## API
 
-Local development:
-
 ```bash
 python api_server.py
-```
-
-Production-style container:
-
-```bash
+# or
 docker compose up --build
 ```
 
@@ -121,58 +108,25 @@ GET /api/v1/search?q=<query>
 
 Legacy `/api/...` aliases remain for backward compatibility. CORS is disabled unless `CORS_ORIGINS` is explicitly configured.
 
-## Direct JavaScript usage
-
-```javascript
-import iranCities from './iran_cities.json' with { type: 'json' };
-
-const tehran = iranCities.find((province) => province.province === 'تهران');
-console.log(tehran.cities.length);
-```
-
 ## Data model
 
-```json
-{
-  "id": 1,
-  "uid": "ir:province:1402:<province-code>",
-  "official_code": "1402:<province-code>",
-  "province": "...",
-  "cities": [
-    {
-      "id": 1,
-      "uid": "ir:city:1402:<province>:<county>:<district>:<city>",
-      "official_code": "1402:<province>:<county>:<district>:<city>",
-      "name": "...",
-      "county": "...",
-      "county_code": "...",
-      "district": "...",
-      "district_code": "...",
-      "latitude": null,
-      "longitude": null,
-      "english_name": null
-    }
-  ]
-}
-```
+Source-backed records include `uid`, `official_code`, county/district hierarchy and legacy-compatible numeric IDs. Coordinates and English names are optional enrichment and may be `null`.
 
-`official_code` and the source hierarchy identify membership. Coordinates and English names are optional enrichment and may be `null`.
+Prefer `official_code` / `uid` for source-backed identity; treat numeric `id` as a compatibility identifier.
 
 ## GeoJSON note
 
-`iran_cities.geojson` contains only cities with valid coordinate enrichment. Its metadata reports the canonical total, geocoded feature count, and number skipped without coordinates. Use `iran_cities.json` when you need the complete 1,450-city membership list.
+`iran_cities.geojson` contains only cities with valid coordinate enrichment. Use `iran_cities.json` for the complete 1,450-city membership list.
 
-## Contributing data corrections
+## Data corrections and freshness
 
-Every membership or hierarchy correction should include a source and snapshot/date. Do not delete a record only because coordinates match, spellings look similar, or names are aliases. Newer administrative decisions should be incorporated through a newer identified snapshot or an explicitly reviewed, sourced delta.
+Membership/hierarchy corrections require a source and snapshot/date. Do not delete a record because coordinates match or names look similar. Changes after 1402 require a newer identified snapshot or explicitly reviewed sourced delta before the project should claim they are included.
 
-## Publishing
+## Publishing and license
 
-The npm package is validated and regenerated before release. PyPI publishing remains disabled until a self-contained Python wheel is implemented and clean-install tested in CI.
+The npm path is gated by validation/tests/generation. PyPI remains disabled until a self-contained wheel is clean-install tested.
 
-## License
-
-- **Repository-authored code:** MIT — see [`LICENSE`](LICENSE).
-- **1402 source-backed dataset and data derivatives:** GPL-3.0 — see [`DATA_LICENSE.md`](DATA_LICENSE.md) and [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0).
+- **Repository-authored code:** MIT — [`LICENSE`](LICENSE)
+- **1402 source-backed dataset and derivatives:** GPL-3.0 — [`DATA_LICENSE.md`](DATA_LICENSE.md), [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0)
 
 **Version:** 2.1.0
