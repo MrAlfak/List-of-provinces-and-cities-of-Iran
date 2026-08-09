@@ -1,32 +1,28 @@
-# Quick Start | شروع سریع
+# Quick start
 
-## 1. Install
+The checked-in canonical dataset is the source-backed **SCI 1402** snapshot with **31 provinces and 1,450 independent cities**.
+
+## Validate and test
 
 ```bash
-git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
-cd List-of-provinces-and-cities-of-Iran
 python -m pip install -r requirements.txt
-```
-
-## 2. Check the dataset
-
-```bash
 python scripts/validate_data.py
-python scripts/audit_data.py
+python scripts/audit_data.py --strict
 python -m pytest tests/
 ```
 
-`validate_data.py` checks structural integrity. `audit_data.py` reports semantic/enrichment debt. The checked-in legacy dataset is intentionally **not** advertised as an authoritative registry until rebuilt from a documented administrative source.
+`--strict` validates source membership/provenance. Missing coordinates or English names are optional enrichment and are reported separately.
 
-## 3. Generate derived files
+## Generate all formats
 
 ```bash
 python scripts/generate_all.py
 ```
 
-This creates/refreshes:
+Generated/maintained formats:
 
 ```text
+iran_cities.json
 iran_cities.min.json
 iran_cities.csv
 iran_cities.geojson
@@ -34,41 +30,58 @@ iran_cities.mysql.sql
 iran_cities.postgresql.sql
 ```
 
-## 4. Run the API
+`iran_cities.geojson` is only the geocoded subset; use `iran_cities.json` for the complete 1,450-city membership list.
 
-Development:
+## Run API
 
 ```bash
 python api_server.py
 ```
 
-Then open:
-
-```text
-http://127.0.0.1:8000/health
-http://127.0.0.1:8000/api/v1/meta
-http://127.0.0.1:8000/api/v1/provinces
-http://127.0.0.1:8000/api/v1/cities?page=1&per_page=100
-```
-
-Production-style local container:
+or:
 
 ```bash
 docker compose up --build
 ```
 
-## 5. Rebuild city membership from country divisions
+Health check:
 
-When you have a normalized source snapshot:
-
-```bash
-python scripts/rebuild_from_divisions.py \
-  --divisions-csv /path/to/divisions.csv \
-  --legacy-json iran_cities.json \
-  --output iran_cities.rebuilt.json
-
-python scripts/validate_data.py --input iran_cities.rebuilt.json
-python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+```text
+GET /health
 ```
 
-Do not overwrite `iran_cities.json` with a new snapshot until provenance and the strict audit are complete. See `data/README.md`.
+Main API namespace:
+
+```text
+/api/v1
+```
+
+## Data identity
+
+Prefer `official_code` / `uid` for source-backed identity. Numeric `id` values are retained for legacy compatibility where mapping was unambiguous.
+
+## Rebuild the pinned 1402 snapshot
+
+The rebuild is explicit and reproducible. In GitHub Actions, manually run the **Tests** workflow with `rebuild_1402=true`.
+
+Locally, use `scripts/rebuild_from_amar_1402.py` with the exact source revision recorded in `data/provenance.json`. The importer will stop if the expected 1,659 raw rows, 209 excluded urban subareas or 1,450 canonical city count changes unexpectedly.
+
+## Licensing
+
+Code is MIT. The 1402 source-backed dataset and data derivatives are GPL-3.0; see `DATA_LICENSE.md`.
+
+---
+
+# شروع سریع فارسی
+
+دیتاست اصلی فعلی snapshot منبع‌دار **۱۴۰۲** با **۳۱ استان و ۱٬۴۵۰ شهر مستقل** است.
+
+```bash
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python scripts/audit_data.py --strict
+python -m pytest tests/
+python scripts/generate_all.py
+```
+
+برای فهرست کامل شهرها از `iran_cities.json` استفاده کنید. GeoJSON فقط رکوردهای دارای مختصات را شامل می‌شود. کد پروژه MIT و دیتاست/خروجی‌های داده‌ای ۱۴۰۲ تحت GPL-3.0 هستند.
