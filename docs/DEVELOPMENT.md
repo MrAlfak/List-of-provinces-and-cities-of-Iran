@@ -1,79 +1,66 @@
-# Development Guide
+# Development guide
 
-## Setup
+## Development principle
+
+Canonical city membership is a data-provenance problem first. Do not infer city identity from coordinates, spelling similarity, map search results, or legacy IDs.
+
+The current canonical baseline is the pinned SCI 1402 snapshot described in `data/provenance.json`: 31 provinces and 1,450 independent cities after source-relative urban-subarea filtering.
+
+## Local checks
 
 ```bash
 python -m pip install -r requirements.txt
-```
-
-Useful commands:
-
-```bash
-make validate
-make audit
-make test
-make generate
-make docker-test
-```
-
-## Repository rule: canonical vs enrichment
-
-Keep these concerns separate:
-
-- **Canonical administrative membership**: whether a record is a province/county/district/city. This must come from a documented administrative-division snapshot.
-- **Enrichment**: coordinates, English aliases, population, postal information, etc. Enrichment may be absent and must never be used to infer that a record is officially a city.
-
-Do not add a manual list that deletes records merely because names or coordinates look similar.
-
-## Data changes
-
-For a source-backed refresh:
-
-1. Record source/snapshot/checksum in `data/provenance.json`.
-2. Keep the raw source outside generated output paths.
-3. Rebuild with `scripts/rebuild_from_divisions.py`.
-4. Run structural validation.
-5. Run strict audit.
-6. Review unmatched/renamed records manually against the source.
-7. Replace the canonical JSON only after the previous steps pass.
-8. Regenerate all derived formats.
-
-```bash
-python scripts/rebuild_from_divisions.py --divisions-csv source.csv --output iran_cities.rebuilt.json
-python scripts/validate_data.py --input iran_cities.rebuilt.json
-python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+python -m compileall -q api_server.py scripts tests
+python scripts/validate_data.py
+python scripts/audit_data.py --strict
+python -m pytest tests/
 python scripts/generate_all.py
 ```
 
-## Tests
+`audit_data.py --strict` gates membership/provenance. Use `--strict-enrichment` only for workflows that require complete optional enrichment.
 
-Regression tests belong in `tests/`. Important invariants include:
+## Data changes
 
-- global numeric ID uniqueness;
-- stable source-backed `uid` values;
-- exactly one province capital;
-- duplicate detection must not merge distinct names just because coordinates match;
-- SQL escaping must remain safe for apostrophes;
-- Persian search normalization must treat Arabic/Persian character variants consistently.
+For changes to membership or hierarchy:
 
-CI runs tests on Python 3.10 and 3.12, rebuilds derived artifacts, checks SQL escaping, builds Docker and smoke-tests `/health`.
+1. provide an official or clearly traceable source and effective snapshot/date;
+2. record checksum and licensing;
+3. diff by source hierarchy/identifiers;
+4. never delete a record solely because coordinates or names resemble another record;
+5. preserve a legacy numeric ID only for an unambiguous identity match;
+6. update `official_code` / `uid`, provenance and audit trail;
+7. run strict membership audit and regenerate all derivatives.
 
-## API development
+## Pinned 1402 rebuild
 
-The local command uses Flask's development server:
+The 1402 rebuild is intentionally manual. Run the GitHub **Tests** workflow with `rebuild_1402=true`, or execute `scripts/rebuild_from_amar_1402.py` against the exact pinned source recorded in `data/provenance.json`.
+
+The importer enforces three expected source invariants: 1,659 raw CODEREC=5 rows, 209 excluded municipal subareas, and 1,450 canonical cities. A mismatch is a review event, not something to auto-fix.
+
+## Optional enrichment
+
+Coordinates and English names may be null. GeoJSON therefore contains only geocoded records. Enrichment sources should be tracked independently from administrative membership.
+
+## API / Docker
+
+Run locally:
 
 ```bash
 python api_server.py
 ```
 
-Do not use that server for public production deployment. The Dockerfile uses Gunicorn. CORS is opt-in through `CORS_ORIGINS`.
+Run containerized:
 
-API changes should preserve `/api/v1`; compatibility aliases under `/api/...` may be deprecated only with release notes and a migration path.
+```bash
+docker compose up --build
+```
 
-## Packaging
+The Docker image runs Gunicorn as a non-root user. CI builds the image and smoke-tests `/health`.
 
-npm is the supported package-registry path in v2.1. PyPI is intentionally disabled until a self-contained Python wheel and clean-install CI test exist.
+## Tests
 
-## Pull requests
+Tests cover source-backed identifiers, global ID uniqueness, county-scoped city names, Persian normalization, SQL escaping, optional coordinates, subarea classification, artifact generation, and API container health.
 
-Data PRs should say which source/snapshot supports each semantic correction. Code PRs should include regression coverage when fixing a failure mode.
+## Licensing
+
+Repository-authored code is MIT. The current 1402 source-backed dataset and data derivatives are GPL-3.0; preserve `DATA_LICENSE.md` and `LICENSE-DATA-GPL-3.0` in data-bearing distributions.
