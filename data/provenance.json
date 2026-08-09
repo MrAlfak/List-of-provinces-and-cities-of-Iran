@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "canonical_membership_rule": "Use CODEREC=5 records from the pinned SCI 1402 administrative snapshot, excluding a municipal subarea only when its numbered/named base resolves to another CODEREC=5 city in the same province and county.",
+  "canonical_dataset": {
+    "path": "iran_cities.json",
+    "status": "source-backed",
+    "snapshot_year_jalali": 1402,
+    "publisher": "Statistical Center of Iran",
+    "official_source_page": "https://amar.org.ir/geo",
+    "mirror_repository": "sajaddp/list-of-cities-in-Iran",
+    "mirror_commit": "474942269f75ec247e1af5684f5e3eca9f304431",
+    "mirror_path": "offical/list.json",
+    "source_sha256": "a2302aad20f5b5c090c8aa1409a82c19a1bf4a3198e9f3d1e01ad84e271f9ad0",
+    "source_license": "GPL-3.0-only (redistributed mirror/data derivatives)",
+    "raw_coderec5_rows": 1659,
+    "excluded_urban_subareas": 209,
+    "canonical_city_count": 1450,
+    "legacy_enriched_cities": 747,
+    "note": "Membership is source-backed as of 1402. Coordinates and English names are legacy enrichment and may be null or require separate review. Later country-division decisions are not represented until a newer source snapshot is imported."
+  },
+  "refresh_policy": {
+    "required_evidence": [
+      "publisher/source URL or archival identifier",
+      "snapshot date/year",
+      "source checksum",
+      "pinned mirror/source revision when a mirror is used",
+      "import command and importer version",
+      "validation and audit reports"
+    ],
+    "forbidden_shortcuts": [
+      "using this repository's generated JSON as its own upstream source",
+      "classifying a record as a city from coordinates alone",
+      "deleting records only because coordinates or aliases are similar",
+      "removing a numbered record unless its base city exists in the same source county",
+      "reusing one legacy numeric ID for multiple source rows"
+    ]
+  }
+}

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build: .
@@ -8,10 +6,18 @@ services:
     volumes:
       - ./iran_cities.json:/app/iran_cities.json:ro
     environment:
-      - FLASK_ENV=production
+      PORT: "8000"
+      IRAN_CITIES_DATA_FILE: /app/iran_cities.json
+      # CORS is intentionally opt-in. Example:
+      # CORS_ORIGINS: https://example.com
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()"
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
+      start_period: 5s

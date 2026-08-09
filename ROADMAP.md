@@ -1,128 +1,79 @@
-# 🗺️ Roadmap | نقشه راه
+# 🗺️ Roadmap
 
-## نسخه 2.0.0 ✅ (فعلی)
-- [x] ساختار پروژه حرفه‌ای
-- [x] 31 استان با اطلاعات کامل
-- [x] 883 شهر با مختصات جغرافیایی
-- [x] نام‌های انگلیسی برای همه شهرها
-- [x] فرمت‌های متنوع (JSON, SQL, CSV, GeoJSON)
-- [x] API Server با Flask
-- [x] تست‌های خودکار
-- [x] مستندات کامل
-- [x] نمونه‌های استفاده
+## Current baseline — completed in v2.1 work
 
-## نسخه 2.1.0 📅 (Q2 2024)
-### داده‌ها
-- [ ] تکمیل جمعیت تمام شهرها
-- [ ] اضافه کردن کدهای پستی
-- [ ] بررسی و اصلاح نام‌های انگلیسی auto-transliterated
-- [ ] اضافه کردن ارتفاع از سطح دریا
-- [ ] اضافه کردن منطقه زمانی
+The repository now has a source-backed canonical membership baseline for the **SCI 1402 administrative snapshot**:
 
-### ویژگی‌ها
-- [ ] API با rate limiting
-- [ ] Cache mechanism
-- [ ] Pagination برای API
-- [ ] فیلترهای پیشرفته
-- [ ] Export به فرمت‌های بیشتر (XML, YAML)
+- 31 provinces
+- 1,450 independent city records
+- pinned source revision + SHA-256 provenance
+- source-relative urban-subarea exclusion audit trail
+- stable `uid` / `official_code`
+- county/district hierarchy
+- strict membership audit with zero blockers
+- MySQL/PostgreSQL/CSV/minified JSON generation
+- GeoJSON geocoded subset with explicit missing-coordinate metadata
+- versioned read-only API and hardened Docker runtime
+- Python 3.10/3.12 + Docker CI
+- code/data licensing documented separately
 
-### مستندات
-- [ ] ویدیوهای آموزشی
-- [ ] مثال‌های بیشتر
-- [ ] Integration guides
+## Priority 1 — newer administrative snapshot
 
-## نسخه 2.2.0 📅 (Q3 2024)
-### داده‌های جدید
-- [ ] اضافه کردن شهرستان‌ها (Counties)
-- [ ] اضافه کردن بخش‌ها (Districts)
-- [ ] اضافه کردن دهستان‌ها
-- [ ] مرزهای جغرافیایی استان‌ها (Polygons)
+The canonical membership is **as of 1402**. The next data-integrity milestone is not a new API feature; it is obtaining and reviewing a newer official/traceable country-divisions snapshot or sourced delta.
 
-### ویژگی‌ها
-- [ ] نقشه تعاملی آنلاین
-- [ ] جستجوی پیشرفته با فیلترها
-- [ ] مقایسه شهرها
-- [ ] آمار و نمودارها
+Required work:
 
-## نسخه 3.0.0 📅 (Q4 2024)
-### داده‌های گسترده
-- [ ] اضافه کردن روستاها (Villages)
-- [ ] داده‌های تاریخی (تغییرات در طول زمان)
-- [ ] اطلاعات اقتصادی
-- [ ] اطلاعات آب و هوایی
+- identify newer official publication(s) after 1402;
+- archive/pin source URL, date, checksum, and license;
+- diff by source identifiers/hierarchy rather than coordinates;
+- preserve compatibility IDs only on unambiguous matches;
+- run strict membership audit and regenerate every derivative;
+- document additions, removals, renames, county/district moves and effective dates.
 
-### API پیشرفته
-- [ ] GraphQL API
-- [ ] WebSocket برای real-time updates
-- [ ] Authentication & Authorization
-- [ ] API versioning
-- [ ] Rate limiting per user
+## Priority 2 — enrichment quality
 
-### پلتفرم‌های جدید
-- [ ] Mobile SDK (React Native)
-- [ ] npm package
-- [ ] PyPI package
-- [ ] WordPress plugin
-- [ ] Browser extension
+Membership is no longer blocked by enrichment debt. Current audit debt includes missing coordinates/English names and weak historical transliterations.
 
-## نسخه 4.0.0 📅 (2025)
-### چندزبانه
-- [ ] پشتیبانی از زبان کردی
-- [ ] پشتیبانی از زبان عربی
-- [ ] پشتیبانی از زبان ترکی آذری
-- [ ] پشتیبانی از زبان بلوچی
+Planned work:
 
-### هوش مصنوعی
-- [ ] پیشنهاد شهرهای مشابه
-- [ ] تشخیص خودکار مختصات
-- [ ] تصحیح خودکار داده‌ها
-- [ ] پیش‌بینی جمعیت
+- source and verify coordinates independently of city membership;
+- replace weak automatic transliterations with reviewed English names;
+- review duplicate coordinate groups instead of deleting records automatically;
+- add provenance/confidence fields for enrichment sources;
+- optionally add population/postal enrichment only from identified sources.
 
-### Integration
-- [ ] Integration با Google Maps
-- [ ] Integration با OpenStreetMap
-- [ ] Integration با سیستم‌های پستی
-- [ ] Integration با سرویس‌های آب و هوا
+`audit_data.py --strict-enrichment` can be used when a downstream consumer requires complete enrichment.
 
-## ایده‌های آینده 💡
-- [ ] Mobile App (iOS & Android)
-- [ ] Desktop App (Electron)
-- [ ] Chrome Extension
-- [ ] VS Code Extension
-- [ ] Figma Plugin
-- [ ] Slack Bot
-- [ ] Telegram Bot
-- [ ] Discord Bot
+## Priority 3 — package/release quality
 
-## مشارکت | Contributing
-می‌خواهید در توسعه این پروژه مشارکت کنید؟
+- build a self-contained Python package/wheel with canonical data bundled correctly;
+- clean-install test the Python package in CI before re-enabling PyPI;
+- verify npm package contents/license notices against the dual-license data model;
+- generate release manifests/checksums for all data artifacts;
+- document schema compatibility and migration expectations.
 
-Want to contribute to the development of this project?
+## Priority 4 — API scale only after data/release quality
 
-1. یک feature از roadmap را انتخاب کنید
-2. یک Issue باز کنید و بگویید می‌خواهید روی آن کار کنید
-3. منتظر تایید باشید
-4. شروع به کار کنید!
+Potential later additions:
 
-## اولویت‌بندی | Prioritization
-اولویت‌ها بر اساس:
-- تعداد درخواست‌های کاربران
-- اهمیت ویژگی
-- پیچیدگی پیاده‌سازی
-- منابع موجود
+- caching / ETag / conditional requests;
+- rate limiting for a hosted service;
+- richer county/district filters;
+- OpenAPI schema;
+- optional spatial queries when coordinate coverage is sufficiently verified.
 
-Priorities are based on:
-- Number of user requests
-- Feature importance
-- Implementation complexity
-- Available resources
-
-## بازخورد | Feedback
-نظرات و پیشنهادات خود را در [GitHub Discussions](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/discussions) با ما در میان بگذارید.
-
-Share your feedback and suggestions in [GitHub Discussions](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/discussions).
+GraphQL, AI-powered search, and other feature expansion remain lower priority than data provenance, enrichment quality, and reproducible releases.
 
 ---
 
-**آخرین بروزرسانی | Last Updated**: 2024-01-15  
-**نسخه فعلی | Current Version**: 2.0.0
+# نقشه راه فارسی
+
+## وضعیت فعلی
+
+baseline منبع‌دار تقسیمات کشوری **۱۴۰۲** تکمیل شده است: ۳۱ استان، ۱٬۴۵۰ شهر مستقل، provenance پین‌شده، شناسه‌های منبع‌دار، audit سخت‌گیرانه بدون blocker و CI کامل.
+
+## اولویت بعدی
+
+اولویت بعدی پیدا کردن snapshot رسمی/قابل‌ردیابی **جدیدتر از ۱۴۰۲** و اعمال تغییرات اداری جدید با diff منبع‌محور است؛ نه اضافه‌کردن قابلیت‌های نمایشی جدید.
+
+پس از آن، تکمیل enrichmentها مثل مختصات و نام انگلیسی، سپس packaging/release قابل اعتماد و در نهایت توسعه بیشتر API انجام می‌شود.

@@ -1,0 +1,1957 @@
+{
+  "summary": {
+    "provinces": 31,
+    "records": 1450,
+    "membership_blockers": 0,
+    "records_without_official_code": 0,
+    "duplicate_official_codes": 0,
+    "provenance_status": "source-backed",
+    "facility_review": 0,
+    "administrative_name_review": 0,
+    "duplicate_coordinate_groups": 1,
+    "weak_english_names": 319,
+    "missing_english_names": 703,
+    "missing_coordinates": 703,
+    "enrichment_warnings": 1726,
+    "snapshot_year_jalali": 1402
+  },
+  "duplicate_official_codes": [],
+  "facility_review": [],
+  "administrative_name_review": [],
+  "duplicate_coordinates": [
+    {
+      "coordinates": [
+        36.631111,
+        57.600833
+      ],
+      "records": [
+        {
+          "id": 323,
+          "province": "خراسان رضوی",
+          "name": "لطف آباد"
+        },
+        {
+          "id": 296,
+          "province": "خراسان رضوی",
+          "name": "حکم آباد"
+        }
+      ]
+    }
+  ],
+  "weak_english_names": [
+    {
+      "id": 633,
+      "province": "مرکزی",
+      "name": "قورچی باشی",
+      "english_name": "QVRChY BAShY"
+    },
+    {
+      "id": 637,
+      "province": "مرکزی",
+      "name": "نوبران",
+      "english_name": "NVBRAN"
+    },
+    {
+      "id": 628,
+      "province": "مرکزی",
+      "name": "شازند",
+      "english_name": "ShAZND"
+    },
+    {
+      "id": 618,
+      "province": "مرکزی",
+      "name": "توره",
+      "english_name": "TVRH"
+    },
+    {
+      "id": 635,
+      "province": "مرکزی",
+      "name": "محلات",
+      "english_name": "MHLAT"
+    },
+    {
+      "id": 638,
+      "province": "مرکزی",
+      "name": "نیمور",
+      "english_name": "NYM VR"
+    },
+    {
+      "id": 639,
+      "province": "مرکزی",
+      "name": "پرندک",
+      "english_name": "PRNDK"
+    },
+    {
+      "id": 624,
+      "province": "مرکزی",
+      "name": "زاویه",
+      "english_name": "ZAVYH"
+    },
+    {
+      "id": 641,
+      "province": "مرکزی",
+      "name": "کمیجان",
+      "english_name": "KMYJAN"
+    },
+    {
+      "id": 620,
+      "province": "مرکزی",
+      "name": "خنداب",
+      "english_name": "KhNDAB"
+    },
+    {
+      "id": 631,
+      "province": "مرکزی",
+      "name": "فرمهین",
+      "english_name": "FRMHYN"
+    },
+    {
+      "id": 869,
+      "province": "گیلان",
+      "name": "لوندویل",
+      "english_name": "LVNDVYL"
+    },
+    {
+      "id": 870,
+      "province": "گیلان",
+      "name": "لیسار",
+      "english_name": "LYSAR"
+    },
+    {
+      "id": 879,
+      "province": "گیلان",
+      "name": "چوبر",
+      "english_name": "ChVBR"
+    },
+    {
+      "id": 880,
+      "province": "گیلان",
+      "name": "کوچصفهان",
+      "english_name": "KVChSFHAN"
+    },
+    {
+      "id": 851,
+      "province": "گیلان",
+      "name": "توتکابن",
+      "english_name": "TVTKABN"
+    },
+    {
+      "id": 852,
+      "province": "گیلان",
+      "name": "جیرنده",
+      "english_name": "JYRNDH"
+    },
+    {
+      "id": 878,
+      "province": "گیلان",
+      "name": "چابکسر",
+      "english_name": "ChABKSR"
+    },
+    {
+      "id": 862,
+      "province": "گیلان",
+      "name": "شلمان",
+      "english_name": "ShLMAN"
+    },
+    {
+      "id": 858,
+      "province": "گیلان",
+      "name": "رودبنه",
+      "english_name": "RVDBNH"
+    },
+    {
+      "id": 843,
+      "province": "گیلان",
+      "name": "احمد سرگوراب",
+      "english_name": "AHMDSRGVRAB"
+    },
+    {
+      "id": 846,
+      "province": "گیلان",
+      "name": "املش",
+      "english_name": "AMLSh"
+    },
+    {
+      "id": 860,
+      "province": "گیلان",
+      "name": "سیاهکل",
+      "english_name": "SYAHKL"
+    },
+    {
+      "id": 611,
+      "province": "مازندران",
+      "name": "گزنک",
+      "english_name": "GZNK"
+    },
+    {
+      "id": 580,
+      "province": "مازندران",
+      "name": "دابودشت",
+      "english_name": "DABVDShT"
+    },
+    {
+      "id": 579,
+      "province": "مازندران",
+      "name": "خوش رودپی",
+      "english_name": "KhVSh RVDPY"
+    },
+    {
+      "id": 612,
+      "province": "مازندران",
+      "name": "گلوگاه",
+      "english_name": "GLVGAH"
+    },
+    {
+      "id": 596,
+      "province": "مازندران",
+      "name": "مرزیکلا",
+      "english_name": "MRZYKLA"
+    },
+    {
+      "id": 582,
+      "province": "مازندران",
+      "name": "رستمکلا",
+      "english_name": "RSTMKLA"
+    },
+    {
+      "id": 578,
+      "province": "مازندران",
+      "name": "خلیل شهر",
+      "english_name": "KhLYL ShHR"
+    },
+    {
+      "id": 597,
+      "province": "مازندران",
+      "name": "نشتارود",
+      "english_name": "NShTARVD"
+    },
+    {
+      "id": 608,
+      "province": "مازندران",
+      "name": "کیاسر",
+      "english_name": "KYASR"
+    },
+    {
+      "id": 592,
+      "province": "مازندران",
+      "name": "فریم",
+      "english_name": "FRYM"
+    },
+    {
+      "id": 601,
+      "province": "مازندران",
+      "name": "پل سفید",
+      "english_name": "PL SFYD"
+    },
+    {
+      "id": 573,
+      "province": "مازندران",
+      "name": "بلده",
+      "english_name": "BLDH"
+    },
+    {
+      "id": 603,
+      "province": "مازندران",
+      "name": "چمستان",
+      "english_name": "ChMSTAN"
+    },
+    {
+      "id": 583,
+      "province": "مازندران",
+      "name": "رویان",
+      "english_name": "RVYAN"
+    },
+    {
+      "id": 570,
+      "province": "مازندران",
+      "name": "ایزدشهر",
+      "english_name": "AYZDShHR"
+    },
+    {
+      "id": 607,
+      "province": "مازندران",
+      "name": "کوهی خیل",
+      "english_name": "KVHY KhYL"
+    },
+    {
+      "id": 587,
+      "province": "مازندران",
+      "name": "سلمان شهر",
+      "english_name": "SLMANShHR"
+    },
+    {
+      "id": 589,
+      "province": "مازندران",
+      "name": "شیرگاه",
+      "english_name": "ShYRGAH"
+    },
+    {
+      "id": 605,
+      "province": "مازندران",
+      "name": "کلاردشت",
+      "english_name": "KLARDShT"
+    },
+    {
+      "id": 28,
+      "province": "آذربایجان شرقی",
+      "name": "سردرود",
+      "english_name": "SRDRVD"
+    },
+    {
+      "id": 9,
+      "province": "آذربایجان شرقی",
+      "name": "باسمنج",
+      "english_name": "BASMNJ"
+    },
+    {
+      "id": 43,
+      "province": "آذربایجان شرقی",
+      "name": "مهربان",
+      "english_name": "MHRBAN"
+    },
+    {
+      "id": 33,
+      "province": "آذربایجان شرقی",
+      "name": "شربیان",
+      "english_name": "ShRBYAN"
+    },
+    {
+      "id": 23,
+      "province": "آذربایجان شرقی",
+      "name": "دوزدوزان",
+      "english_name": "DVZDVZAN"
+    },
+    {
+      "id": 26,
+      "province": "آذربایجان شرقی",
+      "name": "زنوز",
+      "english_name": "ZNVZ"
+    },
+    {
+      "id": 55,
+      "province": "آذربایجان شرقی",
+      "name": "یامچی",
+      "english_name": "YAMChY"
+    },
+    {
+      "id": 4,
+      "province": "آذربایجان شرقی",
+      "name": "آقکند",
+      "english_name": "AQKND"
+    },
+    {
+      "id": 47,
+      "province": "آذربایجان شرقی",
+      "name": "هشترود",
+      "english_name": "HShTRVD"
+    },
+    {
+      "id": 16,
+      "province": "آذربایجان شرقی",
+      "name": "تیکمه داش",
+      "english_name": "TYKMH DASh"
+    },
+    {
+      "id": 36,
+      "province": "آذربایجان شرقی",
+      "name": "صوفیان",
+      "english_name": "SVFYAN"
+    },
+    {
+      "id": 19,
+      "province": "آذربایجان شرقی",
+      "name": "خامنه",
+      "english_name": "KhAMNH"
+    },
+    {
+      "id": 34,
+      "province": "آذربایجان شرقی",
+      "name": "شرفخانه",
+      "english_name": "ShRFKhANH"
+    },
+    {
+      "id": 52,
+      "province": "آذربایجان شرقی",
+      "name": "کوزه کنان",
+      "english_name": "KVZH KNAN"
+    },
+    {
+      "id": 15,
+      "province": "آذربایجان شرقی",
+      "name": "تسوج",
+      "english_name": "TSVJ"
+    },
+    {
+      "id": 22,
+      "province": "آذربایجان شرقی",
+      "name": "خواجه",
+      "english_name": "KhVAJH"
+    },
+    {
+      "id": 46,
+      "province": "آذربایجان شرقی",
+      "name": "هریس",
+      "english_name": "HRYS"
+    },
+    {
+      "id": 25,
+      "province": "آذربایجان شرقی",
+      "name": "زرنق",
+      "english_name": "ZRNQ"
+    },
+    {
+      "id": 10,
+      "province": "آذربایجان شرقی",
+      "name": "بخشایش",
+      "english_name": "BKhShAYSh"
+    },
+    {
+      "id": 31,
+      "province": "آذربایجان شرقی",
+      "name": "سیه رود",
+      "english_name": "SYH RVD"
+    },
+    {
+      "id": 45,
+      "province": "آذربایجان شرقی",
+      "name": "هادیشهر",
+      "english_name": "HADYShHR"
+    },
+    {
+      "id": 54,
+      "province": "آذربایجان شرقی",
+      "name": "گوگان",
+      "english_name": "GVGAN"
+    },
+    {
+      "id": 42,
+      "province": "آذربایجان شرقی",
+      "name": "ممقان",
+      "english_name": "MMQAN"
+    },
+    {
+      "id": 7,
+      "province": "آذربایجان شرقی",
+      "name": "ایلخچی",
+      "english_name": "AYLKhChY"
+    },
+    {
+      "id": 29,
+      "province": "آذربایجان شرقی",
+      "name": "سهند",
+      "english_name": "SHND"
+    },
+    {
+      "id": 50,
+      "province": "آذربایجان شرقی",
+      "name": "ورزقان",
+      "english_name": "VRZQAN"
+    },
+    {
+      "id": 48,
+      "province": "آذربایجان شرقی",
+      "name": "هوراند",
+      "english_name": "HVRAND"
+    },
+    {
+      "id": 39,
+      "province": "آذربایجان شرقی",
+      "name": "لیلان",
+      "english_name": "LYLAN"
+    },
+    {
+      "id": 68,
+      "province": "آذربایجان غربی",
+      "name": "سیلوانه",
+      "english_name": "SYLVANH"
+    },
+    {
+      "id": 73,
+      "province": "آذربایجان غربی",
+      "name": "فیرورق",
+      "english_name": "FYRVRQ"
+    },
+    {
+      "id": 76,
+      "province": "آذربایجان غربی",
+      "name": "محمدیار",
+      "english_name": "MHMDYAR"
+    },
+    {
+      "id": 69,
+      "province": "آذربایجان غربی",
+      "name": "سیمینه",
+      "english_name": "SYMYNH"
+    },
+    {
+      "id": 88,
+      "province": "آذربایجان غربی",
+      "name": "کشاورز",
+      "english_name": "KShAVRZ"
+    },
+    {
+      "id": 82,
+      "province": "آذربایجان غربی",
+      "name": "نالوس",
+      "english_name": "NALVS"
+    },
+    {
+      "id": 70,
+      "province": "آذربایجان غربی",
+      "name": "سیه چشمه",
+      "english_name": "SYH ChShMH"
+    },
+    {
+      "id": 85,
+      "province": "آذربایجان غربی",
+      "name": "پلدشت",
+      "english_name": "PLDShT"
+    },
+    {
+      "id": 74,
+      "province": "آذربایجان غربی",
+      "name": "قره ضیاءالدین",
+      "english_name": "QRH ZYAALDYN"
+    },
+    {
+      "id": 72,
+      "province": "آذربایجان غربی",
+      "name": "شوط",
+      "english_name": "ShVT"
+    },
+    {
+      "id": 60,
+      "province": "آذربایجان غربی",
+      "name": "باروق",
+      "english_name": "BARVQ"
+    },
+    {
+      "id": 797,
+      "province": "کرمانشاه",
+      "name": "هلشی",
+      "english_name": "HLShY"
+    },
+    {
+      "id": 801,
+      "province": "کرمانشاه",
+      "name": "کوزران",
+      "english_name": "KVZRAN"
+    },
+    {
+      "id": 795,
+      "province": "کرمانشاه",
+      "name": "نوسود",
+      "english_name": "NVSVD"
+    },
+    {
+      "id": 803,
+      "province": "کرمانشاه",
+      "name": "گیلانغرب",
+      "english_name": "GYLANGhRB"
+    },
+    {
+      "id": 781,
+      "province": "کرمانشاه",
+      "name": "سرمست",
+      "english_name": "SRMST"
+    },
+    {
+      "id": 776,
+      "province": "کرمانشاه",
+      "name": "بیستون",
+      "english_name": "BYSTVN"
+    },
+    {
+      "id": 773,
+      "province": "کرمانشاه",
+      "name": "ازگله",
+      "english_name": "AZGLH"
+    },
+    {
+      "id": 802,
+      "province": "کرمانشاه",
+      "name": "گهواره",
+      "english_name": "GHVARH"
+    },
+    {
+      "id": 388,
+      "province": "خوزستان",
+      "name": "مینوشهر",
+      "english_name": "MYNVShHR"
+    },
+    {
+      "id": 387,
+      "province": "خوزستان",
+      "name": "میانرود",
+      "english_name": "MYANRVD"
+    },
+    {
+      "id": 370,
+      "province": "خوزستان",
+      "name": "دارخوین",
+      "english_name": "DARKhVYN"
+    },
+    {
+      "id": 390,
+      "province": "خوزستان",
+      "name": "هندیجان",
+      "english_name": "HNDYJAN"
+    },
+    {
+      "id": 382,
+      "province": "خوزستان",
+      "name": "قلعه خواجه",
+      "english_name": "QLAH KhVAJH"
+    },
+    {
+      "id": 389,
+      "province": "خوزستان",
+      "name": "هفتگل",
+      "english_name": "HFTGL"
+    },
+    {
+      "id": 391,
+      "province": "خوزستان",
+      "name": "هویزه",
+      "english_name": "HVYZH"
+    },
+    {
+      "id": 368,
+      "province": "خوزستان",
+      "name": "حمیدیه",
+      "english_name": "HMYDYH"
+    },
+    {
+      "id": 373,
+      "province": "خوزستان",
+      "name": "دهدز",
+      "english_name": "DHDZ"
+    },
+    {
+      "id": 381,
+      "province": "خوزستان",
+      "name": "صیدون",
+      "english_name": "SYDVN"
+    },
+    {
+      "id": 469,
+      "province": "فارس",
+      "name": "ایزدخواست",
+      "english_name": "AYZDKhVAST"
+    },
+    {
+      "id": 493,
+      "province": "فارس",
+      "name": "سورمق",
+      "english_name": "SVRMQ"
+    },
+    {
+      "id": 500,
+      "province": "فارس",
+      "name": "صغاد",
+      "english_name": "SGhAD"
+    },
+    {
+      "id": 473,
+      "province": "فارس",
+      "name": "بهمن",
+      "english_name": "BHMN"
+    },
+    {
+      "id": 476,
+      "province": "فارس",
+      "name": "جنت شهر",
+      "english_name": "JNT ShHR"
+    },
+    {
+      "id": 496,
+      "province": "فارس",
+      "name": "ششده",
+      "english_name": "ShShDH"
+    },
+    {
+      "id": 515,
+      "province": "فارس",
+      "name": "میمند",
+      "english_name": "MYMND"
+    },
+    {
+      "id": 523,
+      "province": "فارس",
+      "name": "کنارتخته",
+      "english_name": "KNARTKhTH"
+    },
+    {
+      "id": 481,
+      "province": "فارس",
+      "name": "خشت",
+      "english_name": "KhShT"
+    },
+    {
+      "id": 475,
+      "province": "فارس",
+      "name": "بیرم",
+      "english_name": "BYRM"
+    },
+    {
+      "id": 472,
+      "province": "فارس",
+      "name": "بنارویه",
+      "english_name": "BNARVYH"
+    },
+    {
+      "id": 522,
+      "province": "فارس",
+      "name": "کامفیروز",
+      "english_name": "KAMFYRVZ"
+    },
+    {
+      "id": 484,
+      "province": "فارس",
+      "name": "خومه زار",
+      "english_name": "KhVMH ZAR"
+    },
+    {
+      "id": 502,
+      "province": "فارس",
+      "name": "علامرودشت",
+      "english_name": "ALAMRVDShT"
+    },
+    {
+      "id": 501,
+      "province": "فارس",
+      "name": "صفاشهر",
+      "english_name": "SFAShHR"
+    },
+    {
+      "id": 498,
+      "province": "فارس",
+      "name": "شهرپیر",
+      "english_name": "ShHR PYR"
+    },
+    {
+      "id": 486,
+      "province": "فارس",
+      "name": "دبیران",
+      "english_name": "DBYRAN"
+    },
+    {
+      "id": 527,
+      "province": "فارس",
+      "name": "گله دار",
+      "english_name": "GLH DAR"
+    },
+    {
+      "id": 520,
+      "province": "فارس",
+      "name": "وراوی",
+      "english_name": "VRAVY"
+    },
+    {
+      "id": 503,
+      "province": "فارس",
+      "name": "فراشبند",
+      "english_name": "FRAShBND"
+    },
+    {
+      "id": 482,
+      "province": "فارس",
+      "name": "خنج",
+      "english_name": "KhNJ"
+    },
+    {
+      "id": 524,
+      "province": "فارس",
+      "name": "کوهنجان",
+      "english_name": "KVHNJAN"
+    },
+    {
+      "id": 480,
+      "province": "فارس",
+      "name": "خرامه",
+      "english_name": "KhRAMH"
+    },
+    {
+      "id": 516,
+      "province": "فارس",
+      "name": "نودان",
+      "english_name": "NVDAN"
+    },
+    {
+      "id": 736,
+      "province": "کرمان",
+      "name": "بزنجان",
+      "english_name": "BZNJAN"
+    },
+    {
+      "id": 735,
+      "province": "کرمان",
+      "name": "بروات",
+      "english_name": "BRVAT"
+    },
+    {
+      "id": 738,
+      "province": "کرمان",
+      "name": "بهرمان",
+      "english_name": "BHRMAN"
+    },
+    {
+      "id": 772,
+      "province": "کرمان",
+      "name": "یزدان شهر",
+      "english_name": "YZDAN ShHR"
+    },
+    {
+      "id": 765,
+      "province": "کرمان",
+      "name": "پاریز",
+      "english_name": "PARYZ"
+    },
+    {
+      "id": 753,
+      "province": "کرمان",
+      "name": "شهداد",
+      "english_name": "ShHDAD"
+    },
+    {
+      "id": 731,
+      "province": "کرمان",
+      "name": "اندوهجرد",
+      "english_name": "ANDVHJRD"
+    },
+    {
+      "id": 740,
+      "province": "کرمان",
+      "name": "جوپار",
+      "english_name": "JVPAR"
+    },
+    {
+      "id": 732,
+      "province": "کرمان",
+      "name": "باغین",
+      "english_name": "BAGhYN"
+    },
+    {
+      "id": 766,
+      "province": "کرمان",
+      "name": "چترود",
+      "english_name": "ChTRVD"
+    },
+    {
+      "id": 769,
+      "province": "کرمان",
+      "name": "کهنوج",
+      "english_name": "KHNVJ"
+    },
+    {
+      "id": 771,
+      "province": "کرمان",
+      "name": "گلزار",
+      "english_name": "GLZAR"
+    },
+    {
+      "id": 760,
+      "province": "کرمان",
+      "name": "مردهک",
+      "english_name": "MRDHK"
+    },
+    {
+      "id": 761,
+      "province": "کرمان",
+      "name": "منوجان",
+      "english_name": "MNVJAN"
+    },
+    {
+      "id": 764,
+      "province": "کرمان",
+      "name": "نودژ",
+      "english_name": "NVDZh"
+    },
+    {
+      "id": 757,
+      "province": "کرمان",
+      "name": "فهرج",
+      "english_name": "FHRJ"
+    },
+    {
+      "id": 729,
+      "province": "کرمان",
+      "name": "امین شهر",
+      "english_name": "AMYN ShHR"
+    },
+    {
+      "id": 762,
+      "province": "کرمان",
+      "name": "نرماشیر",
+      "english_name": "NRMAShYR"
+    },
+    {
+      "id": 763,
+      "province": "کرمان",
+      "name": "نظام شهر",
+      "english_name": "NZAM ShHR"
+    },
+    {
+      "id": 337,
+      "province": "خراسان رضوی",
+      "name": "کاریز",
+      "english_name": "KARYZ"
+    },
+    {
+      "id": 331,
+      "province": "خراسان رضوی",
+      "name": "نیل شهر",
+      "english_name": "NYL ShHR"
+    },
+    {
+      "id": 333,
+      "province": "خراسان رضوی",
+      "name": "چاپشلو",
+      "english_name": "ChAPShLV"
+    },
+    {
+      "id": 329,
+      "province": "خراسان رضوی",
+      "name": "نوخندان",
+      "english_name": "NVKhNDAN"
+    },
+    {
+      "id": 289,
+      "province": "خراسان رضوی",
+      "name": "بیدخت",
+      "english_name": "BYDKhT"
+    },
+    {
+      "id": 336,
+      "province": "خراسان رضوی",
+      "name": "کاخک",
+      "english_name": "KAKhK"
+    },
+    {
+      "id": 335,
+      "province": "خراسان رضوی",
+      "name": "چکنه",
+      "english_name": "ChKNH"
+    },
+    {
+      "id": 311,
+      "province": "خراسان رضوی",
+      "name": "سنگان",
+      "english_name": "SNGAN"
+    },
+    {
+      "id": 310,
+      "province": "خراسان رضوی",
+      "name": "سلامی",
+      "english_name": "SLAMY"
+    },
+    {
+      "id": 315,
+      "province": "خراسان رضوی",
+      "name": "فرهادگرد",
+      "english_name": "FRHADGRD"
+    },
+    {
+      "id": 288,
+      "province": "خراسان رضوی",
+      "name": "بردسکن",
+      "english_name": "BRDSKN"
+    },
+    {
+      "id": 295,
+      "province": "خراسان رضوی",
+      "name": "جنگل",
+      "english_name": "JNGL"
+    },
+    {
+      "id": 306,
+      "province": "خراسان رضوی",
+      "name": "رشتخوار",
+      "english_name": "RShTKhVAR"
+    },
+    {
+      "id": 312,
+      "province": "خراسان رضوی",
+      "name": "شادمهر",
+      "english_name": "ShADMHR"
+    },
+    {
+      "id": 313,
+      "province": "خراسان رضوی",
+      "name": "شاندیز",
+      "english_name": "ShANDYZ"
+    },
+    {
+      "id": 317,
+      "province": "خراسان رضوی",
+      "name": "فیروزه",
+      "english_name": "FYRVZH"
+    },
+    {
+      "id": 294,
+      "province": "خراسان رضوی",
+      "name": "جغتای",
+      "english_name": "JGhTAY"
+    },
+    {
+      "id": 285,
+      "province": "خراسان رضوی",
+      "name": "باخرز",
+      "english_name": "BAKhRZ"
+    },
+    {
+      "id": 301,
+      "province": "خراسان رضوی",
+      "name": "داورزن",
+      "english_name": "DAVRZN"
+    },
+    {
+      "id": 320,
+      "province": "خراسان رضوی",
+      "name": "قدمگاه",
+      "english_name": "QDMGAH"
+    },
+    {
+      "id": 298,
+      "province": "خراسان رضوی",
+      "name": "خرو",
+      "english_name": "KhRV"
+    },
+    {
+      "id": 103,
+      "province": "اصفهان",
+      "name": "ابریشم",
+      "english_name": "ABRYShM"
+    },
+    {
+      "id": 150,
+      "province": "اصفهان",
+      "name": "نیاسر",
+      "english_name": "NYASR"
+    },
+    {
+      "id": 164,
+      "province": "اصفهان",
+      "name": "گوگد",
+      "english_name": "GVGD"
+    },
+    {
+      "id": 163,
+      "province": "اصفهان",
+      "name": "گلشهر",
+      "english_name": "GL ShHR"
+    },
+    {
+      "id": 154,
+      "province": "اصفهان",
+      "name": "چمگردان",
+      "english_name": "ChMGRDAN"
+    },
+    {
+      "id": 152,
+      "province": "اصفهان",
+      "name": "ورنامخواست",
+      "english_name": "VRNAMKhVAST"
+    },
+    {
+      "id": 140,
+      "province": "اصفهان",
+      "name": "فولادشهر",
+      "english_name": "FVLADShHR"
+    },
+    {
+      "id": 146,
+      "province": "اصفهان",
+      "name": "نایین",
+      "english_name": "NAYYN"
+    },
+    {
+      "id": 162,
+      "province": "اصفهان",
+      "name": "گلدشت",
+      "english_name": "GL DShT"
+    },
+    {
+      "id": 158,
+      "province": "اصفهان",
+      "name": "کهریزسنگ",
+      "english_name": "KHRYZSNG"
+    },
+    {
+      "id": 108,
+      "province": "اصفهان",
+      "name": "بادرود",
+      "english_name": "BADRVD"
+    },
+    {
+      "id": 145,
+      "province": "اصفهان",
+      "name": "میمه",
+      "english_name": "MYMH"
+    },
+    {
+      "id": 126,
+      "province": "اصفهان",
+      "name": "دیزیچه",
+      "english_name": "DYZYChH"
+    },
+    {
+      "id": 135,
+      "province": "اصفهان",
+      "name": "طالخونچه",
+      "english_name": "TALKhVNChH"
+    },
+    {
+      "id": 131,
+      "province": "اصفهان",
+      "name": "زیباشهر",
+      "english_name": "ZYBAShHR"
+    },
+    {
+      "id": 112,
+      "province": "اصفهان",
+      "name": "تیران",
+      "english_name": "TYRAN"
+    },
+    {
+      "id": 127,
+      "province": "اصفهان",
+      "name": "رضوانشهر",
+      "english_name": "RZVAN ShHR"
+    },
+    {
+      "id": 120,
+      "province": "اصفهان",
+      "name": "خورزوق",
+      "english_name": "KhVRZVQ"
+    },
+    {
+      "id": 113,
+      "province": "اصفهان",
+      "name": "جندق",
+      "english_name": "JNDQ"
+    },
+    {
+      "id": 159,
+      "province": "اصفهان",
+      "name": "کوهپایه",
+      "english_name": "KVHPAYH"
+    },
+    {
+      "id": 111,
+      "province": "اصفهان",
+      "name": "تودشک",
+      "english_name": "TVDShK"
+    },
+    {
+      "id": 107,
+      "province": "اصفهان",
+      "name": "اژیه",
+      "english_name": "AZhYH"
+    },
+    {
+      "id": 430,
+      "province": "سیستان و بلوچستان",
+      "name": "بزمان",
+      "english_name": "BZMAN"
+    },
+    {
+      "id": 457,
+      "province": "سیستان و بلوچستان",
+      "name": "پیشین",
+      "english_name": "PYShYN"
+    },
+    {
+      "id": 437,
+      "province": "سیستان و بلوچستان",
+      "name": "دوست محمد",
+      "english_name": "DVST MHMD"
+    },
+    {
+      "id": 460,
+      "province": "سیستان و بلوچستان",
+      "name": "گلمورتی",
+      "english_name": "GLMVRTY"
+    },
+    {
+      "id": 446,
+      "province": "سیستان و بلوچستان",
+      "name": "سوران",
+      "english_name": "SVRAN"
+    },
+    {
+      "id": 427,
+      "province": "سیستان و بلوچستان",
+      "name": "ادیمی",
+      "english_name": "ADYMY"
+    },
+    {
+      "id": 452,
+      "province": "سیستان و بلوچستان",
+      "name": "میرجاوه",
+      "english_name": "MYRJAVH"
+    },
+    {
+      "id": 448,
+      "province": "سیستان و بلوچستان",
+      "name": "قصرقند",
+      "english_name": "QSRQND"
+    },
+    {
+      "id": 447,
+      "province": "سیستان و بلوچستان",
+      "name": "فنوج",
+      "english_name": "FNVJ"
+    },
+    {
+      "id": 455,
+      "province": "سیستان و بلوچستان",
+      "name": "نگور",
+      "english_name": "NGVR"
+    },
+    {
+      "id": 445,
+      "province": "سیستان و بلوچستان",
+      "name": "سرباز",
+      "english_name": "SRBAZ"
+    },
+    {
+      "id": 428,
+      "province": "سیستان و بلوچستان",
+      "name": "اسپکه",
+      "english_name": "ASPKH"
+    },
+    {
+      "id": 721,
+      "province": "کردستان",
+      "name": "شویشه",
+      "english_name": "ShVYShH"
+    },
+    {
+      "id": 725,
+      "province": "کردستان",
+      "name": "چناره",
+      "english_name": "ChNARH"
+    },
+    {
+      "id": 716,
+      "province": "کردستان",
+      "name": "زرینه",
+      "english_name": "ZRYNH"
+    },
+    {
+      "id": 715,
+      "province": "کردستان",
+      "name": "دیواندره",
+      "english_name": "DYVANDRH"
+    },
+    {
+      "id": 714,
+      "province": "کردستان",
+      "name": "دهگلان",
+      "english_name": "DHGLAN"
+    },
+    {
+      "id": 676,
+      "province": "همدان",
+      "name": "فرسفج",
+      "english_name": "FRSFJ"
+    },
+    {
+      "id": 672,
+      "province": "همدان",
+      "name": "زنگنه",
+      "english_name": "ZNGNH"
+    },
+    {
+      "id": 677,
+      "province": "همدان",
+      "name": "فیروزان",
+      "english_name": "FYRVZAN"
+    },
+    {
+      "id": 678,
+      "province": "همدان",
+      "name": "قهاوند",
+      "english_name": "QHAVND"
+    },
+    {
+      "id": 684,
+      "province": "همدان",
+      "name": "کبودرآهنگ",
+      "english_name": "KBVD RAHNG"
+    },
+    {
+      "id": 679,
+      "province": "همدان",
+      "name": "لالجین",
+      "english_name": "LALJYN"
+    },
+    {
+      "id": 675,
+      "province": "همدان",
+      "name": "فامنین",
+      "english_name": "FAMNYN"
+    },
+    {
+      "id": 707,
+      "province": "چهارمحال و بختیاری",
+      "name": "گندمان",
+      "english_name": "GNDMAN"
+    },
+    {
+      "id": 692,
+      "province": "چهارمحال و بختیاری",
+      "name": "سفیددشت",
+      "english_name": "SFYDDShT"
+    },
+    {
+      "id": 689,
+      "province": "چهارمحال و بختیاری",
+      "name": "بلداجی",
+      "english_name": "BLDAJY"
+    },
+    {
+      "id": 704,
+      "province": "چهارمحال و بختیاری",
+      "name": "هفشجان",
+      "english_name": "HFShJAN"
+    },
+    {
+      "id": 703,
+      "province": "چهارمحال و بختیاری",
+      "name": "نافچ",
+      "english_name": "NAFCh"
+    },
+    {
+      "id": 694,
+      "province": "چهارمحال و بختیاری",
+      "name": "سورشجان",
+      "english_name": "SVRShJAN"
+    },
+    {
+      "id": 693,
+      "province": "چهارمحال و بختیاری",
+      "name": "سودجان",
+      "english_name": "SVDJAN"
+    },
+    {
+      "id": 690,
+      "province": "چهارمحال و بختیاری",
+      "name": "جونقان",
+      "english_name": "JVNQAN"
+    },
+    {
+      "id": 705,
+      "province": "چهارمحال و بختیاری",
+      "name": "چلگرد",
+      "english_name": "ChLGRD"
+    },
+    {
+      "id": 695,
+      "province": "چهارمحال و بختیاری",
+      "name": "شلمزار",
+      "english_name": "ShLMZAR"
+    },
+    {
+      "id": 708,
+      "province": "چهارمحال و بختیاری",
+      "name": "گهرو",
+      "english_name": "GHRV"
+    },
+    {
+      "id": 686,
+      "province": "چهارمحال و بختیاری",
+      "name": "آلونی",
+      "english_name": "ALVNY"
+    },
+    {
+      "id": 701,
+      "province": "چهارمحال و بختیاری",
+      "name": "مال خلیفه",
+      "english_name": "MAL KhLYFH"
+    },
+    {
+      "id": 699,
+      "province": "چهارمحال و بختیاری",
+      "name": "فرخ شهر",
+      "english_name": "FRKh ShHR"
+    },
+    {
+      "id": 549,
+      "province": "لرستان",
+      "name": "بیران شهر",
+      "english_name": "BYRANShHR"
+    },
+    {
+      "id": 554,
+      "province": "لرستان",
+      "name": "زاغه",
+      "english_name": "ZAGhH"
+    },
+    {
+      "id": 551,
+      "province": "لرستان",
+      "name": "درب گنبد",
+      "english_name": "DRB GNBD"
+    },
+    {
+      "id": 561,
+      "province": "لرستان",
+      "name": "پلدختر",
+      "english_name": "PL DKhTR"
+    },
+    {
+      "id": 555,
+      "province": "لرستان",
+      "name": "سراب دوره",
+      "english_name": "SRAB DVRH"
+    },
+    {
+      "id": 560,
+      "province": "لرستان",
+      "name": "ویسیان",
+      "english_name": "VYSYAN"
+    },
+    {
+      "id": 192,
+      "province": "ایلام",
+      "name": "پهله",
+      "english_name": "PHLH"
+    },
+    {
+      "id": 190,
+      "province": "ایلام",
+      "name": "موسیان",
+      "english_name": "MVSYAN"
+    },
+    {
+      "id": 191,
+      "province": "ایلام",
+      "name": "میمه",
+      "english_name": "MYMH"
+    },
+    {
+      "id": 188,
+      "province": "ایلام",
+      "name": "لومار",
+      "english_name": "LVMAR"
+    },
+    {
+      "id": 817,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "گراب سفلی",
+      "english_name": "GRAB SFLY"
+    },
+    {
+      "id": 815,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "چیتاب",
+      "english_name": "ChYTAB"
+    },
+    {
+      "id": 807,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "دیشموک",
+      "english_name": "DYShMVK"
+    },
+    {
+      "id": 811,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "لیکک",
+      "english_name": "LYKK"
+    },
+    {
+      "id": 804,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "باشت",
+      "english_name": "BAShT"
+    },
+    {
+      "id": 810,
+      "province": "کهگیلویه و بویراحمد",
+      "name": "لنده",
+      "english_name": "LNDH"
+    },
+    {
+      "id": 211,
+      "province": "بوشهر",
+      "name": "خارک",
+      "english_name": "KhARK"
+    },
+    {
+      "id": 224,
+      "province": "بوشهر",
+      "name": "چغادک",
+      "english_name": "ChGhADK"
+    },
+    {
+      "id": 214,
+      "province": "بوشهر",
+      "name": "دلوار",
+      "english_name": "DLVAR"
+    },
+    {
+      "id": 223,
+      "province": "بوشهر",
+      "name": "وحدتیه",
+      "english_name": "VHDTYH"
+    },
+    {
+      "id": 213,
+      "province": "بوشهر",
+      "name": "دالکی",
+      "english_name": "DALKY"
+    },
+    {
+      "id": 209,
+      "province": "بوشهر",
+      "name": "تنگ ارم",
+      "english_name": "TNG ARM"
+    },
+    {
+      "id": 226,
+      "province": "بوشهر",
+      "name": "کلمه",
+      "english_name": "KLMH"
+    },
+    {
+      "id": 195,
+      "province": "بوشهر",
+      "name": "آب پخش",
+      "english_name": "AB PKhSh"
+    },
+    {
+      "id": 219,
+      "province": "بوشهر",
+      "name": "شنبه",
+      "english_name": "ShNBH"
+    },
+    {
+      "id": 199,
+      "province": "بوشهر",
+      "name": "بردخون",
+      "english_name": "BRDKhVN"
+    },
+    {
+      "id": 222,
+      "province": "بوشهر",
+      "name": "نخل تقی",
+      "english_name": "NKhL TQY"
+    },
+    {
+      "id": 410,
+      "province": "زنجان",
+      "name": "هیدج",
+      "english_name": "HYDJ"
+    },
+    {
+      "id": 408,
+      "province": "زنجان",
+      "name": "قیدار",
+      "english_name": "QYDAR"
+    },
+    {
+      "id": 406,
+      "province": "زنجان",
+      "name": "سهرورد",
+      "english_name": "SHRVRD"
+    },
+    {
+      "id": 401,
+      "province": "زنجان",
+      "name": "دندی",
+      "english_name": "DNDY"
+    },
+    {
+      "id": 405,
+      "province": "زنجان",
+      "name": "سلطانیه",
+      "english_name": "SLTANYH"
+    },
+    {
+      "id": 413,
+      "province": "سمنان",
+      "name": "بسطام",
+      "english_name": "BSTAM"
+    },
+    {
+      "id": 425,
+      "province": "سمنان",
+      "name": "کلاته خیج",
+      "english_name": "KLATH KhYJ"
+    },
+    {
+      "id": 414,
+      "province": "سمنان",
+      "name": "بیارجمند",
+      "english_name": "BYARJMND"
+    },
+    {
+      "id": 420,
+      "province": "سمنان",
+      "name": "شهمیرزاد",
+      "english_name": "ShHMYRZAD"
+    },
+    {
+      "id": 416,
+      "province": "سمنان",
+      "name": "درجزین",
+      "english_name": "DRJZYN"
+    },
+    {
+      "id": 424,
+      "province": "سمنان",
+      "name": "میامی",
+      "english_name": "MYAMY"
+    },
+    {
+      "id": 417,
+      "province": "سمنان",
+      "name": "سرخه",
+      "english_name": "SRKhH"
+    },
+    {
+      "id": 892,
+      "province": "یزد",
+      "name": "ندوشن",
+      "english_name": "NDVShN"
+    },
+    {
+      "id": 889,
+      "province": "یزد",
+      "name": "مهردشت",
+      "english_name": "MHRDShT"
+    },
+    {
+      "id": 883,
+      "province": "یزد",
+      "name": "اشکذر",
+      "english_name": "AShKZR"
+    },
+    {
+      "id": 888,
+      "province": "یزد",
+      "name": "مروست",
+      "english_name": "MRVST"
+    },
+    {
+      "id": 642,
+      "province": "هرمزگان",
+      "name": "ابوموسی",
+      "english_name": "ABVMVSY"
+    },
+    {
+      "id": 652,
+      "province": "هرمزگان",
+      "name": "درگهان",
+      "english_name": "DRGHAN"
+    },
+    {
+      "id": 655,
+      "province": "هرمزگان",
+      "name": "سندرک",
+      "english_name": "SNDRK"
+    },
+    {
+      "id": 662,
+      "province": "هرمزگان",
+      "name": "لیردف",
+      "english_name": "LYRDF"
+    },
+    {
+      "id": 656,
+      "province": "هرمزگان",
+      "name": "سیریک",
+      "english_name": "SYRYK"
+    },
+    {
+      "id": 262,
+      "province": "تهران",
+      "name": "کیلان",
+      "english_name": "KYLAN"
+    },
+    {
+      "id": 233,
+      "province": "تهران",
+      "name": "باقرشهر",
+      "english_name": "BAQRShHR"
+    },
+    {
+      "id": 248,
+      "province": "تهران",
+      "name": "فشم",
+      "english_name": "FShM"
+    },
+    {
+      "id": 246,
+      "province": "تهران",
+      "name": "صباشهر",
+      "english_name": "SBAShHR"
+    },
+    {
+      "id": 241,
+      "province": "تهران",
+      "name": "شاهدشهر",
+      "english_name": "ShAHDShHR"
+    },
+    {
+      "id": 257,
+      "province": "تهران",
+      "name": "وحیدیه",
+      "english_name": "VHYDYH"
+    },
+    {
+      "id": 247,
+      "province": "تهران",
+      "name": "فردوسیه",
+      "english_name": "FRDVSYH"
+    },
+    {
+      "id": 237,
+      "province": "تهران",
+      "name": "رباطکریم",
+      "english_name": "RBAT KRYM"
+    },
+    {
+      "id": 256,
+      "province": "تهران",
+      "name": "نصیرشهر",
+      "english_name": "NSYRShHR"
+    },
+    {
+      "id": 228,
+      "province": "تهران",
+      "name": "ارجمند",
+      "english_name": "ARJMND"
+    },
+    {
+      "id": 263,
+      "province": "تهران",
+      "name": "گلستان",
+      "english_name": "GLSTAN"
+    },
+    {
+      "id": 255,
+      "province": "تهران",
+      "name": "نسیم شهر",
+      "english_name": "NSYM ShHR"
+    },
+    {
+      "id": 234,
+      "province": "تهران",
+      "name": "بومهن",
+      "english_name": "BVMHN"
+    },
+    {
+      "id": 252,
+      "province": "تهران",
+      "name": "قرچک",
+      "english_name": "QRChK"
+    },
+    {
+      "id": 100,
+      "province": "اردبیل",
+      "name": "گرمی",
+      "english_name": "GRMY"
+    },
+    {
+      "id": 101,
+      "province": "اردبیل",
+      "name": "گیوی",
+      "english_name": "GYVY"
+    },
+    {
+      "id": 90,
+      "province": "اردبیل",
+      "name": "آبی بیگلو",
+      "english_name": "ABY BYGLV"
+    },
+    {
+      "id": 542,
+      "province": "قم",
+      "name": "دستجرد",
+      "english_name": "DSTJRD"
+    },
+    {
+      "id": 543,
+      "province": "قم",
+      "name": "سلفچگان",
+      "english_name": "SLFChGAN"
+    },
+    {
+      "id": 532,
+      "province": "قزوین",
+      "name": "اسفرورین",
+      "english_name": "ASFRVRYN"
+    },
+    {
+      "id": 540,
+      "province": "قزوین",
+      "name": "نرجه",
+      "english_name": "NRJH"
+    },
+    {
+      "id": 539,
+      "province": "قزوین",
+      "name": "محمودآبادنمونه",
+      "english_name": "MHMVDABAD NMVNH"
+    },
+    {
+      "id": 541,
+      "province": "قزوین",
+      "name": "کوهین",
+      "english_name": "KVHYN"
+    },
+    {
+      "id": 528,
+      "province": "قزوین",
+      "name": "آبگرم",
+      "english_name": "ABGRM"
+    },
+    {
+      "id": 833,
+      "province": "گلستان",
+      "name": "نوکنده",
+      "english_name": "NVKNDH"
+    },
+    {
+      "id": 828,
+      "province": "گلستان",
+      "name": "سرخنکلاته",
+      "english_name": "SRKhNKLATH"
+    },
+    {
+      "id": 834,
+      "province": "گلستان",
+      "name": "نگین شهر",
+      "english_name": "NGYN ShHR"
+    },
+    {
+      "id": 826,
+      "province": "گلستان",
+      "name": "خان ببین",
+      "english_name": "KhAN BBYN"
+    },
+    {
+      "id": 827,
+      "province": "گلستان",
+      "name": "دلند",
+      "english_name": "DLND"
+    },
+    {
+      "id": 829,
+      "province": "گلستان",
+      "name": "سیمین شهر",
+      "english_name": "SYMYN ShHR"
+    },
+    {
+      "id": 837,
+      "province": "گلستان",
+      "name": "گالیکش",
+      "english_name": "GALYKSh"
+    },
+    {
+      "id": 345,
+      "province": "خراسان شمالی",
+      "name": "حصارگرمخان",
+      "english_name": "HSAR GRM KhAN"
+    },
+    {
+      "id": 348,
+      "province": "خراسان شمالی",
+      "name": "سنخواست",
+      "english_name": "SNKhVAST"
+    },
+    {
+      "id": 353,
+      "province": "خراسان شمالی",
+      "name": "لوجلی",
+      "english_name": "LVJLY"
+    },
+    {
+      "id": 355,
+      "province": "خراسان شمالی",
+      "name": "گرمه",
+      "english_name": "GRMH"
+    },
+    {
+      "id": 354,
+      "province": "خراسان شمالی",
+      "name": "پیش قلعه",
+      "english_name": "PYSh QLAH"
+    },
+    {
+      "id": 274,
+      "province": "خراسان جنوبی",
+      "name": "سربیشه",
+      "english_name": "SRBYShH"
+    },
+    {
+      "id": 265,
+      "province": "خراسان جنوبی",
+      "name": "اسفدن",
+      "english_name": "ASFDN"
+    },
+    {
+      "id": 269,
+      "province": "خراسان جنوبی",
+      "name": "خضری دشت بیاض",
+      "english_name": "KhZRY DShT BYAZ"
+    },
+    {
+      "id": 275,
+      "province": "خراسان جنوبی",
+      "name": "شوسف",
+      "english_name": "ShVSF"
+    },
+    {
+      "id": 282,
+      "province": "خراسان جنوبی",
+      "name": "نهبندان",
+      "english_name": "NHBNDAN"
+    },
+    {
+      "id": 272,
+      "province": "خراسان جنوبی",
+      "name": "دیهوک",
+      "english_name": "DYHVK"
+    },
+    {
+      "id": 170,
+      "province": "البرز",
+      "name": "ماهدشت",
+      "english_name": "MAHDShT"
+    },
+    {
+      "id": 177,
+      "province": "البرز",
+      "name": "کمال شهر",
+      "english_name": "KMALShHR"
+    },
+    {
+      "id": 171,
+      "province": "البرز",
+      "name": "محمد شهر",
+      "english_name": "MHMDShHR"
+    },
+    {
+      "id": 179,
+      "province": "البرز",
+      "name": "گرمدره",
+      "english_name": "GRMDRH"
+    },
+    {
+      "id": 178,
+      "province": "البرز",
+      "name": "کوهسار",
+      "english_name": "KVHSAR"
+    },
+    {
+      "id": 172,
+      "province": "البرز",
+      "name": "مشکین دشت",
+      "english_name": "MShKYN DShT"
+    }
+  ]
+}

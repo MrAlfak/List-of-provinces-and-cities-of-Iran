@@ -1,219 +1,72 @@
-# 📦 راهنمای انتشار | Publishing Guide
+# Publishing guide
 
-این راهنما مراحل انتشار پکیج در npm و PyPI را توضیح می‌دهد.
+Releases must publish a **validated source-backed dataset**, not simply whatever happens to be checked into the repository.
 
-## پیش‌نیازها | Prerequisites
+## Required pre-release checks
 
-### برای npm
 ```bash
-# ثبت‌نام در npm
-npm adduser
-
-# یا ورود
-npm login
-```
-
-### برای PyPI
-```bash
-# نصب ابزارهای لازم
-pip install build twine
-
-# ثبت‌نام در PyPI
-# https://pypi.org/account/register/
-```
-
-## انتشار در npm
-
-### 1. بررسی نهایی
-```bash
-# تست پکیج
-npm test
-
-# بررسی فایل‌های شامل شده
-npm pack --dry-run
-```
-
-### 2. بروزرسانی نسخه
-```bash
-# نسخه patch (2.0.0 -> 2.0.1)
-npm version patch
-
-# نسخه minor (2.0.0 -> 2.1.0)
-npm version minor
-
-# نسخه major (2.0.0 -> 3.0.0)
-npm version major
-```
-
-### 3. انتشار
-```bash
-# انتشار عمومی
-npm publish
-
-# انتشار با tag
-npm publish --tag beta
-```
-
-### 4. تایید
-```bash
-# نصب از npm
-npm install iran-cities-data
-
-# بررسی صفحه npm
-# https://www.npmjs.com/package/iran-cities-data
-```
-
-## انتشار در PyPI
-
-### 1. بررسی نهایی
-```bash
-# اجرای تست‌ها
-python -m pytest tests/
-
-# اعتبارسنجی داده‌ها
+python -m pip install -r requirements.txt
 python scripts/validate_data.py
+python scripts/audit_data.py --strict
+python -m pytest tests/
+python scripts/generate_all.py
 ```
 
-### 2. بروزرسانی نسخه
-در فایل‌های زیر نسخه را بروز کنید:
-- `setup.py` -> `version="2.0.0"`
-- `pyproject.toml` -> `version = "2.0.0"`
+For the current 1402 baseline, CI additionally verifies:
 
-### 3. ساخت پکیج
-```bash
-# پاک‌سازی فایل‌های قبلی
-rm -rf dist/ build/ *.egg-info
+- 31 provinces
+- 1,450 canonical city records
+- complete, globally unique `official_code` values
+- provenance status `source-backed`
+- MySQL/PostgreSQL generation and SQL escaping regression
+- Docker build and `/health` smoke test
 
-# ساخت پکیج
-python -m build
-```
+## Data provenance
 
-### 4. بررسی پکیج
-```bash
-# بررسی با twine
-twine check dist/*
-```
+Before a release that changes canonical membership, verify and record:
 
-### 5. انتشار در TestPyPI (اختیاری)
-```bash
-# انتشار در TestPyPI
-twine upload --repository testpypi dist/*
+- publisher / official source page;
+- snapshot date/year;
+- pinned revision when a mirror is used;
+- source SHA-256;
+- importer/rebuild command;
+- exclusion/delta audit trail;
+- strict membership audit result;
+- source/data license.
 
-# نصب از TestPyPI
-pip install --index-url https://test.pypi.org/simple/ iran-cities
-```
+The current pinned baseline is documented in `data/provenance.json` and `DATA_LICENSE.md`.
 
-### 6. انتشار در PyPI
-```bash
-# انتشار نهایی
-twine upload dist/*
-```
+## Rebuilding 1402
 
-### 7. تایید
-```bash
-# نصب از PyPI
-pip install iran-cities
+The 1402 rebuild is explicit. Use the **Tests** workflow with `rebuild_1402=true` or run `scripts/rebuild_from_amar_1402.py` against the exact pinned source revision. Do not change the pinned source or expected counts silently.
 
-# بررسی صفحه PyPI
-# https://pypi.org/project/iran-cities/
-```
+## Derived release artifacts
 
-## انتشار خودکار با GitHub Actions
+The canonical JSON is `iran_cities.json`. Derived outputs include:
 
-### تنظیم Secrets
+- `iran_cities.min.json`
+- `iran_cities.csv`
+- `iran_cities.geojson` — geocoded subset only
+- `iran_cities.mysql.sql`
+- `iran_cities.postgresql.sql`
 
-در تنظیمات GitHub repository:
+GeoJSON must not fabricate points for cities without coordinate enrichment.
 
-1. `Settings` -> `Secrets and variables` -> `Actions`
-2. اضافه کردن secrets:
-   - `NPM_TOKEN`: توکن npm
-   - `PYPI_TOKEN`: توکن PyPI
+## Licensing notices
 
-### ایجاد Release
+- Repository-authored software/code: MIT (`LICENSE`).
+- Current source-backed 1402 dataset and its data derivatives: GPL-3.0 (`DATA_LICENSE.md`, `LICENSE-DATA-GPL-3.0`).
 
-```bash
-# ایجاد tag
-git tag v2.0.0
-git push origin v2.0.0
+Any npm or other data-bearing package must include the relevant data-license notice and attribution.
 
-# یا از GitHub UI
-# Releases -> Create a new release
-```
+## npm
 
-پس از ایجاد release، GitHub Actions به طور خودکار:
-- پکیج را در npm منتشر می‌کند
-- پکیج را در PyPI منتشر می‌کند
+The npm path remains supported only when validation, strict membership audit, tests and artifact generation pass before publishing.
 
-## چک‌لیست قبل از انتشار
+## PyPI
 
-- [ ] تمام تست‌ها پاس شده‌اند
-- [ ] اعتبارسنجی داده‌ها موفق بوده
-- [ ] CHANGELOG.md بروز شده
-- [ ] نسخه در تمام فایل‌ها یکسان است
-- [ ] README.md کامل و بروز است
-- [ ] مستندات کامل است
-- [ ] فایل‌های غیرضروری در .npmignore هستند
-- [ ] LICENSE فایل موجود است
+PyPI publishing remains disabled. Re-enable only after the repository contains a self-contained Python package/wheel that bundles the intended data files, includes all license notices, and passes a clean-install import/data-access test in CI.
 
-## نسخه‌گذاری | Versioning
+## Versioning
 
-از [Semantic Versioning](https://semver.org/) استفاده می‌کنیم:
-
-- **MAJOR** (3.0.0): تغییرات ناسازگار
-- **MINOR** (2.1.0): ویژگی‌های جدید سازگار
-- **PATCH** (2.0.1): رفع باگ‌ها
-
-## پس از انتشار
-
-### 1. بروزرسانی مستندات
-```bash
-# بروزرسانی README با لینک‌های جدید
-# بروزرسانی CHANGELOG
-```
-
-### 2. اطلاع‌رسانی
-- توییت کردن
-- پست در Reddit
-- اطلاع به کاربران
-
-### 3. نظارت
-- بررسی download stats
-- پاسخ به issues
-- بررسی feedback
-
-## مشکلات رایج
-
-### npm publish fails
-```bash
-# بررسی ورود
-npm whoami
-
-# ورود مجدد
-npm login
-```
-
-### PyPI upload fails
-```bash
-# بررسی توکن
-# بررسی نام پکیج (باید یکتا باشد)
-# بررسی نسخه (نباید تکراری باشد)
-```
-
-### Version conflict
-```bash
-# همیشه نسخه را در همه فایل‌ها بروز کنید:
-# - package.json
-# - setup.py
-# - pyproject.toml
-```
-
-## منابع
-
-- [npm Publishing Guide](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry)
-- [PyPI Publishing Guide](https://packaging.python.org/tutorials/packaging-projects/)
-- [Semantic Versioning](https://semver.org/)
-- [GitHub Actions](https://docs.github.com/en/actions)
-
----
-
-**نکته**: همیشه قبل از انتشار، پکیج را در محیط تست بررسی کنید!
+A newer administrative snapshot or membership-changing sourced delta should be treated as a meaningful data release. Document additions/removals/renames/moves and preserve compatibility IDs only when the identity mapping is unambiguous.

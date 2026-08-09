@@ -1,24 +1,23 @@
-# Dockerfile for Iran Cities API Server
-FROM python:3.9-slim
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000 \
+    IRAN_CITIES_DATA_FILE=/app/iran_cities.json
 
 WORKDIR /app
 
-# Copy requirements
-COPY requirements.txt .
+RUN addgroup --system app && adduser --system --ingroup app app
 
-# Install dependencies
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
-COPY iran_cities.json .
-COPY api_server.py .
+COPY --chown=app:app iran_cities.json api_server.py ./
 
-# Expose port
+USER app
 EXPOSE 8000
 
-# Set environment variables
-ENV FLASK_APP=api_server.py
-ENV PYTHONUNBUFFERED=1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()" || exit 1
 
-# Run the application
-CMD ["python", "api_server.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "4", "--timeout", "30", "api_server:app"]

@@ -1,161 +1,87 @@
-# 🚀 شروع سریع | Quick Start
+# Quick start
 
-## نصب و استفاده در 3 دقیقه!
+The checked-in canonical dataset is the source-backed **SCI 1402** snapshot with **31 provinces and 1,450 independent cities**.
 
-### 1️⃣ دانلود فایل JSON
-
-```bash
-curl -O https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
-```
-
-### 2️⃣ استفاده در JavaScript
-
-```javascript
-fetch('iran_cities.json')
-  .then(response => response.json())
-  .then(data => {
-    console.log(`تعداد استان‌ها: ${data.length}`);
-    console.log(`اولین استان: ${data[0].province}`);
-  });
-```
-
-### 3️⃣ استفاده در Python
-
-```python
-import json
-
-with open('iran_cities.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-
-print(f"تعداد استان‌ها: {len(data)}")
-print(f"اولین استان: {data[0]['province']}")
-```
-
-### 4️⃣ اجرای API Server
+## Validate and test
 
 ```bash
-pip install flask flask-cors
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python scripts/audit_data.py --strict
+python -m pytest tests/
+```
+
+`--strict` validates source membership/provenance. Missing coordinates or English names are optional enrichment and are reported separately.
+
+## Generate all formats
+
+```bash
+python scripts/generate_all.py
+```
+
+Generated/maintained formats:
+
+```text
+iran_cities.json
+iran_cities.min.json
+iran_cities.csv
+iran_cities.geojson
+iran_cities.mysql.sql
+iran_cities.postgresql.sql
+```
+
+`iran_cities.geojson` is only the geocoded subset; use `iran_cities.json` for the complete 1,450-city membership list.
+
+## Run API
+
+```bash
 python api_server.py
 ```
 
-سپس مرورگر را باز کنید: http://localhost:8000
+or:
 
-### 5️⃣ نمایش روی نقشه
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-</head>
-<body>
-    <div id="map" style="height: 600px;"></div>
-    <script>
-        const map = L.map('map').setView([32.4279, 53.6880], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        
-        fetch('iran_cities.geojson')
-            .then(response => response.json())
-            .then(data => {
-                L.geoJSON(data, {
-                    onEachFeature: (feature, layer) => {
-                        layer.bindPopup(feature.properties.name);
-                    }
-                }).addTo(map);
-            });
-    </script>
-</body>
-</html>
+```bash
+docker compose up --build
 ```
 
-## 📚 مستندات کامل
+Health check:
 
-- [README فارسی](README.fa.md)
-- [README English](README.md)
-- [مستندات API](docs/API.md)
-- [راهنمای توسعه](docs/DEVELOPMENT.md)
-- [نمونه‌های بیشتر](examples/README.md)
-
-## 🎯 موارد استفاده رایج
-
-### دریافت لیست استان‌ها
-
-```javascript
-const provinces = data.map(p => ({
-    id: p.id,
-    name: p.province,
-    englishName: p.english_name
-}));
+```text
+GET /health
 ```
 
-### جستجوی شهر
+Main API namespace:
 
-```javascript
-function findCity(cityName) {
-    for (const province of data) {
-        const city = province.cities.find(c => 
-            c.name.includes(cityName)
-        );
-        if (city) {
-            return {
-                city: city.name,
-                province: province.province,
-                coordinates: {
-                    lat: city.latitude,
-                    lon: city.longitude
-                }
-            };
-        }
-    }
-    return null;
-}
-
-const tehran = findCity('تهران');
-console.log(tehran);
+```text
+/api/v1
 ```
 
-### دریافت مراکز استان‌ها
+## Data identity
 
-```javascript
-const capitals = data.map(province => {
-    const capital = province.cities.find(c => c.is_capital);
-    return {
-        province: province.province,
-        capital: capital.name,
-        phoneCode: province.phone_code
-    };
-});
-```
+Prefer `official_code` / `uid` for source-backed identity. Numeric `id` values are retained for legacy compatibility where mapping was unambiguous.
 
-## 💡 نکات مهم
+## Rebuild the pinned 1402 snapshot
 
-1. **برای production از نسخه minified استفاده کنید:**
-   ```
-   iran_cities.min.json (148 KB)
-   ```
+The rebuild is explicit and reproducible. In GitHub Actions, manually run the **Tests** workflow with `rebuild_1402=true`.
 
-2. **برای نقشه از GeoJSON استفاده کنید:**
-   ```
-   iran_cities.geojson
-   ```
+Locally, use `scripts/rebuild_from_amar_1402.py` with the exact source revision recorded in `data/provenance.json`. The importer will stop if the expected 1,659 raw rows, 209 excluded urban subareas or 1,450 canonical city count changes unexpectedly.
 
-3. **برای دیتابیس از SQL استفاده کنید:**
-   ```
-   iran_cities.sql
-   ```
+## Licensing
 
-4. **برای Excel از CSV استفاده کنید:**
-   ```
-   iran_cities.csv
-   ```
-
-## 🤝 کمک و پشتیبانی
-
-- [گزارش مشکل](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/issues)
-- [راهنمای مشارکت](CONTRIBUTING.md)
-- [تاریخچه تغییرات](CHANGELOG.md)
+Code is MIT. The 1402 source-backed dataset and data derivatives are GPL-3.0; see `DATA_LICENSE.md`.
 
 ---
 
-**موفق باشید! 🎉**
+# شروع سریع فارسی
+
+دیتاست اصلی فعلی snapshot منبع‌دار **۱۴۰۲** با **۳۱ استان و ۱٬۴۵۰ شهر مستقل** است.
+
+```bash
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python scripts/audit_data.py --strict
+python -m pytest tests/
+python scripts/generate_all.py
+```
+
+برای فهرست کامل شهرها از `iran_cities.json` استفاده کنید. GeoJSON فقط رکوردهای دارای مختصات را شامل می‌شود. کد پروژه MIT و دیتاست/خروجی‌های داده‌ای ۱۴۰۲ تحت GPL-3.0 هستند.

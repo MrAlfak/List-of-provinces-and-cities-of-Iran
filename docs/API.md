@@ -1,300 +1,121 @@
-# 📡 API Documentation | مستندات API
+# Iran Cities API
 
-[فارسی](#فارسی) | [English](#english)
+The API is **read-only**. `/api/v1` is the stable namespace; legacy `/api/...` aliases remain for compatibility.
 
----
+> The API exposes the checked-in dataset as-is. `/api/v1/meta` reports whether it is the legacy unverified snapshot or a source-backed rebuild. API availability does not make legacy records authoritative.
 
-## فارسی
+## Run
 
-### راه‌اندازی سرور
+Development:
 
 ```bash
-# نصب وابستگی‌ها
-pip install -r requirements.txt
-
-# اجرای سرور
+python -m pip install -r requirements.txt
 python api_server.py
 ```
 
-سرور روی `http://localhost:8000` اجرا می‌شود.
+Container:
 
-### Endpoints
-
-#### 1. صفحه اصلی
-```
-GET /
+```bash
+docker compose up --build
 ```
 
-**پاسخ:**
+## Configuration
+
+- `IRAN_CITIES_DATA_FILE`: absolute/relative path to the dataset; defaults to the repository JSON beside `api_server.py`.
+- `HOST`: development-server bind host; defaults to `127.0.0.1`.
+- `PORT`: defaults to `8000`.
+- `FLASK_DEBUG`: disabled by default.
+- `CORS_ORIGINS`: comma-separated allowed origins. CORS is disabled when unset.
+
+## Endpoints
+
+### `GET /health`
+
+Returns process/dataset health, API version, dataset SHA-256, province count and record count.
+
+### `GET /api/v1/meta`
+
+Returns API/application version, dataset fingerprint and `data_status` (`legacy-unverified` or `source-backed`).
+
+### `GET /api/v1/provinces`
+
+Returns province summaries.
+
+### `GET /api/v1/provinces/<id>`
+
+Returns one province including its city records.
+
+### `GET /api/v1/cities`
+
+Query parameters:
+
+- `page` — positive integer, default `1`.
+- `per_page` — positive integer, default `100`, capped at `500`.
+- `province_id` — optional numeric province filter.
+- `q` — optional Persian/English search term.
+
+Persian search normalizes Arabic/Persian kaf/yeh variants, ZWNJ, tatweel and repeated whitespace.
+
+Example:
+
+```text
+GET /api/v1/cities?province_id=8&q=اسلام%20شهر&page=1&per_page=50
+```
+
+### `GET /api/v1/cities/<id>`
+
+Returns a city/location record by its compatibility numeric ID.
+
+### `GET /api/v1/search?q=<query>`
+
+Searches province and city names and returns paginated mixed results with a `type` field.
+
+## Response shape
+
+Successful collection response:
+
 ```json
 {
-  "message": "Iran Cities API",
-  "version": "2.0.0",
-  "endpoints": {
-    "provinces": "/api/provinces",
-    "province_by_id": "/api/provinces/<id>",
-    "cities": "/api/cities",
-    "city_by_id": "/api/cities/<id>",
-    "search": "/api/search?q=<query>"
+  "success": true,
+  "data": [],
+  "pagination": {
+    "page": 1,
+    "per_page": 100,
+    "total": 0,
+    "total_pages": 0,
+    "has_next": false,
+    "has_previous": false
   }
 }
 ```
 
-#### 2. لیست استان‌ها
-```
-GET /api/provinces
-```
+Error response:
 
-**پاسخ:**
 ```json
 {
-  "success": true,
-  "count": 31,
-  "data": [
-    {
-      "id": 1,
-      "province": "آذربایجان شرقی",
-      "english_name": "East Azerbaijan",
-      "phone_code": "041",
-      "cities_count": 55
-    }
-  ]
-}
-```
-
-#### 3. اطلاعات یک استان
-```
-GET /api/provinces/:id
-```
-
-**مثال:**
-```bash
-curl http://localhost:8000/api/provinces/1
-```
-
-**پاسخ:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "province": "آذربایجان شرقی",
-    "english_name": "East Azerbaijan",
-    "phone_code": "041",
-    "cities_count": 55,
-    "cities": [...]
+  "success": false,
+  "error": {
+    "code": "invalid_parameter",
+    "message": "page must be greater than zero"
   }
 }
 ```
 
-#### 4. لیست تمام شهرها
-```
-GET /api/cities
-```
+## Compatibility
 
-**پاسخ:**
-```json
-{
-  "success": true,
-  "count": 895,
-  "data": [
-    {
-      "id": 1,
-      "name": "تبریز",
-      "english_name": "Tabriz",
-      "latitude": "38.0739964",
-      "longitude": "46.2961952",
-      "is_capital": true,
-      "province_id": 1,
-      "province_name": "آذربایجان شرقی"
-    }
-  ]
-}
+The following legacy aliases remain available in v2.1:
+
+```text
+/api/provinces
+/api/provinces/<id>
+/api/cities
+/api/cities/<id>
+/api/search
+/api/meta
 ```
 
-#### 5. اطلاعات یک شهر
-```
-GET /api/cities/:id
-```
+New integrations should use `/api/v1`.
 
-**مثال:**
-```bash
-curl http://localhost:8000/api/cities/1
-```
+## Production notes
 
-#### 6. جستجو
-```
-GET /api/search?q=<query>
-```
-
-**مثال:**
-```bash
-curl http://localhost:8000/api/search?q=تهران
-```
-
-**پاسخ:**
-```json
-{
-  "success": true,
-  "query": "تهران",
-  "results": {
-    "provinces": [
-      {
-        "id": 8,
-        "province": "تهران",
-        "english_name": "Tehran"
-      }
-    ],
-    "cities": [
-      {
-        "id": 1,
-        "name": "تهران",
-        "english_name": "Tehran",
-        "province": "تهران"
-      }
-    ]
-  },
-  "total": 2
-}
-```
-
-### کدهای خطا
-
-| کد | توضیح |
-|----|-------|
-| 200 | موفق |
-| 400 | درخواست نامعتبر |
-| 404 | یافت نشد |
-| 500 | خطای سرور |
-
-### مثال‌های استفاده
-
-#### JavaScript/Fetch
-```javascript
-// دریافت لیست استان‌ها
-fetch('http://localhost:8000/api/provinces')
-  .then(response => response.json())
-  .then(data => console.log(data));
-
-// جستجو
-fetch('http://localhost:8000/api/search?q=اصفهان')
-  .then(response => response.json())
-  .then(data => console.log(data));
-```
-
-#### Python/Requests
-```python
-import requests
-
-# دریافت لیست شهرها
-response = requests.get('http://localhost:8000/api/cities')
-data = response.json()
-print(data)
-
-# جستجو
-response = requests.get('http://localhost:8000/api/search', params={'q': 'شیراز'})
-data = response.json()
-print(data)
-```
-
-#### cURL
-```bash
-# لیست استان‌ها
-curl http://localhost:8000/api/provinces
-
-# اطلاعات استان خاص
-curl http://localhost:8000/api/provinces/1
-
-# جستجو
-curl "http://localhost:8000/api/search?q=مشهد"
-```
-
----
-
-## English
-
-### Server Setup
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run server
-python api_server.py
-```
-
-Server runs on `http://localhost:8000`.
-
-### Endpoints
-
-#### 1. Home Page
-```
-GET /
-```
-
-**Response:**
-```json
-{
-  "message": "Iran Cities API",
-  "version": "2.0.0",
-  "endpoints": {
-    "provinces": "/api/provinces",
-    "province_by_id": "/api/provinces/<id>",
-    "cities": "/api/cities",
-    "city_by_id": "/api/cities/<id>",
-    "search": "/api/search?q=<query>"
-  }
-}
-```
-
-#### 2. List Provinces
-```
-GET /api/provinces
-```
-
-#### 3. Get Province
-```
-GET /api/provinces/:id
-```
-
-#### 4. List Cities
-```
-GET /api/cities
-```
-
-#### 5. Get City
-```
-GET /api/cities/:id
-```
-
-#### 6. Search
-```
-GET /api/search?q=<query>
-```
-
-### Error Codes
-
-| Code | Description |
-|------|-------------|
-| 200 | Success |
-| 400 | Bad Request |
-| 404 | Not Found |
-| 500 | Server Error |
-
-### Usage Examples
-
-See Persian section above for detailed examples.
-
----
-
-## CORS
-
-The API has CORS enabled, so you can call it from any domain.
-
-## Rate Limiting
-
-Currently, there is no rate limiting. For production use, consider adding rate limiting.
-
-## Authentication
-
-Currently, the API is open and doesn't require authentication. For production use, consider adding authentication.
+Do not run Flask's built-in development server as an internet-facing service. The provided Docker image uses Gunicorn. Configure CORS explicitly and put TLS, request limits, observability and any public rate-limiting policy at the deployment layer.
