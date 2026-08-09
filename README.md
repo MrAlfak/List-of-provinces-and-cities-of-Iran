@@ -1,222 +1,165 @@
-# 🇮🇷 Complete List of Iranian Provinces and Cities
+# 🇮🇷 Iran Provinces & Cities Data
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran)
+[![Tests](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml/badge.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Persian](https://img.shields.io/badge/language-Persian-red.svg)](README.fa.md)
-[![Tests](https://img.shields.io/badge/tests-9%20passed-brightgreen.svg)](tests/)
-[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/network/members)
-
-The most **complete and professional** dataset of Iranian provinces and cities for developers.
 
 [فارسی](README.fa.md) | English
 
----
+A developer-friendly Iran location dataset with JSON, CSV, GeoJSON, SQL generators, a small read-only API, validation tools, and an explicit provenance workflow.
 
-## 🌟 Star Us!
+> [!WARNING]
+> **Data status:** the checked-in `iran_cities.json` is a **legacy, not-yet-authoritative** compatibility dataset. Earlier versions incorrectly described every record as an official city. The legacy data contains known semantic debt (for example administrative areas/border facilities mixed with cities and weak automatic transliterations). Do not use it as a legal or authoritative registry until it is rebuilt from an identified administrative-division snapshot and passes the strict audit.
 
-If you find this project useful, please consider giving it a ⭐️ on GitHub! It helps others discover the project.
+## What changed in v2.1
 
-[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+- Removed the circular pipeline that downloaded this repository's own JSON as its upstream source.
+- Replaced the dangerous hand-written duplicate deletion list with conservative exact-duplicate detection.
+- Added a source-backed rebuild pipeline based on administrative division type (`divisionType=5` for cities).
+- Preserves existing numeric IDs where possible and adds stable `uid` / `official_code` fields for source-backed data.
+- Added structural validation plus a separate semantic/enrichment audit.
+- Hardened the API: `/api/v1`, pagination, Persian normalization, opt-in CORS, health/meta endpoints, no default debug mode.
+- Split SQL generation into real MySQL and PostgreSQL dialects with correct string escaping.
+- Docker now runs Gunicorn as a non-root user and has a working healthcheck.
+- CI now validates, tests, audits, regenerates outputs, and smoke-tests the Docker image.
 
----
+## Files
 
-## ✨ Features
-
-✅ **883 Cities**: All official cities of Iran  
-📍 **Geographic Coordinates**: Precise latitude and longitude for each city  
-🏛️ **Province Capitals**: Marked with `is_capital` field  
-🌍 **Multiple Formats**: JSON, SQL, CSV, and GeoJSON  
-⚡ **Minified Version**: Optimized for frontend projects  
-🚀 **API Server**: Ready-to-use local API script  
-🆔 **Unique IDs**: Every province and city has a unique identifier  
-🌐 **English Names**: All provinces and cities have English names  
-👥 **Population**: City population data (work in progress)  
-📮 **Postal Codes**: City center postal codes (work in progress)
-
-## 📦 Repository Contents
-
-```
-├── iran_cities.json          # Main data source (readable & complete)
-├── iran_cities.min.json      # Minified version for web
-├── iran_cities.sql           # MySQL/PostgreSQL script
-├── iran_cities.csv           # Excel-compatible format
-├── iran_cities.geojson       # GeoJSON standard format
-├── api_server.py             # Simple API server
-├── tests/                    # Automated tests
-└── docs/                     # Complete documentation
+```text
+iran_cities.json               # Legacy compatibility dataset / canonical output after an approved rebuild
+iran_cities.min.json           # Derived minified JSON
+iran_cities.csv                # Derived CSV
+iran_cities.geojson            # Derived GeoJSON
+api_server.py                   # Read-only API
+scripts/rebuild_from_divisions.py
+scripts/validate_data.py
+scripts/audit_data.py
+scripts/generate_all.py
+data/provenance.json            # Provenance policy and current status
 ```
 
-## 🚀 Installation & Usage
-
-### 1️⃣ Direct Download
+SQL files are generated on demand:
 
 ```bash
-# Download JSON file
-curl -O https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
-
-# Or with wget
-wget https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
+python scripts/generate_sql.py --dialect both
+# iran_cities.mysql.sql
+# iran_cities.postgresql.sql
 ```
 
-### 2️⃣ JavaScript/TypeScript Usage
+## Quick start
 
+```bash
+git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
+cd List-of-provinces-and-cities-of-Iran
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python -m pytest tests/
+python scripts/audit_data.py
+```
+
+The normal audit is report-only for the legacy snapshot. A newly rebuilt source-backed dataset should pass strict mode:
+
+```bash
+python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+```
+
+## Rebuild from administrative divisions
+
+The canonical question **"is this record a city?"** must come from an identified country-divisions source, not from coordinates or name similarity.
+
+The importer accepts normalized UTF-8 CSV with:
+
+```text
+id,parentCountryDivisionId,name,code,divisionType
+```
+
+where `divisionType=5` means city.
+
+```bash
+python scripts/rebuild_from_divisions.py \
+  --divisions-csv /path/to/divisions.csv \
+  --legacy-json iran_cities.json \
+  --output iran_cities.rebuilt.json
+
+python scripts/validate_data.py --input iran_cities.rebuilt.json
+python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+```
+
+See [`data/README.md`](data/README.md) and [`data/provenance.json`](data/provenance.json). A reproducible historical baseline is the Statistical Center of Iran 1398 division spreadsheet; prefer a newer official snapshot when available.
+
+## API
+
+Local development:
+
+```bash
+python api_server.py
+```
+
+Production-style container:
+
+```bash
+docker compose up --build
+```
+
+Main endpoints:
+
+```text
+GET /health
+GET /api/v1/meta
+GET /api/v1/provinces
+GET /api/v1/provinces/<id>
+GET /api/v1/cities?page=1&per_page=100&province_id=<id>&q=<query>
+GET /api/v1/cities/<id>
+GET /api/v1/search?q=<query>
+```
+
+Legacy `/api/...` aliases remain available for backward compatibility. CORS is disabled unless `CORS_ORIGINS` is explicitly configured.
+
+## Direct JavaScript usage
 
 ```javascript
-// Fetch from CDN
-fetch('https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.min.json')
-  .then(response => response.json())
-  .then(data => console.log(data));
+import iranCities from './iran_cities.json' with { type: 'json' };
 
-// Or direct import
-import iranCities from './iran_cities.json';
+const tehran = iranCities.find((province) => province.province === 'تهران');
+console.log(tehran);
 ```
 
-### 3️⃣ Python Usage
+## Data model
 
-```python
-import json
-import requests
-
-# Download from internet
-url = 'https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json'
-response = requests.get(url)
-data = response.json()
-
-# Or read from local file
-with open('iran_cities.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-```
-
-### 4️⃣ SQL Database Usage
-
-```bash
-# MySQL
-mysql -u username -p database_name < iran_cities.sql
-
-# PostgreSQL
-psql -U username -d database_name -f iran_cities.sql
-```
-
-### 5️⃣ Run Local API Server
-
-```bash
-# Install dependencies
-pip install flask flask-cors
-
-# Run server
-python api_server.py
-
-# Server runs on port 8000
-```
-
-## 📡 API Endpoints
-
-After running `api_server.py`:
-
-```
-GET /api/provinces              # List all provinces
-GET /api/provinces/:id          # Get specific province
-GET /api/cities                 # List all cities
-GET /api/cities/:id             # Get specific city
-GET /api/search?q=Tehran        # Search cities and provinces
-```
-
-## 📊 JSON Data Structure
+Source-backed records can include stable source identifiers and hierarchy fields in addition to legacy compatibility fields:
 
 ```json
 {
   "id": 1,
-  "province": "آذربایجان شرقی",
-  "english_name": "East Azerbaijan",
-  "phone_code": "041",
-  "cities_count": 55,
+  "uid": "ir:province:<source-code>",
+  "official_code": "<source-code>",
+  "province": "...",
   "cities": [
     {
       "id": 1,
-      "name": "تبریز",
-      "english_name": "Tabriz",
-      "latitude": "38.0739964",
-      "longitude": "46.2961952",
-      "is_capital": true,
-      "population": 1558693,
-      "postal_code": "5138683751"
+      "uid": "ir:city:<source-code>",
+      "official_code": "<source-code>",
+      "name": "...",
+      "county": "...",
+      "district": "...",
+      "latitude": null,
+      "longitude": null
     }
   ]
 }
 ```
 
-## 🗺️ Using GeoJSON with Maps
+Coordinates and English names are enrichment fields and may be `null` until independently verified.
 
-```javascript
-// With Leaflet
-fetch('iran_cities.geojson')
-  .then(response => response.json())
-  .then(data => {
-    L.geoJSON(data, {
-      onEachFeature: function(feature, layer) {
-        layer.bindPopup(feature.properties.name);
-      }
-    }).addTo(map);
-  });
+## Contributing data corrections
 
-// With Mapbox
-map.addSource('iran-cities', {
-  type: 'geojson',
-  data: 'iran_cities.geojson'
-});
-```
+A data correction should include the source and snapshot/date that supports the change. Please do not submit "duplicate fixes" based only on shared coordinates, similar spelling, or aliases. The data-correction issue template is the preferred starting point.
 
-## 🧪 Tests
+## Publishing
 
-```bash
-# Run tests
-python -m pytest tests/
+The npm package is validated and regenerated before release. PyPI publishing is intentionally disabled until a self-contained Python wheel is implemented and installation is covered by CI.
 
-# Test uniqueness
-python tests/test_uniqueness.py
+## License
 
-# Test coordinates validity
-python tests/test_coordinates.py
-```
+Project code and repository-authored material are MIT licensed; see [LICENSE](LICENSE). Upstream datasets may have their own provenance/licensing requirements, which must be recorded before import.
 
-## 📈 Statistics
-
-- **31 Provinces**
-- **883 Cities**
-- **Precise Geographic Coordinates**
-- **Provincial Phone Codes**
-- **Persian and English Names**
-
-## 🤝 Contributing
-
-We're looking to make this dataset even better! If you have:
-
-- Accurate population data
-- City postal codes
-- Found errors in the data
-- Improvement suggestions
-
-Please submit a **Pull Request** or open an **Issue**.
-
-### Contribution Guide
-
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-Made with ❤️ for the Iranian developer community
-
----
-
-**Last Updated**: 2024  
-**Version**: 2.0.0  
-**Maintainer**: [@MrAlfak](https://github.com/MrAlfak)
+**Version:** 2.1.0
