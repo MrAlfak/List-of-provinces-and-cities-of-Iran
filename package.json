@@ -1,11 +1,15 @@
 {
   "name": "iran-cities-data",
-  "version": "2.0.0",
-  "description": "Complete list of Iranian provinces and cities with geographic coordinates",
+  "version": "2.1.0",
+  "description": "Iran provinces/cities dataset with provenance-aware tooling and multiple derived formats",
   "main": "iran_cities.json",
+  "types": "index.d.ts",
   "scripts": {
+    "validate": "python scripts/validate_data.py",
+    "audit": "python scripts/audit_data.py",
     "test": "python -m pytest tests/",
     "generate": "python scripts/generate_all.py",
+    "prepack": "python scripts/validate_data.py && python -m pytest tests/ && python scripts/generate_all.py",
     "serve": "python api_server.py"
   },
   "repository": {
@@ -21,7 +25,7 @@
     "persian",
     "farsi",
     "geojson",
-    "api",
+    "administrative-divisions",
     "data"
   ],
   "author": "MrAlfak",
@@ -30,15 +34,17 @@
     "url": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/issues"
   },
   "homepage": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran#readme",
-  "types": "index.d.ts",
   "files": [
     "iran_cities.json",
     "iran_cities.min.json",
-    "iran_cities.sql",
+    "iran_cities.mysql.sql",
+    "iran_cities.postgresql.sql",
     "iran_cities.csv",
     "iran_cities.geojson",
     "index.d.ts",
     "README.md",
-    "LICENSE"
+    "README.fa.md",
+    "LICENSE",
+    "data/provenance.json"
   ]
 }
