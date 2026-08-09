@@ -1,8 +1,11 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: 💬 سوالات و بحث | Questions & Discussions
-    url: https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/discussions
-    about: برای سوالات عمومی و بحث از Discussions استفاده کنید
-  - name: 📚 مستندات | Documentation
+  - name: 📚 Documentation
     url: https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/blob/main/README.md
-    about: مستندات کامل پروژه را مطالعه کنید
+    about: Read the project overview, quick-start examples and data status before opening an issue.
+  - name: 🧭 Data provenance
+    url: https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/blob/main/data/README.md
+    about: Check the source snapshot, membership rules and refresh policy for data questions.
+  - name: 🆘 Support guide
+    url: https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/blob/main/SUPPORT.md
+    about: Choose the right path for data corrections, bugs and feature requests.

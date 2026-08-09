@@ -1,80 +1,174 @@
-# 🇮🇷 Iran Provinces & Cities Data
+# 🇮🇷 Iran Provinces & Cities Dataset — JSON, CSV, GeoJSON, SQL & REST API
 
-[![Tests](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml/badge.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml)
-[![Code License](https://img.shields.io/badge/code-MIT-green.svg)](LICENSE)
-[![Data License](https://img.shields.io/badge/data-GPL--3.0-blue.svg)](DATA_LICENSE.md)
+<div align="center">
 
-[فارسی](README.fa.md) | English
+**A source-backed dataset of 31 Iranian provinces and 1,450 cities for web apps, mobile apps, forms, checkout flows, CRMs, logistics, GIS and data projects.**
 
-A developer-friendly Iran city dataset with source-backed administrative membership, JSON/CSV/GeoJSON/SQL outputs, a read-only API, validation, provenance, and a reproducible rebuild pipeline.
+[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github&label=Stars)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github&label=Forks)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/network/members)
+[![Tests](https://img.shields.io/github/actions/workflow/status/MrAlfak/List-of-provinces-and-cities-of-Iran/tests.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml)
+[![Last commit](https://img.shields.io/github/last-commit/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/commits/main)
 
-> [!IMPORTANT]
-> **Canonical data status:** `iran_cities.json` is source-backed to the **Statistical Center of Iran (SCI) 1402 administrative-division snapshot** mirrored at a pinned upstream revision. The raw source contains 1,659 `CODEREC=5` rows; 209 source-relative municipal subareas are excluded only when their base city exists in the same province and county, leaving **1,450 independent city records across 31 provinces**. This is an **as-of-1402 snapshot**, not a claim that no later administrative changes have occurred.
+**[فارسی](README.fa.md)** · **[Quick Start](QUICKSTART.md)** · **[API](docs/API.md)** · **[Use Cases](docs/USE_CASES.md)** · **[Contributing](CONTRIBUTING.md)**
 
-## Integrity status
+⭐ **If this dataset saves you time, star the repository so you can find it again and help more developers discover it.**
 
-The checked-in canonical dataset passes the strict membership audit:
+</div>
 
-- 31 provinces / 1,450 canonical city records
-- 0 records without `official_code`
-- 0 duplicate `official_code` values
-- 0 membership/provenance blockers
-- provenance status: `source-backed`
-- source SHA-256 and pinned mirror revision recorded in [`data/provenance.json`](data/provenance.json)
+---
 
-Optional enrichment is tracked separately. **703 records currently lack coordinate and English-name enrichment**, 319 retained English names are flagged as weak/automatic transliterations, and one duplicate coordinate group remains for review. None of those fields determine city membership.
+## What you get
 
-## Source and reproducibility
+| Feature | Included |
+|---|---|
+| Provinces | **31** |
+| Canonical cities | **1,450** |
+| Administrative snapshot | **SCI 1402** |
+| JSON | ✅ |
+| Minified JSON | ✅ |
+| CSV | ✅ |
+| GeoJSON | ✅ geocoded subset |
+| MySQL | ✅ |
+| PostgreSQL | ✅ |
+| REST API | ✅ |
+| Persian/Farsi search normalization | ✅ |
+| Stable source identifiers | ✅ `uid` + `official_code` |
+| County & district hierarchy | ✅ |
+| Automated validation / CI | ✅ |
 
-Canonical membership is rebuilt by [`scripts/rebuild_from_amar_1402.py`](scripts/rebuild_from_amar_1402.py) from the pinned 1402 SCI snapshot:
+This repository is designed for developers searching for **Iran cities JSON**, **Iran provinces and cities**, **Iran location data**, **Iran GeoJSON**, **Iran cities SQL**, **Persian/Farsi city data**, or an **Iran provinces and cities API**.
 
-```text
-Publisher: Statistical Center of Iran (مرکز آمار ایران)
-Official source page identified upstream: https://amar.org.ir/geo
-Mirror: sajaddp/list-of-cities-in-Iran
-Pinned mirror commit: 474942269f75ec247e1af5684f5e3eca9f304431
-Pinned source path: offical/list.json
-Snapshot: 1402
+## Why this repository
+
+Many Iran city lists are useful as simple static files, but this project focuses on **traceability and developer usability**:
+
+- **Source-backed membership** instead of treating coordinates or spelling similarity as proof that a record is a city.
+- **1,450 canonical city records** across all 31 provinces in the pinned SCI 1402 snapshot.
+- **Multiple formats** for frontend, backend, database and GIS workflows.
+- **Stable source identity** with `uid` and `official_code`.
+- **County and district hierarchy** for richer address flows.
+- **Versioned REST API** with pagination and normalized Persian search.
+- **Reproducible importer, validator and audit pipeline** instead of opaque manual edits.
+- **Docker-ready API** and automated CI checks.
+
+## Use it in 30 seconds
+
+### JavaScript / TypeScript
+
+```js
+const url = 'https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json';
+
+const provinces = await fetch(url).then((response) => response.json());
+const tehran = provinces.find((province) => province.province === 'تهران');
+
+console.log(tehran.cities);
 ```
 
-The exact source checksum and refresh policy live in [`data/provenance.json`](data/provenance.json). The 209 excluded source rows are retained in [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json).
+### Python
 
-A rebuild is explicit rather than automatic on every push. Run the **Tests** workflow manually with `rebuild_1402=true`, or execute the importer locally against the pinned source. Hard invariants stop the rebuild if 1,659 raw rows, 209 exclusions, or 1,450 canonical cities unexpectedly change.
+```python
+import json
+from urllib.request import urlopen
 
-## Main improvements in v2.1
+url = "https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json"
+with urlopen(url) as response:
+    provinces = json.load(response)
 
-- Replaced circular self-download and hand-maintained deletion logic with a pinned source-backed pipeline.
-- Preserved legacy numeric IDs only for unambiguous matches; source-backed `uid` / `official_code` are canonical identifiers.
-- Added county/district hierarchy.
-- Separated structural validation, membership audit, and optional enrichment audit.
-- Hardened API (`/api/v1`, pagination, Persian normalization, opt-in CORS, health/meta, debug off).
-- Split SQL into MySQL/PostgreSQL dialects with correct escaping.
-- GeoJSON exports only geocoded records instead of fabricating coordinates.
-- Docker runs Gunicorn as non-root with a real healthcheck.
-- CI verifies source-backed 31/1,450 invariants, tests, artifact generation, SQL regression, and Docker health.
+tehran = next(p for p in provinces if p["province"] == "تهران")
+print([city["name"] for city in tehran["cities"]])
+```
 
-## Files
+### REST API
+
+```bash
+python api_server.py
+curl "http://127.0.0.1:8000/api/v1/cities?q=تهران"
+```
+
+### Database
 
 ```text
-iran_cities.json                         # Canonical source-backed 1402 dataset (1,450 cities)
-iran_cities.min.json                     # Minified canonical JSON
+iran_cities.mysql.sql
+iran_cities.postgresql.sql
+```
+
+See [`docs/USE_CASES.md`](docs/USE_CASES.md) for examples covering address selectors, ecommerce checkout, CRM, logistics, GIS and backend integrations.
+
+## Popular use cases
+
+- Province → city dropdowns in **React, Next.js, Vue, Angular and mobile apps**
+- Iranian address forms and user-profile onboarding
+- Ecommerce checkout and shipping forms
+- CRM / ERP customer-address normalization
+- Delivery, logistics and dispatch systems
+- GIS and mapping projects using GeoJSON
+- Laravel, Django, Flask, Node.js and other backend projects
+- Search/autocomplete for Persian city names
+- Analytics and location-based reporting
+- Database seeding for MySQL and PostgreSQL
+
+## Data files
+
+```text
+iran_cities.json                         # complete canonical 1402 dataset
+iran_cities.min.json                     # minified JSON
 iran_cities.csv                          # CSV derivative
-iran_cities.geojson                      # Geocoded subset only
+iran_cities.geojson                      # geocoded subset
 iran_cities.mysql.sql                    # MySQL derivative
 iran_cities.postgresql.sql               # PostgreSQL derivative
-api_server.py                            # Read-only API
-scripts/rebuild_from_amar_1402.py        # Pinned SCI 1402 importer
-scripts/rebuild_from_divisions.py        # Generic normalized importer
-scripts/validate_data.py                 # Structural validation
-scripts/audit_data.py                    # Membership/enrichment audit
-scripts/generate_all.py                  # Derived artifact generation
-data/provenance.json                     # Source, checksum, counts, policy
-data/audit-report.json                   # Audit report
-data/excluded-urban-subareas-1402.json   # 209 excluded source subareas
-DATA_LICENSE.md                          # Data licensing/attribution
 ```
 
-## Quick start
+### Example record
+
+```json
+{
+  "id": 1,
+  "uid": "ir:city:1402:...",
+  "official_code": "1402:...",
+  "name": "...",
+  "english_name": null,
+  "county": "...",
+  "county_code": "...",
+  "district": "...",
+  "district_code": "...",
+  "latitude": null,
+  "longitude": null,
+  "is_capital": false
+}
+```
+
+Prefer `official_code` / `uid` for source-backed identity. Numeric `id` is retained mainly for legacy compatibility.
+
+## Data integrity & provenance
+
+> [!IMPORTANT]
+> `iran_cities.json` is source-backed to the **Statistical Center of Iran (SCI) 1402 administrative-division snapshot** mirrored at a pinned upstream revision. It represents an **as-of-1402** baseline and does not claim that every administrative decision after 1402 is already included.
+
+The pinned source contains **1,659** raw `CODEREC=5` rows. The importer excludes **209** source-relative municipal subareas only when the corresponding base city exists in the same province and county, leaving **1,450 independent canonical cities**.
+
+Current strict membership audit:
+
+- 31 provinces
+- 1,450 canonical cities
+- 0 missing `official_code`
+- 0 duplicate `official_code`
+- 0 membership/provenance blockers
+- provenance status: `source-backed`
+
+Exact source revision and SHA-256 are recorded in [`data/provenance.json`](data/provenance.json), and excluded source rows remain auditable in [`data/excluded-urban-subareas-1402.json`](data/excluded-urban-subareas-1402.json).
+
+### Enrichment status
+
+Coordinates and English names are enrichment—not proof of city identity. Some enrichment remains intentionally incomplete instead of being fabricated:
+
+- 703 records without coordinate enrichment
+- 703 records without English-name enrichment
+- 319 legacy English transliterations flagged for review
+- 1 duplicate-coordinate group flagged for review
+
+`iran_cities.geojson` therefore contains only records with valid coordinates. Use `iran_cities.json` for the complete city membership list.
+
+## Local development
 
 ```bash
 git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
@@ -86,7 +180,7 @@ python -m pytest tests/
 python scripts/generate_all.py
 ```
 
-## API
+Run the API:
 
 ```bash
 python api_server.py
@@ -106,27 +200,33 @@ GET /api/v1/cities/<id>
 GET /api/v1/search?q=<query>
 ```
 
-Legacy `/api/...` aliases remain for backward compatibility. CORS is disabled unless `CORS_ORIGINS` is explicitly configured.
+## Contributing
 
-## Data model
+Found a newer administrative change, typo, hierarchy problem, coordinate issue or better English name? Contributions are welcome.
 
-Source-backed records include `uid`, `official_code`, county/district hierarchy and legacy-compatible numeric IDs. Coordinates and English names are optional enrichment and may be `null`.
+- Membership/hierarchy changes should include a source and effective snapshot/date.
+- Enrichment changes should cite the enrichment source independently.
+- Records are not deleted merely because coordinates match or names look similar.
 
-Prefer `official_code` / `uid` for source-backed identity; treat numeric `id` as a compatibility identifier.
+Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) or open one of the repository issue templates.
 
-## GeoJSON note
+## Help the project grow
 
-`iran_cities.geojson` contains only cities with valid coordinate enrichment. Use `iran_cities.json` for the complete 1,450-city membership list.
+If you use this project in an app, website, thesis, dashboard, logistics system or open-source project:
 
-## Data corrections and freshness
+1. ⭐ **Star the repository** to keep it in your GitHub library.
+2. 🍴 **Fork it** if you are building a useful extension.
+3. 🐛 Open an issue when you find a data problem.
+4. 🔗 Link back to the repository from projects that use the dataset.
+5. 🤝 Submit sourced corrections or integrations that can help other developers.
 
-Membership/hierarchy corrections require a source and snapshot/date. Do not delete a record because coordinates match or names look similar. Changes after 1402 require a newer identified snapshot or explicitly reviewed sourced delta before the project should claim they are included.
+## Search keywords
 
-## Publishing and license
+`iran cities json` · `iran provinces json` · `iran provinces and cities` · `iran city list` · `iranian cities` · `persian cities` · `farsi cities` · `iran geojson` · `iran sql database` · `iran mysql cities` · `iran postgresql cities` · `iran location data` · `iran administrative divisions` · `iran address form` · `iran city api` · `iran provinces api`
 
-The npm path is gated by validation/tests/generation. PyPI remains disabled until a self-contained wheel is clean-install tested.
+## License
 
 - **Repository-authored code:** MIT — [`LICENSE`](LICENSE)
-- **1402 source-backed dataset and derivatives:** GPL-3.0 — [`DATA_LICENSE.md`](DATA_LICENSE.md), [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0)
+- **SCI 1402 source-backed dataset and derivatives:** GPL-3.0 — [`DATA_LICENSE.md`](DATA_LICENSE.md), [`LICENSE-DATA-GPL-3.0`](LICENSE-DATA-GPL-3.0)
 
 **Version:** 2.1.0
