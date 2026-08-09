@@ -40,7 +40,7 @@ jobs:
       - name: Run regression tests
         run: python -m pytest tests/
 
-      - name: Audit legacy data debt
+      - name: Audit dataset
         run: python scripts/audit_data.py --json-output data/audit-report.json
 
       - name: Generate derived formats
@@ -69,74 +69,78 @@ jobs:
           docker logs iran-cities-api
           exit 1
 
-  source-probe:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/agent/')
+  rebuild-1402:
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/agent/data-integrity-hardening' &&
+      !contains(github.event.head_commit.message, '[data-rebuild]')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Download 1402 source snapshot
-        run: curl --fail --location --retry 3 --output /tmp/list.json https://raw.githubusercontent.com/sajaddp/list-of-cities-in-Iran/main/offical/list.json
-      - name: Inspect CODEREC=5 semantics
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/data-integrity-hardening
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download pinned SCI 1402 snapshot
         run: |
+          curl --fail --location --retry 3 \
+            --output /tmp/iran-divisions-1402.json \
+            https://raw.githubusercontent.com/sajaddp/list-of-cities-in-Iran/474942269f75ec247e1af5684f5e3eca9f304431/offical/list.json
+          curl --fail --location --retry 3 \
+            --output LICENSE-DATA-GPL-3.0 \
+            https://raw.githubusercontent.com/sajaddp/list-of-cities-in-Iran/474942269f75ec247e1af5684f5e3eca9f304431/LICENSE
+
+      - name: Rebuild canonical city membership
+        run: |
+          cp iran_cities.json /tmp/legacy-iran-cities.json
+          python scripts/rebuild_from_amar_1402.py \
+            --source-json /tmp/iran-divisions-1402.json \
+            --legacy-json /tmp/legacy-iran-cities.json \
+            --output iran_cities.json \
+            --provenance data/provenance.json \
+            --excluded-report data/excluded-urban-subareas-1402.json
+
+      - name: Validate rebuilt dataset
+        run: |
+          python scripts/validate_data.py
+          python scripts/audit_data.py --strict --json-output data/audit-report.json
           python - <<'PY'
-          import json, re, unicodedata
-          from collections import Counter, defaultdict
-
-          rows = json.load(open('/tmp/list.json', encoding='utf-8-sig'))
-          cities = [r for r in rows if r.get('CODEREC') == 5]
-
-          trans = str.maketrans({'ي':'ی','ى':'ی','ك':'ک','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'})
-          def norm(value):
-              text = unicodedata.normalize('NFKC', str(value or '')).translate(trans)
-              text = text.replace('\u200c',' ').replace('ـ','')
-              return re.sub(r'\s+', ' ', text).strip()
-          def county_key(r):
-              return (norm(r.get('نام استان')), norm(r.get('نام شهرستان')))
-
-          by_county_name = {(county_key(r), norm(r.get('نام'))): r for r in cities}
-          suffix_re = re.compile(r'^(.*?)(?:\s|[-–—])(\d+)$')
-          suffix_rows = []
-          matched = []
-          unmatched = []
-          for r in cities:
-              name = norm(r.get('نام'))
-              m = suffix_re.match(name)
-              if not m:
-                  continue
-              suffix_rows.append(r)
-              base = m.group(1).strip()
-              base_row = by_county_name.get((county_key(r), base))
-              item = (name, base, norm(r.get('نام استان')), norm(r.get('نام شهرستان')), r.get('کد دهستان/ شهر'))
-              (matched if base_row else unmatched).append(item)
-
-          non_suffix_digit = []
-          for r in cities:
-              name = norm(r.get('نام'))
-              if re.search(r'\d', name) and not suffix_re.match(name):
-                  non_suffix_digit.append((name, norm(r.get('نام استان')), norm(r.get('نام شهرستان')), r.get('کد دهستان/ شهر')))
-
-          suspicious_tokens = ('منطقه', 'ناحیه', 'شهرداری', 'حوزه')
-          suspicious_named = [
-              (norm(r.get('نام')), norm(r.get('نام استان')), norm(r.get('نام شهرستان')))
-              for r in cities if any(token in norm(r.get('نام')) for token in suspicious_tokens)
-          ]
-
-          exact_duplicates = Counter((county_key(r), norm(r.get('نام'))) for r in cities)
-          exact_duplicate_keys = [k for k,v in exact_duplicates.items() if v > 1]
-
-          print('coderec5=', len(cities))
-          print('numeric_suffix_rows=', len(suffix_rows))
-          print('numeric_suffix_with_base_same_county=', len(matched))
-          print('numeric_suffix_without_base_same_county=', len(unmatched))
-          print('candidate_independent_city_count=', len(cities) - len(matched))
-          print('non_suffix_digit_names=', len(non_suffix_digit))
-          print('UNMATCHED_SUFFIX=', json.dumps(unmatched, ensure_ascii=False))
-          print('NON_SUFFIX_DIGIT=', json.dumps(non_suffix_digit, ensure_ascii=False))
-          print('SUSPICIOUS_TOKENS=', json.dumps(suspicious_named, ensure_ascii=False))
-          print('EXACT_DUPLICATE_CITY_KEYS=', len(exact_duplicate_keys))
-          print('EXACT_DUPLICATE_EXAMPLES=', json.dumps(exact_duplicate_keys[:50], ensure_ascii=False))
-
-          # The exclusion rule must never delete a numbered row unless its exact
-          # unnumbered base is present in the same province+county.
-          assert len(matched) <= len(suffix_rows)
-          assert len(cities) - len(matched) > 1400
+          import json
+          data = json.load(open('iran_cities.json', encoding='utf-8'))
+          assert len(data) == 31
+          assert sum(len(p['cities']) for p in data) == 1450
+          assert all(c.get('official_code') for p in data for c in p['cities'])
+          print('verified provinces=31 cities=1450 official_codes=complete')
           PY
+
+      - name: Generate source-backed artifacts
+        run: python scripts/generate_all.py
+
+      - name: Commit rebuilt data to PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            iran_cities.json \
+            iran_cities.min.json \
+            iran_cities.csv \
+            iran_cities.geojson \
+            iran_cities.mysql.sql \
+            iran_cities.postgresql.sql \
+            data/provenance.json \
+            data/audit-report.json \
+            data/excluded-urban-subareas-1402.json \
+            LICENSE-DATA-GPL-3.0
+          if git diff --cached --quiet; then
+            echo "No rebuilt data changes to commit."
+            exit 0
+          fi
+          git commit -m "Rebuild canonical dataset from SCI 1402 snapshot [data-rebuild]"
+          git push origin HEAD:agent/data-integrity-hardening
