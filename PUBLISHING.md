@@ -1,64 +1,72 @@
-# Publishing | راهنمای انتشار
+# Publishing guide
 
-## Release gate
+Releases must publish a **validated source-backed dataset**, not simply whatever happens to be checked into the repository.
 
-Do not publish a release merely because the code tests pass. Data and code have separate freshness/quality requirements.
-
-Before an npm/GitHub release:
+## Required pre-release checks
 
 ```bash
 python -m pip install -r requirements.txt
 python scripts/validate_data.py
-python -m pytest tests/
-python scripts/audit_data.py
-python scripts/generate_all.py
-npm pack --dry-run
-```
-
-If the release claims **official/current city coverage**, also require:
-
-```bash
 python scripts/audit_data.py --strict
+python -m pytest tests/
+python scripts/generate_all.py
 ```
 
-and verify that `data/provenance.json` records the source publisher, snapshot date/year, checksum, source URL/archive identifier, import command and validation result.
+For the current 1402 baseline, CI additionally verifies:
+
+- 31 provinces
+- 1,450 canonical city records
+- complete, globally unique `official_code` values
+- provenance status `source-backed`
+- MySQL/PostgreSQL generation and SQL escaping regression
+- Docker build and `/health` smoke test
+
+## Data provenance
+
+Before a release that changes canonical membership, verify and record:
+
+- publisher / official source page;
+- snapshot date/year;
+- pinned revision when a mirror is used;
+- source SHA-256;
+- importer/rebuild command;
+- exclusion/delta audit trail;
+- strict membership audit result;
+- source/data license.
+
+The current pinned baseline is documented in `data/provenance.json` and `DATA_LICENSE.md`.
+
+## Rebuilding 1402
+
+The 1402 rebuild is explicit. Use the **Tests** workflow with `rebuild_1402=true` or run `scripts/rebuild_from_amar_1402.py` against the exact pinned source revision. Do not change the pinned source or expected counts silently.
+
+## Derived release artifacts
+
+The canonical JSON is `iran_cities.json`. Derived outputs include:
+
+- `iran_cities.min.json`
+- `iran_cities.csv`
+- `iran_cities.geojson` — geocoded subset only
+- `iran_cities.mysql.sql`
+- `iran_cities.postgresql.sql`
+
+GeoJSON must not fabricate points for cities without coordinate enrichment.
+
+## Licensing notices
+
+- Repository-authored software/code: MIT (`LICENSE`).
+- Current source-backed 1402 dataset and its data derivatives: GPL-3.0 (`DATA_LICENSE.md`, `LICENSE-DATA-GPL-3.0`).
+
+Any npm or other data-bearing package must include the relevant data-license notice and attribution.
 
 ## npm
 
-The npm package is the supported package-registry distribution for v2.1.
-
-1. Update `package.json` and `CHANGELOG.md` together.
-2. Run the release gate above.
-3. Create a GitHub Release.
-4. `.github/workflows/publish.yml` validates again and runs `npm publish` using `NPM_TOKEN`.
-
-`npm publish` runs `prepack`, which regenerates:
-
-```text
-iran_cities.min.json
-iran_cities.csv
-iran_cities.geojson
-iran_cities.mysql.sql
-iran_cities.postgresql.sql
-```
-
-The SQL artifacts are generated at package time so a stale checked-in SQL dump cannot drift from the JSON source.
+The npm path remains supported only when validation, strict membership audit, tests and artifact generation pass before publishing.
 
 ## PyPI
 
-**PyPI publishing is disabled in v2.1.** The previous configuration could build metadata without guaranteeing that the installed wheel contained a usable dataset. Re-enable PyPI only after:
-
-- a real importable Python package owns the data files;
-- wheel/sdist contents are explicitly controlled;
-- installation into a clean virtual environment is tested in CI;
-- an import/use smoke test passes from the installed wheel, not from the repository checkout.
+PyPI publishing remains disabled. Re-enable only after the repository contains a self-contained Python package/wheel that bundles the intended data files, includes all license notices, and passes a clean-install import/data-access test in CI.
 
 ## Versioning
 
-Use semantic versioning for code/schema behavior. Dataset snapshot dates are separate metadata and must not be inferred from the package version or code release date.
-
-- PATCH: compatible code/data-quality fixes that do not change public schema semantics.
-- MINOR: backward-compatible fields/endpoints/tooling.
-- MAJOR: incompatible schema/API behavior.
-
-A change in the official administrative snapshot should always be documented in provenance and release notes even if the package semver change is only minor/patch.
+A newer administrative snapshot or membership-changing sourced delta should be treated as a meaningful data release. Document additions/removals/renames/moves and preserve compatibility IDs only when the identity mapping is unambiguous.
