@@ -36,3 +36,14 @@
 *.gif binary
 *.ico binary
 *.pdf binary
+
+# Generated dataset artifacts. Marking these as generated keeps GitHub's
+# language bar focused on the implementation rather than large SQL/data dumps.
+iran_cities.json linguist-generated=true
+iran_cities.min.json linguist-generated=true
+iran_cities.csv linguist-generated=true
+iran_cities.geojson linguist-generated=true
+iran_cities.mysql.sql linguist-generated=true
+iran_cities.postgresql.sql linguist-generated=true
+data/audit-report.json linguist-generated=true
+data/excluded-urban-subareas-1402.json linguist-generated=true
