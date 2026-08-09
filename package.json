@@ -1,16 +1,28 @@
 {
   "name": "iran-cities-data",
   "version": "2.1.0",
-  "description": "Iran provinces/cities dataset with provenance-aware tooling and multiple derived formats",
+  "description": "Source-backed Iran provinces and cities dataset (SCI 1402 snapshot) with JSON/CSV/GeoJSON/SQL outputs",
   "main": "iran_cities.json",
   "types": "index.d.ts",
+  "files": [
+    "iran_cities.json",
+    "iran_cities.min.json",
+    "iran_cities.csv",
+    "iran_cities.geojson",
+    "iran_cities.mysql.sql",
+    "iran_cities.postgresql.sql",
+    "index.d.ts",
+    "README.md",
+    "README.fa.md",
+    "DATA_LICENSE.md",
+    "LICENSE-DATA-GPL-3.0",
+    "data/provenance.json"
+  ],
   "scripts": {
-    "validate": "python scripts/validate_data.py",
-    "audit": "python scripts/audit_data.py",
     "test": "python -m pytest tests/",
+    "validate": "python scripts/validate_data.py && python scripts/audit_data.py --strict",
     "generate": "python scripts/generate_all.py",
-    "prepack": "python scripts/validate_data.py && python -m pytest tests/ && python scripts/generate_all.py",
-    "serve": "python api_server.py"
+    "prepublishOnly": "npm run validate && npm test && npm run generate"
   },
   "repository": {
     "type": "git",
@@ -20,31 +32,15 @@
     "iran",
     "cities",
     "provinces",
-    "geography",
-    "coordinates",
     "persian",
-    "farsi",
-    "geojson",
+    "geography",
     "administrative-divisions",
     "data"
   ],
   "author": "MrAlfak",
-  "license": "MIT",
+  "license": "SEE LICENSE IN DATA_LICENSE.md",
   "bugs": {
     "url": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/issues"
   },
-  "homepage": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran#readme",
-  "files": [
-    "iran_cities.json",
-    "iran_cities.min.json",
-    "iran_cities.mysql.sql",
-    "iran_cities.postgresql.sql",
-    "iran_cities.csv",
-    "iran_cities.geojson",
-    "index.d.ts",
-    "README.md",
-    "README.fa.md",
-    "LICENSE",
-    "data/provenance.json"
-  ]
+  "homepage": "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran#readme"
 }
