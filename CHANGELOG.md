@@ -1,46 +1,50 @@
-# Changelog | تاریخچه تغییرات
+# 📝 تاریخچه تغییرات | Changelog
 
-Notable changes are documented here. Dates describe repository releases/changes, not the freshness date of the underlying administrative dataset.
+تمام تغییرات مهم این پروژه در این فایل مستند می‌شود.
 
-## [2.1.0] - 2026-08-09
+فرمت بر اساس [Keep a Changelog](https://keepachangelog.com/fa/1.0.0/) است.
 
-### Data integrity
-- Marked the checked-in JSON as a legacy, non-authoritative compatibility dataset until it is rebuilt from an identified administrative-division snapshot.
-- Added `data/provenance.json` and a documented evidence policy for new snapshots.
-- Added `scripts/rebuild_from_divisions.py`; official city membership is derived from `divisionType=5`, while legacy coordinates/names are enrichment only.
-- Preserved existing numeric IDs where possible and introduced source-backed `uid` / `official_code` fields.
-- Replaced the hand-maintained duplicate deletion list with conservative exact-record duplicate detection.
-- Removed the circular "download this repository's own JSON as upstream" behavior.
-- Added semantic/enrichment auditing and stronger structural validation, including global city-ID uniqueness.
+## [Unreleased]
 
-### API / runtime
-- Added `/api/v1` endpoints while keeping legacy aliases.
-- Added pagination, province filtering, normalized Persian search, `/health`, and `/api/v1/meta`.
-- CORS is now opt-in and Flask debug mode is disabled by default.
-- Dataset loading now fails loudly on missing/invalid files.
-- Docker now uses Gunicorn, a non-root user, and a working healthcheck.
+### Data integrity / منبع داده
+- بازسازی دیتاست اصلی از snapshot تقسیمات کشوری **۱۴۰۲** مرکز آمار ایران با منبع mirror پین‌شده.
+- پردازش ۱٬۶۵۹ ردیف خام `CODEREC=5` و جداسازی منبع‌محور ۲۰۹ زیرناحیه/منطقه شهری؛ خروجی نهایی **۱٬۴۵۰ شهر مستقل در ۳۱ استان**.
+- ثبت `official_code` و `uid` برای همه شهرهای canonical و اضافه‌شدن شهرستان/بخش به ساختار داده.
+- ثبت SHA-256 منبع، commit پین‌شده، تعدادها و سیاست refresh در `data/provenance.json`.
+- نگهداری audit trail برای ۲۰۹ ردیف کنارگذاشته‌شده در `data/excluded-urban-subareas-1402.json`.
+- اصلاح matching داده قدیمی به‌صورت county-aware و single-use برای جلوگیری از reuse یک ID برای دو شهر هم‌نام.
+- جداسازی audit عضویت از enrichment؛ `audit_data.py --strict` اکنون منبع/عضویت را gate می‌کند و `--strict-enrichment` برای کیفیت تکمیلی است.
+- ثبت وضعیت فعلی enrichment: ۷۰۳ شهر بدون مختصات/نام انگلیسی، ۳۱۹ transliteration ضعیف و یک گروه مختصات تکراری؛ هیچ‌کدام blocker عضویت نیستند.
 
-### Generated formats
-- Replaced the misleading shared MySQL/PostgreSQL SQL file with separate dialect generators.
-- Fixed SQL literal escaping (including apostrophes in names).
-- Removed the stale checked-in `iran_cities.sql`; release/package generation produces `iran_cities.mysql.sql` and `iran_cities.postgresql.sql`.
+### Validation / CI
+- یکتایی نام شهر در سطح شهرستان و یکتایی سراسری `id`، `uid` و `official_code`.
+- تست regression برای زیرناحیه‌های شماره‌دار و نام‌دار، نام‌های همسان در شهرستان‌های متفاوت و enrichment اختیاری.
+- CI روی Python 3.10/3.12، strict membership audit، ساخت artifactها، invariantهای ۳۱ استان/۱٬۴۵۰ شهر و Docker smoke-test.
+- rebuild منبع ۱۴۰۲ از pushهای عادی جدا و به workflow دستی قابل بازتولید تبدیل شد.
 
-### CI / publishing
-- CI now runs structural validation, regression tests, semantic audit, derived-format generation, SQL escaping regression checks, Docker build, and API smoke test.
-- Updated GitHub Actions versions.
-- npm publishing now validates and regenerates artifacts first.
-- Disabled PyPI publishing because the old metadata did not produce a self-contained installable data wheel.
+### Formats / runtime
+- GeoJSON اکنون فقط زیرمجموعه دارای مختصات معتبر را صادر می‌کند و تعداد رکوردهای بدون مختصات را در metadata گزارش می‌دهد.
+- SQL جداگانه MySQL/PostgreSQL با escaping صحیح.
+- API نسخه‌بندی‌شده، pagination، جستجوی فارسی نرمال‌شده، CORS opt-in، `/health` و `/api/v1/meta`.
+- Docker با Gunicorn و کاربر non-root.
 
-### Documentation
-- Removed claims that the legacy snapshot is a complete/official/fully precise registry.
-- Updated README files, TypeScript types, source policy, and release guidance.
+### Licensing
+- کد پروژه تحت MIT باقی مانده است.
+- دیتاست منبع‌دار ۱۴۰۲ و مشتقات داده‌ای با attribution و متن مجوز GPL-3.0 جداگانه مستند شده‌اند (`DATA_LICENSE.md`, `LICENSE-DATA-GPL-3.0`).
 
-## [2.0.0] - historical
+## [2.0.0] - 2024-01-15
 
-Version 2.0 introduced the expanded JSON dataset, coordinates, English-name enrichment, CSV/GeoJSON/SQL generators, Flask API, Docker files, tests, and documentation.
+### Added
+- شناسه‌های عددی، نام انگلیسی، مختصات و فیلدهای enrichment برای دیتاست legacy اولیه.
+- JSON/CSV/GeoJSON/SQL generators، Flask API، Docker و workflowهای اولیه.
 
-> Historical note: v2.0 documentation described 883 records as "all official cities" and called the dataset production-ready. The v2.1 audit found that those claims were not supported by a traceable authoritative source and that the legacy records include semantic classification issues. Those claims are superseded by v2.1.
+### Historical note
+نسخه ۲.۰ همه ۸۸۳ رکورد legacy را «شهر» معرفی می‌کرد و برخی حذف‌ها را با لیست دستی/فرض‌های ضعیف انجام می‌داد. این فرض‌ها در تغییرات Unreleased جایگزین شده‌اند و نباید به‌عنوان وضعیت فعلی دیتاست تفسیر شوند.
 
-## [1.0.0] - historical
+## [1.0.0] - قبل از 2024
 
-Initial province/city data and telephone-code dataset.
+- داده‌های اولیه استان‌ها و مکان‌ها، مختصات و کدهای تلفن استانی.
+
+---
+
+**Versioning note:** تغییرات schema/source ممکن است نیازمند انتشار نسخه جدید باشند؛ مصرف‌کنندگان باید `official_code`/`uid` را برای هویت منبع‌دار و `id` عددی را برای سازگاری legacy در نظر بگیرند.
