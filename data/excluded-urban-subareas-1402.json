@@ -1,0 +1,1465 @@
+[
+  {
+    "name": "اراک 1",
+    "province": "مرکزی",
+    "county": "اراک",
+    "source_city_code": 1678,
+    "derived_base": "اراک"
+  },
+  {
+    "name": "اراک 2",
+    "province": "مرکزی",
+    "county": "اراک",
+    "source_city_code": 1679,
+    "derived_base": "اراک"
+  },
+  {
+    "name": "اراک 3",
+    "province": "مرکزی",
+    "county": "اراک",
+    "source_city_code": 1680,
+    "derived_base": "اراک"
+  },
+  {
+    "name": "اراک 4",
+    "province": "مرکزی",
+    "county": "اراک",
+    "source_city_code": 2858,
+    "derived_base": "اراک"
+  },
+  {
+    "name": "اراک 5",
+    "province": "مرکزی",
+    "county": "اراک",
+    "source_city_code": 2859,
+    "derived_base": "اراک"
+  },
+  {
+    "name": "ساوه 1",
+    "province": "مرکزی",
+    "county": "ساوه",
+    "source_city_code": 2860,
+    "derived_base": "ساوه"
+  },
+  {
+    "name": "ساوه 2",
+    "province": "مرکزی",
+    "county": "ساوه",
+    "source_city_code": 2861,
+    "derived_base": "ساوه"
+  },
+  {
+    "name": "بندرانزلی 1",
+    "province": "گیلان",
+    "county": "بندرانزلی",
+    "source_city_code": 2538,
+    "derived_base": "بندرانزلی"
+  },
+  {
+    "name": "بندرانزلی 2",
+    "province": "گیلان",
+    "county": "بندرانزلی",
+    "source_city_code": 2539,
+    "derived_base": "بندرانزلی"
+  },
+  {
+    "name": "رشت 1",
+    "province": "گیلان",
+    "county": "رشت",
+    "source_city_code": 1654,
+    "derived_base": "رشت"
+  },
+  {
+    "name": "رشت 2",
+    "province": "گیلان",
+    "county": "رشت",
+    "source_city_code": 1655,
+    "derived_base": "رشت"
+  },
+  {
+    "name": "رشت 3",
+    "province": "گیلان",
+    "county": "رشت",
+    "source_city_code": 1656,
+    "derived_base": "رشت"
+  },
+  {
+    "name": "رشت 4",
+    "province": "گیلان",
+    "county": "رشت",
+    "source_city_code": 2098,
+    "derived_base": "رشت"
+  },
+  {
+    "name": "رشت 5",
+    "province": "گیلان",
+    "county": "رشت",
+    "source_city_code": 2099,
+    "derived_base": "رشت"
+  },
+  {
+    "name": "بابل 1",
+    "province": "مازندران",
+    "county": "بابل",
+    "source_city_code": 2743,
+    "derived_base": "بابل"
+  },
+  {
+    "name": "بابل 2",
+    "province": "مازندران",
+    "county": "بابل",
+    "source_city_code": 2744,
+    "derived_base": "بابل"
+  },
+  {
+    "name": "ساری 1",
+    "province": "مازندران",
+    "county": "ساری",
+    "source_city_code": 2740,
+    "derived_base": "ساری"
+  },
+  {
+    "name": "ساری 2",
+    "province": "مازندران",
+    "county": "ساری",
+    "source_city_code": 2741,
+    "derived_base": "ساری"
+  },
+  {
+    "name": "ساری 3",
+    "province": "مازندران",
+    "county": "ساری",
+    "source_city_code": 2742,
+    "derived_base": "ساری"
+  },
+  {
+    "name": "تبریز1-",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1621,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز2-",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1622,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز3-",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1623,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز4-",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1624,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز5",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1651,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز6",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1652,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز7",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 1653,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز 9",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 2071,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز 10",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 2072,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "تبریز8",
+    "province": "آذربایجان شرقی",
+    "county": "تبریز",
+    "source_city_code": 2521,
+    "derived_base": "تبریز"
+  },
+  {
+    "name": "مراغه 1",
+    "province": "آذربایجان شرقی",
+    "county": "مراغه",
+    "source_city_code": 1649,
+    "derived_base": "مراغه"
+  },
+  {
+    "name": "مراغه 2",
+    "province": "آذربایجان شرقی",
+    "county": "مراغه",
+    "source_city_code": 1650,
+    "derived_base": "مراغه"
+  },
+  {
+    "name": "ارومیه 1",
+    "province": "آذربایجان غربی",
+    "county": "ارومیه",
+    "source_city_code": 2528,
+    "derived_base": "ارومیه"
+  },
+  {
+    "name": "ارومیه 2",
+    "province": "آذربایجان غربی",
+    "county": "ارومیه",
+    "source_city_code": 2529,
+    "derived_base": "ارومیه"
+  },
+  {
+    "name": "ارومیه 3",
+    "province": "آذربایجان غربی",
+    "county": "ارومیه",
+    "source_city_code": 2530,
+    "derived_base": "ارومیه"
+  },
+  {
+    "name": "ارومیه 4",
+    "province": "آذربایجان غربی",
+    "county": "ارومیه",
+    "source_city_code": 2531,
+    "derived_base": "ارومیه"
+  },
+  {
+    "name": "ارومیه 5",
+    "province": "آذربایجان غربی",
+    "county": "ارومیه",
+    "source_city_code": 2853,
+    "derived_base": "ارومیه"
+  },
+  {
+    "name": "کرمانشاه 1",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1666,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 2",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1667,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 3",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1668,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 4",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1669,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 5",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1670,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 6",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 1671,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 7",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 2856,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "کرمانشاه 8",
+    "province": "کرمانشاه",
+    "county": "کرمانشاه",
+    "source_city_code": 2857,
+    "derived_base": "کرمانشاه"
+  },
+  {
+    "name": "آبادان 1",
+    "province": "خوزستان",
+    "county": "آبادان",
+    "source_city_code": 1687,
+    "derived_base": "آبادان"
+  },
+  {
+    "name": "آبادان 2",
+    "province": "خوزستان",
+    "county": "آبادان",
+    "source_city_code": 1688,
+    "derived_base": "آبادان"
+  },
+  {
+    "name": "آبادان 3",
+    "province": "خوزستان",
+    "county": "آبادان",
+    "source_city_code": 2855,
+    "derived_base": "آبادان"
+  },
+  {
+    "name": "اهواز1",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 1625,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز2",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 1626,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز3",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 1684,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز4",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 1685,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز5",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 1686,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز6",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 2668,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز7",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 2669,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "اهواز8",
+    "province": "خوزستان",
+    "county": "اهواز",
+    "source_city_code": 2670,
+    "derived_base": "اهواز"
+  },
+  {
+    "name": "دزفول 1",
+    "province": "خوزستان",
+    "county": "دزفول",
+    "source_city_code": 1689,
+    "derived_base": "دزفول"
+  },
+  {
+    "name": "دزفول 2",
+    "province": "خوزستان",
+    "county": "دزفول",
+    "source_city_code": 1690,
+    "derived_base": "دزفول"
+  },
+  {
+    "name": "دزفول 3",
+    "province": "خوزستان",
+    "county": "دزفول",
+    "source_city_code": 2865,
+    "derived_base": "دزفول"
+  },
+  {
+    "name": "مسجدسلیمان 1",
+    "province": "خوزستان",
+    "county": "مسجدسلیمان",
+    "source_city_code": 2671,
+    "derived_base": "مسجدسلیمان"
+  },
+  {
+    "name": "مسجدسلیمان 2",
+    "province": "خوزستان",
+    "county": "مسجدسلیمان",
+    "source_city_code": 2672,
+    "derived_base": "مسجدسلیمان"
+  },
+  {
+    "name": "شیراز 11",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1075,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز1",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1627,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز2",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1628,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز3",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1693,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز4",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1694,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز5",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1695,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز6",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 1696,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز7",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 2532,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز8",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 2533,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز 9",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 2738,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "شیراز 10",
+    "province": "فارس",
+    "county": "شیراز",
+    "source_city_code": 2864,
+    "derived_base": "شیراز"
+  },
+  {
+    "name": "سیرجان 1",
+    "province": "کرمان",
+    "county": "سیرجان",
+    "source_city_code": 2675,
+    "derived_base": "سیرجان"
+  },
+  {
+    "name": "سیرجان 2",
+    "province": "کرمان",
+    "county": "سیرجان",
+    "source_city_code": 2676,
+    "derived_base": "سیرجان"
+  },
+  {
+    "name": "کرمان 1",
+    "province": "کرمان",
+    "county": "کرمان",
+    "source_city_code": 1675,
+    "derived_base": "کرمان"
+  },
+  {
+    "name": "کرمان 2",
+    "province": "کرمان",
+    "county": "کرمان",
+    "source_city_code": 1676,
+    "derived_base": "کرمان"
+  },
+  {
+    "name": "کرمان 3",
+    "province": "کرمان",
+    "county": "کرمان",
+    "source_city_code": 1677,
+    "derived_base": "کرمان"
+  },
+  {
+    "name": "کرمان 4",
+    "province": "کرمان",
+    "county": "کرمان",
+    "source_city_code": 2534,
+    "derived_base": "کرمان"
+  },
+  {
+    "name": "سبزوار1",
+    "province": "خراسان رضوی",
+    "county": "سبزوار",
+    "source_city_code": 2677,
+    "derived_base": "سبزوار"
+  },
+  {
+    "name": "سبزوار2",
+    "province": "خراسان رضوی",
+    "county": "سبزوار",
+    "source_city_code": 2678,
+    "derived_base": "سبزوار"
+  },
+  {
+    "name": "مشهد 1",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1629,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 2",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1630,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 3",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1631,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 4",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1632,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 5",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1643,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 6",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1644,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 7",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1645,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 8",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1646,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 9",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1647,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 10",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 1648,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 12",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 2000,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "مشهد 11",
+    "province": "خراسان رضوی",
+    "county": "مشهد",
+    "source_city_code": 2524,
+    "derived_base": "مشهد"
+  },
+  {
+    "name": "نیشابور 1",
+    "province": "خراسان رضوی",
+    "county": "نیشابور",
+    "source_city_code": 2786,
+    "derived_base": "نیشابور"
+  },
+  {
+    "name": "نیشابور 2",
+    "province": "خراسان رضوی",
+    "county": "نیشابور",
+    "source_city_code": 2787,
+    "derived_base": "نیشابور"
+  },
+  {
+    "name": "اصفهان 15",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1407,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 1",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1633,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 2",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1634,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 3",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1635,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 4",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1636,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 5",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1637,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 6",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1638,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 7",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1639,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 8",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1640,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 9",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1641,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 10",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 1642,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 12",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 2001,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 13",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 2002,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 14",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 2089,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "اصفهان 11",
+    "province": "اصفهان",
+    "county": "اصفهان",
+    "source_city_code": 2554,
+    "derived_base": "اصفهان"
+  },
+  {
+    "name": "زاهدان 1",
+    "province": "سیستان و بلوچستان",
+    "county": "زاهدان",
+    "source_city_code": 1681,
+    "derived_base": "زاهدان"
+  },
+  {
+    "name": "زاهدان 2",
+    "province": "سیستان و بلوچستان",
+    "county": "زاهدان",
+    "source_city_code": 1682,
+    "derived_base": "زاهدان"
+  },
+  {
+    "name": "زاهدان 3",
+    "province": "سیستان و بلوچستان",
+    "county": "زاهدان",
+    "source_city_code": 1683,
+    "derived_base": "زاهدان"
+  },
+  {
+    "name": "زاهدان 4",
+    "province": "سیستان و بلوچستان",
+    "county": "زاهدان",
+    "source_city_code": 2862,
+    "derived_base": "زاهدان"
+  },
+  {
+    "name": "زاهدان 5",
+    "province": "سیستان و بلوچستان",
+    "county": "زاهدان",
+    "source_city_code": 2863,
+    "derived_base": "زاهدان"
+  },
+  {
+    "name": "سنندج 1",
+    "province": "کردستان",
+    "county": "سنندج",
+    "source_city_code": 1672,
+    "derived_base": "سنندج"
+  },
+  {
+    "name": "سنندج 2",
+    "province": "کردستان",
+    "county": "سنندج",
+    "source_city_code": 1673,
+    "derived_base": "سنندج"
+  },
+  {
+    "name": "سنندج 3",
+    "province": "کردستان",
+    "county": "سنندج",
+    "source_city_code": 1674,
+    "derived_base": "سنندج"
+  },
+  {
+    "name": "همدان 1",
+    "province": "همدان",
+    "county": "همدان",
+    "source_city_code": 1691,
+    "derived_base": "همدان"
+  },
+  {
+    "name": "همدان 2",
+    "province": "همدان",
+    "county": "همدان",
+    "source_city_code": 1692,
+    "derived_base": "همدان"
+  },
+  {
+    "name": "همدان 3",
+    "province": "همدان",
+    "county": "همدان",
+    "source_city_code": 2522,
+    "derived_base": "همدان"
+  },
+  {
+    "name": "همدان 4",
+    "province": "همدان",
+    "county": "همدان",
+    "source_city_code": 2523,
+    "derived_base": "همدان"
+  },
+  {
+    "name": "بروجرد1",
+    "province": "لرستان",
+    "county": "بروجرد",
+    "source_city_code": 2688,
+    "derived_base": "بروجرد"
+  },
+  {
+    "name": "بروجرد2",
+    "province": "لرستان",
+    "county": "بروجرد",
+    "source_city_code": 2689,
+    "derived_base": "بروجرد"
+  },
+  {
+    "name": "بروجرد 3",
+    "province": "لرستان",
+    "county": "بروجرد",
+    "source_city_code": 2988,
+    "derived_base": "بروجرد"
+  },
+  {
+    "name": "خرم آباد1",
+    "province": "لرستان",
+    "county": "خرم آباد",
+    "source_city_code": 2685,
+    "derived_base": "خرم آباد"
+  },
+  {
+    "name": "خرم آباد2",
+    "province": "لرستان",
+    "county": "خرم آباد",
+    "source_city_code": 2686,
+    "derived_base": "خرم آباد"
+  },
+  {
+    "name": "خرم آباد3",
+    "province": "لرستان",
+    "county": "خرم آباد",
+    "source_city_code": 2687,
+    "derived_base": "خرم آباد"
+  },
+  {
+    "name": "ایلام 1",
+    "province": "ایلام",
+    "county": "ایلام",
+    "source_city_code": 1659,
+    "derived_base": "ایلام"
+  },
+  {
+    "name": "ایلام 2",
+    "province": "ایلام",
+    "county": "ایلام",
+    "source_city_code": 1660,
+    "derived_base": "ایلام"
+  },
+  {
+    "name": "بوشهر1",
+    "province": "بوشهر",
+    "county": "بوشهر",
+    "source_city_code": 2692,
+    "derived_base": "بوشهر"
+  },
+  {
+    "name": "بوشهر2",
+    "province": "بوشهر",
+    "county": "بوشهر",
+    "source_city_code": 2693,
+    "derived_base": "بوشهر"
+  },
+  {
+    "name": "زنجان 1",
+    "province": "زنجان",
+    "county": "زنجان",
+    "source_city_code": 1664,
+    "derived_base": "زنجان"
+  },
+  {
+    "name": "زنجان 2",
+    "province": "زنجان",
+    "county": "زنجان",
+    "source_city_code": 1665,
+    "derived_base": "زنجان"
+  },
+  {
+    "name": "زنجان 3",
+    "province": "زنجان",
+    "county": "زنجان",
+    "source_city_code": 2384,
+    "derived_base": "زنجان"
+  },
+  {
+    "name": "زنجان 4",
+    "province": "زنجان",
+    "county": "زنجان",
+    "source_city_code": 2958,
+    "derived_base": "زنجان"
+  },
+  {
+    "name": "یزد 4",
+    "province": "یزد",
+    "county": "یزد",
+    "source_city_code": 1016,
+    "derived_base": "یزد"
+  },
+  {
+    "name": "یزد_منطقه تاریخی",
+    "province": "یزد",
+    "county": "یزد",
+    "source_city_code": 1017,
+    "derived_base": "یزد"
+  },
+  {
+    "name": "یزد 1",
+    "province": "یزد",
+    "county": "یزد",
+    "source_city_code": 1657,
+    "derived_base": "یزد"
+  },
+  {
+    "name": "یزد 2",
+    "province": "یزد",
+    "county": "یزد",
+    "source_city_code": 1658,
+    "derived_base": "یزد"
+  },
+  {
+    "name": "یزد 3",
+    "province": "یزد",
+    "county": "یزد",
+    "source_city_code": 2525,
+    "derived_base": "یزد"
+  },
+  {
+    "name": "بندر عباس 1",
+    "province": "هرمزگان",
+    "county": "بندر عباس",
+    "source_city_code": 1697,
+    "derived_base": "بندر عباس"
+  },
+  {
+    "name": "بندر عباس 2",
+    "province": "هرمزگان",
+    "county": "بندر عباس",
+    "source_city_code": 1698,
+    "derived_base": "بندر عباس"
+  },
+  {
+    "name": "بندر عباس 3",
+    "province": "هرمزگان",
+    "county": "بندر عباس",
+    "source_city_code": 2091,
+    "derived_base": "بندر عباس"
+  },
+  {
+    "name": "تهران 1",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1601,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 2",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1602,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 3",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1603,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 4",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1604,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 5",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1605,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 6",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1606,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 7",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1607,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 8",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1608,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 9",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1609,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 10",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1610,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 11",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1611,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 12",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1612,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 13",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1613,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 14",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1614,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 15",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1615,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 16",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1616,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 17",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1617,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 18",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1618,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 19",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1619,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 20",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 1620,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 21",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 2225,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "تهران 22",
+    "province": "تهران",
+    "county": "تهران",
+    "source_city_code": 2226,
+    "derived_base": "تهران"
+  },
+  {
+    "name": "شهریار1",
+    "province": "تهران",
+    "county": "شهریار",
+    "source_city_code": 2694,
+    "derived_base": "شهریار"
+  },
+  {
+    "name": "شهریار2",
+    "province": "تهران",
+    "county": "شهریار",
+    "source_city_code": 2695,
+    "derived_base": "شهریار"
+  },
+  {
+    "name": "شهریار3",
+    "province": "تهران",
+    "county": "شهریار",
+    "source_city_code": 2696,
+    "derived_base": "شهریار"
+  },
+  {
+    "name": "اسلام شهر6",
+    "province": "تهران",
+    "county": "اسلامشهر",
+    "source_city_code": 1050,
+    "derived_base": "اسلام شهر"
+  },
+  {
+    "name": "اسلام شهر1",
+    "province": "تهران",
+    "county": "اسلامشهر",
+    "source_city_code": 2289,
+    "derived_base": "اسلام شهر"
+  },
+  {
+    "name": "اسلام شهر2",
+    "province": "تهران",
+    "county": "اسلامشهر",
+    "source_city_code": 2290,
+    "derived_base": "اسلام شهر"
+  },
+  {
+    "name": "اسلام شهر3",
+    "province": "تهران",
+    "county": "اسلامشهر",
+    "source_city_code": 2560,
+    "derived_base": "اسلام شهر"
+  },
+  {
+    "name": "پاکدشت 1",
+    "province": "تهران",
+    "county": "پاکدشت",
+    "source_city_code": 1052,
+    "derived_base": "پاکدشت"
+  },
+  {
+    "name": "پاکدشت 2",
+    "province": "تهران",
+    "county": "پاکدشت",
+    "source_city_code": 1053,
+    "derived_base": "پاکدشت"
+  },
+  {
+    "name": "اردبیل 1",
+    "province": "اردبیل",
+    "county": "اردبیل",
+    "source_city_code": 1662,
+    "derived_base": "اردبیل"
+  },
+  {
+    "name": "اردبیل 2",
+    "province": "اردبیل",
+    "county": "اردبیل",
+    "source_city_code": 1663,
+    "derived_base": "اردبیل"
+  },
+  {
+    "name": "اردبیل 3",
+    "province": "اردبیل",
+    "county": "اردبیل",
+    "source_city_code": 2575,
+    "derived_base": "اردبیل"
+  },
+  {
+    "name": "اردبیل 4",
+    "province": "اردبیل",
+    "county": "اردبیل",
+    "source_city_code": 2852,
+    "derived_base": "اردبیل"
+  },
+  {
+    "name": "اردبیل 5",
+    "province": "اردبیل",
+    "county": "اردبیل",
+    "source_city_code": 2873,
+    "derived_base": "اردبیل"
+  },
+  {
+    "name": "قم 5",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2096,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 6",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2097,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 1",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2221,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 2",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2222,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 3",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2223,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 4",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2224,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 7",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2810,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قم 8",
+    "province": "قم",
+    "county": "قم",
+    "source_city_code": 2811,
+    "derived_base": "قم"
+  },
+  {
+    "name": "قزوین 1",
+    "province": "قزوین",
+    "county": "قزوین",
+    "source_city_code": 2291,
+    "derived_base": "قزوین"
+  },
+  {
+    "name": "قزوین 2",
+    "province": "قزوین",
+    "county": "قزوین",
+    "source_city_code": 2292,
+    "derived_base": "قزوین"
+  },
+  {
+    "name": "قزوین 3",
+    "province": "قزوین",
+    "county": "قزوین",
+    "source_city_code": 2520,
+    "derived_base": "قزوین"
+  },
+  {
+    "name": "قزوین 4",
+    "province": "قزوین",
+    "county": "قزوین",
+    "source_city_code": 2703,
+    "derived_base": "قزوین"
+  },
+  {
+    "name": "گرگان 1",
+    "province": "گلستان",
+    "county": "گرگان",
+    "source_city_code": 2697,
+    "derived_base": "گرگان"
+  },
+  {
+    "name": "گرگان 2",
+    "province": "گلستان",
+    "county": "گرگان",
+    "source_city_code": 2698,
+    "derived_base": "گرگان"
+  },
+  {
+    "name": "گرگان 3",
+    "province": "گلستان",
+    "county": "گرگان",
+    "source_city_code": 2866,
+    "derived_base": "گرگان"
+  },
+  {
+    "name": "بجنورد1",
+    "province": "خراسان شمالی",
+    "county": "بجنورد",
+    "source_city_code": 2699,
+    "derived_base": "بجنورد"
+  },
+  {
+    "name": "بجنورد2",
+    "province": "خراسان شمالی",
+    "county": "بجنورد",
+    "source_city_code": 2700,
+    "derived_base": "بجنورد"
+  },
+  {
+    "name": "بیرجند1",
+    "province": "خراسان جنوبی",
+    "county": "بیرجند",
+    "source_city_code": 2701,
+    "derived_base": "بیرجند"
+  },
+  {
+    "name": "بیرجند2",
+    "province": "خراسان جنوبی",
+    "county": "بیرجند",
+    "source_city_code": 2702,
+    "derived_base": "بیرجند"
+  },
+  {
+    "name": "فردیس 1",
+    "province": "البرز",
+    "county": "فردیس",
+    "source_city_code": 2982,
+    "derived_base": "فردیس"
+  },
+  {
+    "name": "کرج 1",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2280,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 2",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2281,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 4",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2283,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 5",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2284,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 6",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2285,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 7",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2286,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 8",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2287,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 9",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2288,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 10",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2766,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "کرج 3",
+    "province": "البرز",
+    "county": "کرج",
+    "source_city_code": 2767,
+    "derived_base": "کرج"
+  },
+  {
+    "name": "فردیس 2",
+    "province": "البرز",
+    "county": "فردیس",
+    "source_city_code": 2540,
+    "derived_base": "فردیس"
+  }
+]
