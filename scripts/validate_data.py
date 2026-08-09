@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Validate the structural integrity of an Iran city dataset.
+"""Validate structural integrity of an Iran city dataset.
 
-This validator deliberately separates *structural correctness* from the
-semantic question of whether a record is officially a city. Use
-``scripts/audit_data.py --strict`` on a newly rebuilt, source-backed snapshot
-for semantic/enrichment quality.
+Structural validation is deliberately separate from source-membership and
+optional enrichment quality.  A city name is unique within its county, not
+necessarily within an entire province; source-backed rows are globally
+identified by ``official_code`` and ``uid``.
 """
 
 from __future__ import annotations
@@ -42,8 +42,10 @@ def validate_data(data: Any, expected_provinces: int | None = 31) -> tuple[list[
     province_ids: set[int] = set()
     province_names: set[str] = set()
     province_uids: set[str] = set()
+    province_official_codes: set[str] = set()
     city_ids: set[int] = set()
     city_uids: set[str] = set()
+    city_official_codes: set[str] = set()
     total_cities = 0
 
     for p_index, province in enumerate(data):
@@ -79,6 +81,14 @@ def validate_data(data: Any, expected_provinces: int | None = 31) -> tuple[list[
             else:
                 province_uids.add(province_uid)
 
+        province_code = province.get("official_code")
+        if province_code:
+            code = str(province_code)
+            if code in province_official_codes:
+                errors.append(f"Duplicate province official_code: {code}")
+            else:
+                province_official_codes.add(code)
+
         cities = province.get("cities", [])
         if not isinstance(cities, list):
             errors.append(f"Province {label!r} cities must be an array")
@@ -90,7 +100,7 @@ def validate_data(data: Any, expected_provinces: int | None = 31) -> tuple[list[
                 f"cities_count mismatch in {label}: declared={province.get('cities_count')!r}, actual={len(cities)}"
             )
 
-        local_names: set[str] = set()
+        local_name_keys: set[tuple[str, str]] = set()
         capital_count = 0
 
         for c_index, city in enumerate(cities):
@@ -112,12 +122,16 @@ def validate_data(data: Any, expected_provinces: int | None = 31) -> tuple[list[
                 city_ids.add(city_id)
 
             normalized_city = normalize_name(city.get("name"))
+            normalized_county = normalize_name(city.get("county"))
             if not normalized_city:
                 errors.append(f"City with empty name in {label}")
-            elif normalized_city in local_names:
-                errors.append(f"Duplicate normalized city name in {label}: {city_label}")
             else:
-                local_names.add(normalized_city)
+                name_key = (normalized_county, normalized_city)
+                if name_key in local_name_keys:
+                    scope = f"county {city.get('county')!r}" if normalized_county else "province (county unavailable)"
+                    errors.append(f"Duplicate normalized city name in {label}, {scope}: {city_label}")
+                else:
+                    local_name_keys.add(name_key)
 
             city_uid = city.get("uid")
             if city_uid:
@@ -125,6 +139,14 @@ def validate_data(data: Any, expected_provinces: int | None = 31) -> tuple[list[
                     errors.append(f"City {city_label!r} has invalid/duplicate uid: {city_uid!r}")
                 else:
                     city_uids.add(city_uid)
+
+            official_code = city.get("official_code")
+            if official_code:
+                code = str(official_code)
+                if code in city_official_codes:
+                    errors.append(f"Duplicate city official_code {code}: {label} / {city_label}")
+                else:
+                    city_official_codes.add(code)
 
             if city.get("is_capital") is True:
                 capital_count += 1
