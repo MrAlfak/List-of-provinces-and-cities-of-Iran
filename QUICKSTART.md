@@ -1,161 +1,74 @@
-# 🚀 شروع سریع | Quick Start
+# Quick Start | شروع سریع
 
-## نصب و استفاده در 3 دقیقه!
-
-### 1️⃣ دانلود فایل JSON
+## 1. Install
 
 ```bash
-curl -O https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
+git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
+cd List-of-provinces-and-cities-of-Iran
+python -m pip install -r requirements.txt
 ```
 
-### 2️⃣ استفاده در JavaScript
-
-```javascript
-fetch('iran_cities.json')
-  .then(response => response.json())
-  .then(data => {
-    console.log(`تعداد استان‌ها: ${data.length}`);
-    console.log(`اولین استان: ${data[0].province}`);
-  });
-```
-
-### 3️⃣ استفاده در Python
-
-```python
-import json
-
-with open('iran_cities.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-
-print(f"تعداد استان‌ها: {len(data)}")
-print(f"اولین استان: {data[0]['province']}")
-```
-
-### 4️⃣ اجرای API Server
+## 2. Check the dataset
 
 ```bash
-pip install flask flask-cors
+python scripts/validate_data.py
+python scripts/audit_data.py
+python -m pytest tests/
+```
+
+`validate_data.py` checks structural integrity. `audit_data.py` reports semantic/enrichment debt. The checked-in legacy dataset is intentionally **not** advertised as an authoritative registry until rebuilt from a documented administrative source.
+
+## 3. Generate derived files
+
+```bash
+python scripts/generate_all.py
+```
+
+This creates/refreshes:
+
+```text
+iran_cities.min.json
+iran_cities.csv
+iran_cities.geojson
+iran_cities.mysql.sql
+iran_cities.postgresql.sql
+```
+
+## 4. Run the API
+
+Development:
+
+```bash
 python api_server.py
 ```
 
-سپس مرورگر را باز کنید: http://localhost:8000
+Then open:
 
-### 5️⃣ نمایش روی نقشه
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-</head>
-<body>
-    <div id="map" style="height: 600px;"></div>
-    <script>
-        const map = L.map('map').setView([32.4279, 53.6880], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        
-        fetch('iran_cities.geojson')
-            .then(response => response.json())
-            .then(data => {
-                L.geoJSON(data, {
-                    onEachFeature: (feature, layer) => {
-                        layer.bindPopup(feature.properties.name);
-                    }
-                }).addTo(map);
-            });
-    </script>
-</body>
-</html>
+```text
+http://127.0.0.1:8000/health
+http://127.0.0.1:8000/api/v1/meta
+http://127.0.0.1:8000/api/v1/provinces
+http://127.0.0.1:8000/api/v1/cities?page=1&per_page=100
 ```
 
-## 📚 مستندات کامل
+Production-style local container:
 
-- [README فارسی](README.fa.md)
-- [README English](README.md)
-- [مستندات API](docs/API.md)
-- [راهنمای توسعه](docs/DEVELOPMENT.md)
-- [نمونه‌های بیشتر](examples/README.md)
-
-## 🎯 موارد استفاده رایج
-
-### دریافت لیست استان‌ها
-
-```javascript
-const provinces = data.map(p => ({
-    id: p.id,
-    name: p.province,
-    englishName: p.english_name
-}));
+```bash
+docker compose up --build
 ```
 
-### جستجوی شهر
+## 5. Rebuild city membership from country divisions
 
-```javascript
-function findCity(cityName) {
-    for (const province of data) {
-        const city = province.cities.find(c => 
-            c.name.includes(cityName)
-        );
-        if (city) {
-            return {
-                city: city.name,
-                province: province.province,
-                coordinates: {
-                    lat: city.latitude,
-                    lon: city.longitude
-                }
-            };
-        }
-    }
-    return null;
-}
+When you have a normalized source snapshot:
 
-const tehran = findCity('تهران');
-console.log(tehran);
+```bash
+python scripts/rebuild_from_divisions.py \
+  --divisions-csv /path/to/divisions.csv \
+  --legacy-json iran_cities.json \
+  --output iran_cities.rebuilt.json
+
+python scripts/validate_data.py --input iran_cities.rebuilt.json
+python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
 ```
 
-### دریافت مراکز استان‌ها
-
-```javascript
-const capitals = data.map(province => {
-    const capital = province.cities.find(c => c.is_capital);
-    return {
-        province: province.province,
-        capital: capital.name,
-        phoneCode: province.phone_code
-    };
-});
-```
-
-## 💡 نکات مهم
-
-1. **برای production از نسخه minified استفاده کنید:**
-   ```
-   iran_cities.min.json (148 KB)
-   ```
-
-2. **برای نقشه از GeoJSON استفاده کنید:**
-   ```
-   iran_cities.geojson
-   ```
-
-3. **برای دیتابیس از SQL استفاده کنید:**
-   ```
-   iran_cities.sql
-   ```
-
-4. **برای Excel از CSV استفاده کنید:**
-   ```
-   iran_cities.csv
-   ```
-
-## 🤝 کمک و پشتیبانی
-
-- [گزارش مشکل](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/issues)
-- [راهنمای مشارکت](CONTRIBUTING.md)
-- [تاریخچه تغییرات](CHANGELOG.md)
-
----
-
-**موفق باشید! 🎉**
+Do not overwrite `iran_cities.json` with a new snapshot until provenance and the strict audit are complete. See `data/README.md`.
