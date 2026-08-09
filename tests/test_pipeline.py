@@ -1,5 +1,9 @@
+import json
+
 from api_server import normalize_query
+from scripts.audit_data import audit
 from scripts.generate_sql import quote
+from scripts.rebuild_from_amar_1402 import derived_subarea_base, split_city_rows
 from scripts.remove_duplicates import find_exact_duplicates, remove_exact_duplicates
 from scripts.validate_data import validate_data
 
@@ -80,3 +84,69 @@ def test_validator_rejects_global_duplicate_city_id():
     ]
     errors, _warnings, _stats = validate_data(data, expected_provinces=None)
     assert any("Duplicate global city id 10" in error for error in errors)
+
+
+def source_row(name, county="نمونه", code=1000):
+    return {
+        "کد استان": 1,
+        "نام استان": "استان نمونه",
+        "کد شهرستان": 1,
+        "نام شهرستان": county,
+        "کد بخش": 1,
+        "نام بخش": "مرکزی",
+        "کد دهستان/ شهر": code,
+        "CODEREC": 5,
+        "نام": name,
+    }
+
+
+def test_1402_numeric_subareas_are_excluded_only_when_base_city_exists_same_county():
+    rows = [
+        source_row("تبریز", code=1),
+        source_row("تبریز 1", code=2),
+        source_row("تبریز2-", code=3),
+        source_row("اسلامشهر", code=4),
+        source_row("اسلام شهر6", code=5),
+        source_row("فاز 2", county="شهرستان دیگر", code=6),
+    ]
+    canonical, excluded = split_city_rows(rows)
+    assert {r["نام"] for r in excluded} == {"تبریز 1", "تبریز2-", "اسلام شهر6"}
+    assert {r["نام"] for r in canonical} == {"تبریز", "اسلامشهر", "فاز 2"}
+
+
+def test_1402_named_municipal_subarea_requires_base_city_in_same_county():
+    rows = [
+        source_row("یزد", code=1),
+        source_row("یزد_منطقه تاریخی", code=2),
+        source_row("آزاد_منطقه تاریخی", county="شهرستان دیگر", code=3),
+    ]
+    canonical, excluded = split_city_rows(rows)
+    assert [r["نام"] for r in excluded] == ["یزد_منطقه تاریخی"]
+    assert {r["نام"] for r in canonical} == {"یزد", "آزاد_منطقه تاریخی"}
+    assert derived_subarea_base("یزد_منطقه تاریخی") == "یزد"
+
+
+def test_strict_membership_audit_ignores_optional_enrichment(tmp_path):
+    provenance = tmp_path / "provenance.json"
+    provenance.write_text(
+        json.dumps({"canonical_dataset": {"status": "source-backed", "snapshot_year_jalali": 1402}}),
+        encoding="utf-8",
+    )
+    data = [
+        {
+            "province": "نمونه",
+            "cities": [
+                {
+                    "id": 1,
+                    "name": "شهر",
+                    "official_code": "1402:01:001:001:0001",
+                    "english_name": None,
+                    "latitude": None,
+                    "longitude": None,
+                }
+            ],
+        }
+    ]
+    report = audit(data, provenance)
+    assert report["summary"]["membership_blockers"] == 0
+    assert report["summary"]["enrichment_warnings"] == 2
