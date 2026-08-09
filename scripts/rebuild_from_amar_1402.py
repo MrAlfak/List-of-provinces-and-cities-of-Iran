@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Rebuild Iran's city dataset from the SCI 1402 administrative snapshot.
+"""Rebuild Iran's city dataset from the pinned SCI 1402 snapshot.
 
-The source snapshot is the raw country-division export mirrored by
-``sajaddp/list-of-cities-in-Iran`` from the Statistical Center of Iran (SCI).
-The mirror contains municipal subarea rows with ``CODEREC == 5`` (for example
-``اراک 1`` and ``تبریز1-``) in addition to independent cities.  We therefore
-exclude a numbered/municipal subarea *only* when its derived base name exists
-as another CODEREC=5 record in the same province and county.  This keeps the
-rule source-relative and avoids a hand-maintained deletion list.
+The mirrored SCI export contains CODEREC=5 rows for independent cities and
+municipal subareas (for example ``اراک 1`` or ``تبریز1-``). A row is excluded
+as a subarea only when a derived base city exists in the same source province
+and county. This is source-relative and avoids hand-maintained deletion lists.
 
-The canonical 1402 snapshot pinned by this repository contains:
+Pinned snapshot invariants:
 - 1,659 raw CODEREC=5 rows
 - 209 source-relative urban subareas
-- 1,450 independent city records
+- 1,450 independent cities
 
-Legacy numeric IDs, English names and coordinates are retained when an
-unambiguous province+city match exists.  Coordinates/English names are only
-enrichment and never determine membership.
+Legacy numeric IDs and enrichment are preserved only on an unambiguous match.
+County-aware matching is preferred once county data exists; a legacy numeric ID
+may be consumed only once, which prevents same-name cities in different
+counties from receiving the same compatibility ID.
 """
 
 from __future__ import annotations
@@ -29,7 +27,7 @@ import re
 import unicodedata
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 
 SOURCE_REPOSITORY = "sajaddp/list-of-cities-in-Iran"
@@ -42,19 +40,9 @@ EXPECTED_CANONICAL_CITIES = 1450
 
 TRANSLATE = str.maketrans(
     {
-        "ي": "ی",
-        "ى": "ی",
-        "ك": "ک",
-        "۰": "0",
-        "۱": "1",
-        "۲": "2",
-        "۳": "3",
-        "۴": "4",
-        "۵": "5",
-        "۶": "6",
-        "۷": "7",
-        "۸": "8",
-        "۹": "9",
+        "ي": "ی", "ى": "ی", "ك": "ک",
+        "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4",
+        "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9",
     }
 )
 NUMERIC_SUBAREA_RE = re.compile(r"^(.*?)[\s_\-–—]*(\d+)[\s_\-–—]*$")
@@ -109,13 +97,10 @@ def split_city_rows(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], l
 
     for row in raw_cities:
         base = derived_subarea_base(row.get("نام"))
-        if base:
-            base_key = (*source_county_key(row), compact_fa(base))
-            if base_key in existing:
-                excluded.append(row)
-                continue
-        canonical.append(row)
-
+        if base and (*source_county_key(row), compact_fa(base)) in existing:
+            excluded.append(row)
+        else:
+            canonical.append(row)
     return canonical, excluded
 
 
@@ -134,8 +119,9 @@ def load_legacy(path: Path | None) -> list[dict[str, Any]]:
 
 def legacy_indexes(legacy: list[dict[str, Any]]):
     provinces: dict[str, dict[str, Any]] = {}
-    exact_cities: dict[tuple[str, str], dict[str, Any]] = {}
-    compact_candidates: defaultdict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    county_exact: defaultdict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    province_exact: defaultdict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    province_compact: defaultdict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     max_province_id = 0
     max_city_id = 0
 
@@ -144,26 +130,58 @@ def legacy_indexes(legacy: list[dict[str, Any]]):
         provinces[pkey] = province
         if isinstance(province.get("id"), int):
             max_province_id = max(max_province_id, province["id"])
+
         for city in province.get("cities", []):
-            exact_cities[(pkey, normalize_fa(city.get("name")).casefold())] = city
-            compact_candidates[(pkey, compact_fa(city.get("name")))].append(city)
+            exact_name = normalize_fa(city.get("name")).casefold()
+            compact_name = compact_fa(city.get("name"))
+            county_key = compact_fa(city.get("county"))
+            if county_key:
+                county_exact[(pkey, county_key, exact_name)].append(city)
+            province_exact[(pkey, exact_name)].append(city)
+            province_compact[(pkey, compact_name)].append(city)
             if isinstance(city.get("id"), int):
                 max_city_id = max(max_city_id, city["id"])
 
-    return provinces, exact_cities, compact_candidates, max_province_id, max_city_id
+    return (
+        provinces,
+        county_exact,
+        province_exact,
+        province_compact,
+        max_province_id,
+        max_city_id,
+    )
+
+
+def _pick_unused(candidates: Iterable[dict[str, Any]], used_ids: set[int]) -> dict[str, Any]:
+    available = [
+        city for city in candidates
+        if isinstance(city.get("id"), int) and city["id"] not in used_ids
+    ]
+    return available[0] if len(available) == 1 else {}
 
 
 def match_legacy_city(
     province_key: str,
+    county_name: str,
     name: str,
-    exact: dict[tuple[str, str], dict[str, Any]],
-    compact: dict[tuple[str, str], list[dict[str, Any]]],
+    county_exact: dict[tuple[str, str, str], list[dict[str, Any]]],
+    province_exact: dict[tuple[str, str], list[dict[str, Any]]],
+    province_compact: dict[tuple[str, str], list[dict[str, Any]]],
+    used_ids: set[int],
 ) -> dict[str, Any]:
-    hit = exact.get((province_key, normalize_fa(name).casefold()))
+    exact_name = normalize_fa(name).casefold()
+    county_key = compact_fa(county_name)
+
+    if county_key:
+        hit = _pick_unused(county_exact.get((province_key, county_key, exact_name), []), used_ids)
+        if hit:
+            return hit
+
+    hit = _pick_unused(province_exact.get((province_key, exact_name), []), used_ids)
     if hit:
         return hit
-    candidates = compact.get((province_key, compact_fa(name)), [])
-    return candidates[0] if len(candidates) == 1 else {}
+
+    return _pick_unused(province_compact.get((province_key, compact_fa(name)), []), used_ids)
 
 
 def code_piece(value: Any, width: int) -> str:
@@ -187,16 +205,26 @@ def official_city_code(row: dict[str, Any]) -> str:
 
 def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
     canonical_rows, excluded_rows = split_city_rows(rows)
-    if len([r for r in rows if as_int(r.get("CODEREC")) == 5]) != EXPECTED_RAW_CITY_ROWS:
-        raise ValueError("Pinned source raw city-row count changed; inspect source before rebuilding")
+    raw_count = len([row for row in rows if as_int(row.get("CODEREC")) == 5])
+    if raw_count != EXPECTED_RAW_CITY_ROWS:
+        raise ValueError(f"Pinned source raw city-row count changed: {raw_count}")
     if len(excluded_rows) != EXPECTED_EXCLUDED_SUBAREAS:
-        raise ValueError("Pinned source urban-subarea count changed; inspect exclusion rule")
+        raise ValueError(f"Pinned source subarea count changed: {len(excluded_rows)}")
     if len(canonical_rows) != EXPECTED_CANONICAL_CITIES:
-        raise ValueError("Pinned source canonical city count changed")
+        raise ValueError(f"Pinned source canonical city count changed: {len(canonical_rows)}")
 
-    old_provinces, old_exact, old_compact, max_province_id, max_city_id = legacy_indexes(legacy)
+    (
+        old_provinces,
+        old_county_exact,
+        old_province_exact,
+        old_province_compact,
+        max_province_id,
+        max_city_id,
+    ) = legacy_indexes(legacy)
+
     next_province_id = max_province_id + 1
     next_city_id = max_city_id + 1
+    used_legacy_city_ids: set[int] = set()
 
     grouped: defaultdict[tuple[int, str], list[dict[str, Any]]] = defaultdict(list)
     for row in canonical_rows:
@@ -209,7 +237,7 @@ def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
     output: list[dict[str, Any]] = []
     matched_legacy_cities = 0
 
-    for (province_code, province_name), city_rows in sorted(grouped.items(), key=lambda x: x[0][0]):
+    for (province_code, province_name), city_rows in sorted(grouped.items(), key=lambda item: item[0][0]):
         pkey = compact_fa(province_name)
         old_province = old_provinces.get(pkey, {})
         old_pid = old_province.get("id")
@@ -219,10 +247,9 @@ def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
             province_id = next_province_id
             next_province_id += 1
 
-        province_uid = old_province.get("uid") or f"ir:province:{SOURCE_YEAR_JALALI}:{province_code:02d}"
         province = {
             "id": province_id,
-            "uid": province_uid,
+            "uid": old_province.get("uid") or f"ir:province:{SOURCE_YEAR_JALALI}:{province_code:02d}",
             "official_code": f"{SOURCE_YEAR_JALALI}:{province_code:02d}",
             "province": province_name,
             "english_name": old_province.get("english_name"),
@@ -234,18 +261,29 @@ def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
 
         for row in sorted(
             city_rows,
-            key=lambda r: (
-                as_int(r.get("کد شهرستان")) or -1,
-                as_int(r.get("کد بخش")) or -1,
-                as_int(r.get("کد دهستان/ شهر")) or -1,
-                normalize_fa(r.get("نام")),
+            key=lambda item: (
+                as_int(item.get("کد شهرستان")) or -1,
+                as_int(item.get("کد بخش")) or -1,
+                as_int(item.get("کد دهستان/ شهر")) or -1,
+                normalize_fa(item.get("نام")),
             ),
         ):
             name = normalize_fa(row.get("نام"))
-            old = match_legacy_city(pkey, name, old_exact, old_compact)
+            county_name = normalize_fa(row.get("نام شهرستان"))
+            old = match_legacy_city(
+                pkey,
+                county_name,
+                name,
+                old_county_exact,
+                old_province_exact,
+                old_province_compact,
+                used_legacy_city_ids,
+            )
+
             old_cid = old.get("id")
             if isinstance(old_cid, int):
                 city_id = old_cid
+                used_legacy_city_ids.add(city_id)
                 matched_legacy_cities += 1
             else:
                 city_id = next_city_id
@@ -264,7 +302,7 @@ def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
                     "is_capital": bool(old.get("is_capital", False)),
                     "population": old.get("population"),
                     "postal_code": old.get("postal_code"),
-                    "county": normalize_fa(row.get("نام شهرستان")) or None,
+                    "county": county_name or None,
                     "county_code": code_piece(row.get("کد شهرستان"), 3),
                     "district": normalize_fa(row.get("نام بخش")) or None,
                     "district_code": code_piece(row.get("کد بخش"), 3),
@@ -276,9 +314,9 @@ def rebuild(rows: list[dict[str, Any]], legacy: list[dict[str, Any]]):
 
     stats = {
         "provinces": len(output),
-        "raw_coderec5_rows": EXPECTED_RAW_CITY_ROWS,
+        "raw_coderec5_rows": raw_count,
         "excluded_urban_subareas": len(excluded_rows),
-        "cities": sum(p["cities_count"] for p in output),
+        "cities": sum(province["cities_count"] for province in output),
         "legacy_enriched_cities": matched_legacy_cities,
     }
     return output, excluded_rows, stats
@@ -307,6 +345,7 @@ def write_provenance(path: Path, source_path: Path, stats: dict[str, int]) -> No
             "raw_coderec5_rows": stats["raw_coderec5_rows"],
             "excluded_urban_subareas": stats["excluded_urban_subareas"],
             "canonical_city_count": stats["cities"],
+            "legacy_enriched_cities": stats["legacy_enriched_cities"],
             "note": (
                 "Membership is source-backed as of 1402. Coordinates and English names are legacy "
                 "enrichment and may be null or require separate review. Later country-division "
@@ -327,6 +366,7 @@ def write_provenance(path: Path, source_path: Path, stats: dict[str, int]) -> No
                 "classifying a record as a city from coordinates alone",
                 "deleting records only because coordinates or aliases are similar",
                 "removing a numbered record unless its base city exists in the same source county",
+                "reusing one legacy numeric ID for multiple source rows",
             ],
         },
     }
@@ -356,8 +396,9 @@ def main() -> int:
     rebuilt, excluded, stats = rebuild(rows, legacy)
 
     Path(args.output).write_text(json.dumps(rebuilt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    Path(args.excluded_report).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.excluded_report).write_text(
+    excluded_path = Path(args.excluded_report)
+    excluded_path.parent.mkdir(parents=True, exist_ok=True)
+    excluded_path.write_text(
         json.dumps(
             [
                 {
@@ -371,8 +412,7 @@ def main() -> int:
             ],
             ensure_ascii=False,
             indent=2,
-        )
-        + "\n",
+        ) + "\n",
         encoding="utf-8",
     )
     write_provenance(Path(args.provenance), source_path, stats)
