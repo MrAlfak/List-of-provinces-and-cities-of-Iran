@@ -1,219 +1,64 @@
-# 📦 راهنمای انتشار | Publishing Guide
+# Publishing | راهنمای انتشار
 
-این راهنما مراحل انتشار پکیج در npm و PyPI را توضیح می‌دهد.
+## Release gate
 
-## پیش‌نیازها | Prerequisites
+Do not publish a release merely because the code tests pass. Data and code have separate freshness/quality requirements.
 
-### برای npm
+Before an npm/GitHub release:
+
 ```bash
-# ثبت‌نام در npm
-npm adduser
-
-# یا ورود
-npm login
-```
-
-### برای PyPI
-```bash
-# نصب ابزارهای لازم
-pip install build twine
-
-# ثبت‌نام در PyPI
-# https://pypi.org/account/register/
-```
-
-## انتشار در npm
-
-### 1. بررسی نهایی
-```bash
-# تست پکیج
-npm test
-
-# بررسی فایل‌های شامل شده
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python -m pytest tests/
+python scripts/audit_data.py
+python scripts/generate_all.py
 npm pack --dry-run
 ```
 
-### 2. بروزرسانی نسخه
-```bash
-# نسخه patch (2.0.0 -> 2.0.1)
-npm version patch
-
-# نسخه minor (2.0.0 -> 2.1.0)
-npm version minor
-
-# نسخه major (2.0.0 -> 3.0.0)
-npm version major
-```
-
-### 3. انتشار
-```bash
-# انتشار عمومی
-npm publish
-
-# انتشار با tag
-npm publish --tag beta
-```
-
-### 4. تایید
-```bash
-# نصب از npm
-npm install iran-cities-data
-
-# بررسی صفحه npm
-# https://www.npmjs.com/package/iran-cities-data
-```
-
-## انتشار در PyPI
-
-### 1. بررسی نهایی
-```bash
-# اجرای تست‌ها
-python -m pytest tests/
-
-# اعتبارسنجی داده‌ها
-python scripts/validate_data.py
-```
-
-### 2. بروزرسانی نسخه
-در فایل‌های زیر نسخه را بروز کنید:
-- `setup.py` -> `version="2.0.0"`
-- `pyproject.toml` -> `version = "2.0.0"`
-
-### 3. ساخت پکیج
-```bash
-# پاک‌سازی فایل‌های قبلی
-rm -rf dist/ build/ *.egg-info
-
-# ساخت پکیج
-python -m build
-```
-
-### 4. بررسی پکیج
-```bash
-# بررسی با twine
-twine check dist/*
-```
-
-### 5. انتشار در TestPyPI (اختیاری)
-```bash
-# انتشار در TestPyPI
-twine upload --repository testpypi dist/*
-
-# نصب از TestPyPI
-pip install --index-url https://test.pypi.org/simple/ iran-cities
-```
-
-### 6. انتشار در PyPI
-```bash
-# انتشار نهایی
-twine upload dist/*
-```
-
-### 7. تایید
-```bash
-# نصب از PyPI
-pip install iran-cities
-
-# بررسی صفحه PyPI
-# https://pypi.org/project/iran-cities/
-```
-
-## انتشار خودکار با GitHub Actions
-
-### تنظیم Secrets
-
-در تنظیمات GitHub repository:
-
-1. `Settings` -> `Secrets and variables` -> `Actions`
-2. اضافه کردن secrets:
-   - `NPM_TOKEN`: توکن npm
-   - `PYPI_TOKEN`: توکن PyPI
-
-### ایجاد Release
+If the release claims **official/current city coverage**, also require:
 
 ```bash
-# ایجاد tag
-git tag v2.0.0
-git push origin v2.0.0
-
-# یا از GitHub UI
-# Releases -> Create a new release
+python scripts/audit_data.py --strict
 ```
 
-پس از ایجاد release، GitHub Actions به طور خودکار:
-- پکیج را در npm منتشر می‌کند
-- پکیج را در PyPI منتشر می‌کند
+and verify that `data/provenance.json` records the source publisher, snapshot date/year, checksum, source URL/archive identifier, import command and validation result.
 
-## چک‌لیست قبل از انتشار
+## npm
 
-- [ ] تمام تست‌ها پاس شده‌اند
-- [ ] اعتبارسنجی داده‌ها موفق بوده
-- [ ] CHANGELOG.md بروز شده
-- [ ] نسخه در تمام فایل‌ها یکسان است
-- [ ] README.md کامل و بروز است
-- [ ] مستندات کامل است
-- [ ] فایل‌های غیرضروری در .npmignore هستند
-- [ ] LICENSE فایل موجود است
+The npm package is the supported package-registry distribution for v2.1.
 
-## نسخه‌گذاری | Versioning
+1. Update `package.json` and `CHANGELOG.md` together.
+2. Run the release gate above.
+3. Create a GitHub Release.
+4. `.github/workflows/publish.yml` validates again and runs `npm publish` using `NPM_TOKEN`.
 
-از [Semantic Versioning](https://semver.org/) استفاده می‌کنیم:
+`npm publish` runs `prepack`, which regenerates:
 
-- **MAJOR** (3.0.0): تغییرات ناسازگار
-- **MINOR** (2.1.0): ویژگی‌های جدید سازگار
-- **PATCH** (2.0.1): رفع باگ‌ها
-
-## پس از انتشار
-
-### 1. بروزرسانی مستندات
-```bash
-# بروزرسانی README با لینک‌های جدید
-# بروزرسانی CHANGELOG
+```text
+iran_cities.min.json
+iran_cities.csv
+iran_cities.geojson
+iran_cities.mysql.sql
+iran_cities.postgresql.sql
 ```
 
-### 2. اطلاع‌رسانی
-- توییت کردن
-- پست در Reddit
-- اطلاع به کاربران
+The SQL artifacts are generated at package time so a stale checked-in SQL dump cannot drift from the JSON source.
 
-### 3. نظارت
-- بررسی download stats
-- پاسخ به issues
-- بررسی feedback
+## PyPI
 
-## مشکلات رایج
+**PyPI publishing is disabled in v2.1.** The previous configuration could build metadata without guaranteeing that the installed wheel contained a usable dataset. Re-enable PyPI only after:
 
-### npm publish fails
-```bash
-# بررسی ورود
-npm whoami
+- a real importable Python package owns the data files;
+- wheel/sdist contents are explicitly controlled;
+- installation into a clean virtual environment is tested in CI;
+- an import/use smoke test passes from the installed wheel, not from the repository checkout.
 
-# ورود مجدد
-npm login
-```
+## Versioning
 
-### PyPI upload fails
-```bash
-# بررسی توکن
-# بررسی نام پکیج (باید یکتا باشد)
-# بررسی نسخه (نباید تکراری باشد)
-```
+Use semantic versioning for code/schema behavior. Dataset snapshot dates are separate metadata and must not be inferred from the package version or code release date.
 
-### Version conflict
-```bash
-# همیشه نسخه را در همه فایل‌ها بروز کنید:
-# - package.json
-# - setup.py
-# - pyproject.toml
-```
+- PATCH: compatible code/data-quality fixes that do not change public schema semantics.
+- MINOR: backward-compatible fields/endpoints/tooling.
+- MAJOR: incompatible schema/API behavior.
 
-## منابع
-
-- [npm Publishing Guide](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry)
-- [PyPI Publishing Guide](https://packaging.python.org/tutorials/packaging-projects/)
-- [Semantic Versioning](https://semver.org/)
-- [GitHub Actions](https://docs.github.com/en/actions)
-
----
-
-**نکته**: همیشه قبل از انتشار، پکیج را در محیط تست بررسی کنید!
+A change in the official administrative snapshot should always be documented in provenance and release notes even if the package semver change is only minor/patch.
