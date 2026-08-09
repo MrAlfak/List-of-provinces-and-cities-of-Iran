@@ -1,23 +1,29 @@
 cff-version: 1.2.0
-message: "If you use this dataset, please cite it as below."
+message: "If you use the Iran provinces and cities dataset in research or a published project, please cite this repository."
 authors:
   - family-names: "MrAlfak"
-    given-names: ""
-title: "Complete List of Iranian Provinces and Cities"
-version: 2.0.0
-date-released: 2024-01-15
+title: "Iran Provinces and Cities Dataset"
+version: 2.1.0
 url: "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran"
 repository-code: "https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran"
 keywords:
   - Iran
-  - cities
-  - provinces
-  - geography
-  - dataset
-  - geojson
-  - coordinates
-license: MIT
+  - Iranian cities
+  - Iranian provinces
+  - Persian
+  - Farsi
+  - administrative divisions
+  - location data
+  - JSON
+  - CSV
+  - GeoJSON
+  - MySQL
+  - PostgreSQL
+  - REST API
+license: GPL-3.0-only
 abstract: >
-  A comprehensive dataset of Iranian provinces and cities
-  including geographic coordinates, English and Persian names,
-  and various output formats (JSON, SQL, CSV, GeoJSON).
+  A source-backed dataset of 31 Iranian provinces and 1,450 canonical cities
+  based on the pinned Statistical Center of Iran 1402 administrative-division
+  snapshot. The repository provides JSON, CSV, GeoJSON, MySQL, PostgreSQL and
+  REST API access, source-backed identifiers, administrative hierarchy,
+  validation, audit tooling and reproducible data-generation workflows.
