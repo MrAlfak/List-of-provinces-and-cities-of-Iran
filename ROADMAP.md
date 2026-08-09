@@ -1,128 +1,62 @@
-# 🗺️ Roadmap | نقشه راه
+# Roadmap | نقشه راه
 
-## نسخه 2.0.0 ✅ (فعلی)
-- [x] ساختار پروژه حرفه‌ای
-- [x] 31 استان با اطلاعات کامل
-- [x] 883 شهر با مختصات جغرافیایی
-- [x] نام‌های انگلیسی برای همه شهرها
-- [x] فرمت‌های متنوع (JSON, SQL, CSV, GeoJSON)
-- [x] API Server با Flask
-- [x] تست‌های خودکار
-- [x] مستندات کامل
-- [x] نمونه‌های استفاده
+The project now prioritizes **source integrity and reproducibility before new features**.
 
-## نسخه 2.1.0 📅 (Q2 2024)
-### داده‌ها
-- [ ] تکمیل جمعیت تمام شهرها
-- [ ] اضافه کردن کدهای پستی
-- [ ] بررسی و اصلاح نام‌های انگلیسی auto-transliterated
-- [ ] اضافه کردن ارتفاع از سطح دریا
-- [ ] اضافه کردن منطقه زمانی
+## P0 — Source-backed canonical dataset
 
-### ویژگی‌ها
-- [ ] API با rate limiting
-- [ ] Cache mechanism
-- [ ] Pagination برای API
-- [ ] فیلترهای پیشرفته
-- [ ] Export به فرمت‌های بیشتر (XML, YAML)
+- [x] Stop using generated repository data as its own upstream source.
+- [x] Define provenance requirements in `data/provenance.json`.
+- [x] Add an importer for normalized administrative divisions.
+- [x] Make `divisionType=5` the canonical city-membership rule.
+- [x] Preserve legacy numeric IDs where possible and introduce stable source-backed identifiers.
+- [x] Remove unsafe manual duplicate deletion logic.
+- [ ] Obtain and archive/checksum the newest usable official administrative-division snapshot.
+- [ ] Rebuild `iran_cities.json` from that snapshot.
+- [ ] Manually resolve unmatched/renamed cities and verify province capitals.
+- [ ] Run `audit_data.py --strict` with zero unresolved semantic items before labeling the dataset authoritative.
 
-### مستندات
-- [ ] ویدیوهای آموزشی
-- [ ] مثال‌های بیشتر
-- [ ] Integration guides
+## P1 — Enrichment quality
 
-## نسخه 2.2.0 📅 (Q3 2024)
-### داده‌های جدید
-- [ ] اضافه کردن شهرستان‌ها (Counties)
-- [ ] اضافه کردن بخش‌ها (Districts)
-- [ ] اضافه کردن دهستان‌ها
-- [ ] مرزهای جغرافیایی استان‌ها (Polygons)
+- [ ] Replace weak automatic English transliterations with reviewed names/aliases and document the transliteration standard.
+- [ ] Re-verify coordinates independently from canonical city membership.
+- [ ] Add coordinate provenance and confidence/source fields.
+- [ ] Add population only with census year/source metadata.
+- [ ] Add postal information only where licensing/source and geographic meaning are clear.
 
-### ویژگی‌ها
-- [ ] نقشه تعاملی آنلاین
-- [ ] جستجوی پیشرفته با فیلترها
-- [ ] مقایسه شهرها
-- [ ] آمار و نمودارها
+## P1 — API and distribution
 
-## نسخه 3.0.0 📅 (Q4 2024)
-### داده‌های گسترده
-- [ ] اضافه کردن روستاها (Villages)
-- [ ] داده‌های تاریخی (تغییرات در طول زمان)
-- [ ] اطلاعات اقتصادی
-- [ ] اطلاعات آب و هوایی
+- [x] Version API under `/api/v1` while keeping compatibility aliases.
+- [x] Add pagination, normalized Persian search, filtering, health/meta endpoints, and opt-in CORS.
+- [x] Split MySQL/PostgreSQL generation and fix SQL escaping.
+- [x] Run production container with Gunicorn and non-root user.
+- [ ] Add OpenAPI schema and contract tests.
+- [ ] Add ETag/conditional requests for large list responses.
+- [ ] Publish immutable data snapshots as GitHub Release assets.
 
-### API پیشرفته
-- [ ] GraphQL API
-- [ ] WebSocket برای real-time updates
-- [ ] Authentication & Authorization
-- [ ] API versioning
-- [ ] Rate limiting per user
+## P2 — Packaging
 
-### پلتفرم‌های جدید
-- [ ] Mobile SDK (React Native)
-- [ ] npm package
-- [ ] PyPI package
-- [ ] WordPress plugin
-- [ ] Browser extension
+- [x] Keep npm publishing behind validation/tests/generation.
+- [x] Disable the broken PyPI publishing path.
+- [ ] Build a real self-contained Python package containing the dataset and API helpers.
+- [ ] Test wheel installation in a clean environment before re-enabling PyPI.
 
-## نسخه 4.0.0 📅 (2025)
-### چندزبانه
-- [ ] پشتیبانی از زبان کردی
-- [ ] پشتیبانی از زبان عربی
-- [ ] پشتیبانی از زبان ترکی آذری
-- [ ] پشتیبانی از زبان بلوچی
+## P2 — Administrative hierarchy
 
-### هوش مصنوعی
-- [ ] پیشنهاد شهرهای مشابه
-- [ ] تشخیص خودکار مختصات
-- [ ] تصحیح خودکار داده‌ها
-- [ ] پیش‌بینی جمعیت
+Once the canonical source is refreshed:
 
-### Integration
-- [ ] Integration با Google Maps
-- [ ] Integration با OpenStreetMap
-- [ ] Integration با سیستم‌های پستی
-- [ ] Integration با سرویس‌های آب و هوا
+- [ ] Publish counties, districts and rural districts as first-class entities instead of mixing their names into city data.
+- [ ] Add stable parent relationships and source codes.
+- [ ] Publish migration notes when official divisions change.
+- [ ] Add optional province/county polygon datasets only with appropriate source/licensing metadata.
 
-## ایده‌های آینده 💡
-- [ ] Mobile App (iOS & Android)
-- [ ] Desktop App (Electron)
-- [ ] Chrome Extension
-- [ ] VS Code Extension
-- [ ] Figma Plugin
-- [ ] Slack Bot
-- [ ] Telegram Bot
-- [ ] Discord Bot
+## Release gate
 
-## مشارکت | Contributing
-می‌خواهید در توسعه این پروژه مشارکت کنید؟
+A release that claims current/official city coverage must satisfy all of the following:
 
-Want to contribute to the development of this project?
-
-1. یک feature از roadmap را انتخاب کنید
-2. یک Issue باز کنید و بگویید می‌خواهید روی آن کار کنید
-3. منتظر تایید باشید
-4. شروع به کار کنید!
-
-## اولویت‌بندی | Prioritization
-اولویت‌ها بر اساس:
-- تعداد درخواست‌های کاربران
-- اهمیت ویژگی
-- پیچیدگی پیاده‌سازی
-- منابع موجود
-
-Priorities are based on:
-- Number of user requests
-- Feature importance
-- Implementation complexity
-- Available resources
-
-## بازخورد | Feedback
-نظرات و پیشنهادات خود را در [GitHub Discussions](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/discussions) با ما در میان بگذارید.
-
-Share your feedback and suggestions in [GitHub Discussions](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/discussions).
-
----
-
-**آخرین بروزرسانی | Last Updated**: 2024-01-15  
-**نسخه فعلی | Current Version**: 2.0.0
+1. An identified source snapshot and checksum are recorded.
+2. Canonical membership is rebuilt from the source hierarchy.
+3. Structural validation passes.
+4. Strict semantic audit passes.
+5. Derived formats are regenerated from exactly that canonical JSON.
+6. API and Docker smoke tests pass.
+7. Documentation states the actual snapshot date rather than the code release date.
