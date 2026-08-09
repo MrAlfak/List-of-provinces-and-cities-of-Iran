@@ -1,221 +1,156 @@
-# 🇮🇷 لیست کامل استان‌ها و شهرهای ایران
+# 🇮🇷 داده استان‌ها و شهرهای ایران
 
-[![نسخه](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran)
-[![لایسنس](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![زبان](https://img.shields.io/badge/language-Persian-red.svg)](README.fa.md)
-[![تست‌ها](https://img.shields.io/badge/tests-9%20passed-brightgreen.svg)](tests/)
-[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/MrAlfak/List-of-provinces-and-cities-of-Iran?style=social)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/network/members)
+[![Tests](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml/badge.svg)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/actions/workflows/tests.yml)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-این مخزن شامل **کامل‌ترین و حرفه‌ای‌ترین** دیتای استان‌ها و شهرهای ایران برای توسعه‌دهندگان است.
+فارسی | [English](README.md)
 
----
+یک دیتاست توسعه‌دهنده‌محور برای اطلاعات مکانی ایران، همراه با JSON، CSV، GeoJSON، تولیدکننده SQL، API خواندنی، ابزارهای اعتبارسنجی و مسیر مشخص برای ثبت منبع داده.
 
-## 🌟 ستاره بدهید!
+> [!WARNING]
+> **وضعیت داده:** فایل فعلی `iran_cities.json` یک دیتاست **قدیمی و هنوز تأییدنشده به‌عنوان مرجع رسمی** است. نسخه‌های قبلی اشتباهاً همه رکوردها را «شهر رسمی» معرفی می‌کردند. در داده قدیمی مواردی از مخلوط‌شدن واحدهای اداری/پایانه‌های مرزی با شهرها و همچنین نام‌های انگلیسی ماشینی کم‌کیفیت وجود دارد. تا قبل از بازسازی از یک snapshot مشخص تقسیمات کشوری و عبور از audit سخت‌گیرانه، از این فایل به‌عنوان مرجع قانونی یا رسمی استفاده نکنید.
 
-اگر این پروژه برایتان مفید بود، لطفاً با دادن ⭐️ از آن حمایت کنید! این کار به دیگران کمک می‌کند پروژه را پیدا کنند.
+## تغییرات مهم نسخه ۲.۱
 
-[![GitHub stars](https://img.shields.io/github/stars/MrAlfak/List-of-provinces-and-cities-of-Iran?style=for-the-badge&logo=github)](https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran/stargazers)
+- حذف چرخه اشتباه که JSON همین مخزن را دوباره به‌عنوان منبع بالادستی دانلود می‌کرد.
+- حذف لیست دستی و خطرناک برای پاک‌کردن «تکراری‌ها»؛ اکنون فقط duplicate کاملاً یکسان قابل حذف خودکار است.
+- اضافه‌شدن pipeline بازسازی بر اساس نوع رسمی تقسیمات کشوری (`divisionType=5` برای شهر).
+- حفظ ID عددی قبلی تا حد امکان و اضافه‌شدن `uid` و `official_code` پایدار برای داده منبع‌دار.
+- جداسازی اعتبارسنجی ساختاری از ممیزی معنایی و کیفیت enrichment.
+- امن‌ترشدن API: نسخه `/api/v1`، pagination، نرمال‌سازی فارسی، CORS اختیاری، health/meta و حذف debug پیش‌فرض.
+- تولید SQL واقعی و جداگانه برای MySQL و PostgreSQL با escaping صحیح.
+- اجرای API داخل Docker با Gunicorn، کاربر non-root و healthcheck واقعی.
+- CI برای validator، تست‌ها، audit، ساخت خروجی‌ها و smoke-test کانتینر.
 
----
+## فایل‌های اصلی
 
-## ✨ ویژگی‌ها
-
-✅ **883 شهر**: شامل تمامی شهرهای رسمی کشور  
-📍 **مختصات جغرافیایی**: طول و عرض جغرافیایی دقیق برای هر شهر  
-🏛️ **مرکز استان**: مشخص بودن مرکز هر استان با فیلد `is_capital`  
-🌍 **چند فرمتی**: ارائه دیتا در قالب‌های JSON, SQL, CSV, و GeoJSON  
-⚡ **نسخه Minified**: برای استفاده بهینه در پروژه‌های فرانت‌اِند  
-🚀 **API Server**: اسکریپت آماده برای راه‌اندازی سریع API محلی  
-🆔 **شناسه یکتا**: هر استان و شهر دارای ID یکتا  
-🌐 **نام انگلیسی**: تمام استان‌ها و شهرها دارای نام انگلیسی  
-👥 **جمعیت**: اطلاعات جمعیتی شهرها (در حال تکمیل)  
-📮 **کد پستی**: کدهای پستی مراکز شهرها (در حال تکمیل)
-
-## 📦 محتویات مخزن
-
-```
-├── iran_cities.json          # منبع اصلی دیتا (خوانا و کامل)
-├── iran_cities.min.json      # نسخه فشرده برای وب
-├── iran_cities.sql           # اسکریپت MySQL/PostgreSQL
-├── iran_cities.csv           # مناسب برای Excel
-├── iran_cities.geojson       # استاندارد GeoJSON
-├── api_server.py             # سرور API ساده
-├── tests/                    # تست‌های خودکار
-└── docs/                     # مستندات کامل
+```text
+iran_cities.json               # دیتاست قدیمی سازگاری / خروجی اصلی پس از rebuild تأییدشده
+iran_cities.min.json           # JSON فشرده مشتق‌شده
+iran_cities.csv                # CSV مشتق‌شده
+iran_cities.geojson            # GeoJSON مشتق‌شده
+api_server.py                   # API فقط خواندنی
+scripts/rebuild_from_divisions.py
+scripts/validate_data.py
+scripts/audit_data.py
+scripts/generate_all.py
+data/provenance.json            # وضعیت و سیاست منبع داده
 ```
 
-## 🚀 نصب و استفاده
-
-### 1️⃣ دانلود مستقیم
-
+فایل‌های SQL به‌صورت قابل بازتولید ساخته می‌شوند:
 
 ```bash
-# دانلود فایل JSON
-curl -O https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
-
-# یا با wget
-wget https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json
+python scripts/generate_sql.py --dialect both
+# iran_cities.mysql.sql
+# iran_cities.postgresql.sql
 ```
 
-### 2️⃣ استفاده در JavaScript/TypeScript
-
-```javascript
-// دانلود از CDN
-fetch('https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.min.json')
-  .then(response => response.json())
-  .then(data => console.log(data));
-
-// یا import مستقیم
-import iranCities from './iran_cities.json';
-```
-
-### 3️⃣ استفاده در Python
-
-```python
-import json
-import requests
-
-# دانلود از اینترنت
-url = 'https://raw.githubusercontent.com/MrAlfak/List-of-provinces-and-cities-of-Iran/main/iran_cities.json'
-response = requests.get(url)
-data = response.json()
-
-# یا خواندن از فایل محلی
-with open('iran_cities.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-```
-
-### 4️⃣ استفاده از SQL در دیتابیس
+## شروع سریع
 
 ```bash
-# MySQL
-mysql -u username -p database_name < iran_cities.sql
-
-# PostgreSQL
-psql -U username -d database_name -f iran_cities.sql
+git clone https://github.com/MrAlfak/List-of-provinces-and-cities-of-Iran.git
+cd List-of-provinces-and-cities-of-Iran
+python -m pip install -r requirements.txt
+python scripts/validate_data.py
+python -m pytest tests/
+python scripts/audit_data.py
 ```
 
-### 5️⃣ راه‌اندازی API محلی
+Audit معمولی روی دیتاست legacy فقط گزارش می‌دهد. دیتاست جدیدی که از منبع تقسیمات کشوری بازسازی شده باید حالت strict را هم پاس کند:
 
 ```bash
-# نصب وابستگی‌ها
-pip install flask flask-cors
+python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+```
 
-# اجرای سرور
+## بازسازی از تقسیمات کشوری
+
+پاسخ به سؤال **«آیا این رکورد واقعاً شهر است؟»** باید از منبع مشخص تقسیمات کشوری بیاید، نه از مختصات، نتیجه نقشه یا شباهت نام.
+
+Importer ورودی CSV نرمال‌شده UTF-8 با ستون‌های زیر را می‌پذیرد:
+
+```text
+id,parentCountryDivisionId,name,code,divisionType
+```
+
+که در آن `divisionType=5` یعنی شهر.
+
+```bash
+python scripts/rebuild_from_divisions.py \
+  --divisions-csv /path/to/divisions.csv \
+  --legacy-json iran_cities.json \
+  --output iran_cities.rebuilt.json
+
+python scripts/validate_data.py --input iran_cities.rebuilt.json
+python scripts/audit_data.py --input iran_cities.rebuilt.json --strict
+```
+
+جزئیات بیشتر در [`data/README.md`](data/README.md) و [`data/provenance.json`](data/provenance.json) آمده است. فایل تقسیمات کشوری سال ۱۳۹۸ مرکز آمار ایران یک baseline بازتولیدپذیر است، اما برای انتشار جدید باید در صورت دسترسی از snapshot رسمی جدیدتر استفاده شود.
+
+## API
+
+برای توسعه محلی:
+
+```bash
 python api_server.py
-
-# سرور روی پورت 8000 اجرا می‌شود
 ```
 
-## 📡 API Endpoints
+برای اجرای مشابه production:
 
-پس از اجرای `api_server.py`:
-
-```
-GET /api/provinces              # لیست تمام استان‌ها
-GET /api/provinces/:id          # اطلاعات یک استان خاص
-GET /api/cities                 # لیست تمام شهرها
-GET /api/cities/:id             # اطلاعات یک شهر خاص
-GET /api/search?q=تهران         # جستجو در شهرها و استان‌ها
+```bash
+docker compose up --build
 ```
 
-## 📊 ساختار داده JSON
+Endpointهای اصلی:
 
+```text
+GET /health
+GET /api/v1/meta
+GET /api/v1/provinces
+GET /api/v1/provinces/<id>
+GET /api/v1/cities?page=1&per_page=100&province_id=<id>&q=<query>
+GET /api/v1/cities/<id>
+GET /api/v1/search?q=<query>
+```
+
+مسیرهای قدیمی `/api/...` برای سازگاری باقی مانده‌اند. CORS فقط در صورت تنظیم صریح `CORS_ORIGINS` فعال می‌شود.
+
+## مدل داده
+
+در snapshot منبع‌دار، علاوه بر فیلدهای قبلی می‌توان شناسه پایدار و سلسله‌مراتب را داشت:
 
 ```json
 {
   "id": 1,
-  "province": "آذربایجان شرقی",
-  "english_name": "East Azerbaijan",
-  "phone_code": "041",
-  "cities_count": 55,
+  "uid": "ir:province:<source-code>",
+  "official_code": "<source-code>",
+  "province": "...",
   "cities": [
     {
       "id": 1,
-      "name": "تبریز",
-      "english_name": "Tabriz",
-      "latitude": "38.0739964",
-      "longitude": "46.2961952",
-      "is_capital": true,
-      "population": 1558693,
-      "postal_code": "5138683751"
+      "uid": "ir:city:<source-code>",
+      "official_code": "<source-code>",
+      "name": "...",
+      "county": "...",
+      "district": "...",
+      "latitude": null,
+      "longitude": null
     }
   ]
 }
 ```
 
-## 🗺️ استفاده از GeoJSON در نقشه
+مختصات و نام انگلیسی enrichment هستند و تا زمان تأیید مستقل می‌توانند `null` باشند.
 
-```javascript
-// با Leaflet
-fetch('iran_cities.geojson')
-  .then(response => response.json())
-  .then(data => {
-    L.geoJSON(data, {
-      onEachFeature: function(feature, layer) {
-        layer.bindPopup(feature.properties.name);
-      }
-    }).addTo(map);
-  });
+## اصلاح داده
 
-// با Mapbox
-map.addSource('iran-cities', {
-  type: 'geojson',
-  data: 'iran_cities.geojson'
-});
-```
+برای هر اصلاح داده، منبع و تاریخ/snapshot پشتیبان تغییر را ارائه کنید. صرفاً به دلیل یکسان‌بودن مختصات، شباهت نوشتاری یا alias بودن، یک رکورد را حذف نکنید.
 
-## 🧪 تست‌ها
+## انتشار
 
-```bash
-# اجرای تست‌ها
-python -m pytest tests/
+پکیج npm قبل از انتشار اعتبارسنجی، تست و بازتولید می‌شود. انتشار PyPI عمداً غیرفعال شده تا زمانی که wheel مستقل و قابل نصب ساخته و در CI تست شود.
 
-# تست یکتا بودن نام‌ها
-python tests/test_uniqueness.py
+## مجوز
 
-# تست صحت مختصات
-python tests/test_coordinates.py
-```
+کد و محتوای تولیدشده در خود مخزن تحت MIT است؛ منبع‌های داده بالادستی ممکن است شرایط و مجوز جداگانه داشته باشند و باید قبل از import ثبت شوند.
 
-## 📈 آمار
-
-- **31 استان**
-- **883 شهر**
-- **مختصات جغرافیایی دقیق**
-- **کدهای تلفن استانی**
-- **نام‌های فارسی و انگلیسی**
-
-## 🤝 مشارکت
-
-ما به دنبال کامل‌تر کردن این دیتا هستیم! اگر:
-
-- اطلاعات جمعیتی دقیق دارید
-- کدهای پستی شهرها را می‌دانید
-- خطایی در داده‌ها پیدا کردید
-- پیشنهاد بهبود دارید
-
-لطفاً **Pull Request** بفرستید یا **Issue** باز کنید.
-
-### راهنمای مشارکت
-
-1. Fork کنید
-2. برنچ جدید بسازید: `git checkout -b feature/amazing-feature`
-3. تغییرات را commit کنید: `git commit -m 'Add amazing feature'`
-4. Push کنید: `git push origin feature/amazing-feature`
-5. Pull Request باز کنید
-
-## 📝 لایسنس
-
-این پروژه تحت لایسنس MIT منتشر شده است - فایل [LICENSE](LICENSE) را ببینید.
-
-## 🙏 تشکر
-
-تهیه شده با ❤️ برای جامعه برنامه‌نویسی ایران
-
----
-
-**آخرین بروزرسانی**: 2024  
-**نسخه**: 2.0.0  
-**نگهدارنده**: [@MrAlfak](https://github.com/MrAlfak)
+**نسخه:** ۲.۱.۰
