@@ -5,6 +5,13 @@ on:
     branches: [main, develop, "agent/**"]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      rebuild_1402:
+        description: "Rebuild canonical dataset from pinned SCI 1402 snapshot"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -40,8 +47,8 @@ jobs:
       - name: Run regression tests
         run: python -m pytest tests/
 
-      - name: Audit dataset
-        run: python scripts/audit_data.py --json-output data/audit-report.json
+      - name: Audit dataset membership
+        run: python scripts/audit_data.py --strict --json-output /tmp/audit-report.json
 
       - name: Generate derived formats
         run: python scripts/generate_all.py
@@ -50,6 +57,21 @@ jobs:
         run: |
           grep -F "Sowme''eh Sara" iran_cities.mysql.sql
           grep -F "Sowme''eh Sara" iran_cities.postgresql.sql
+
+      - name: Verify canonical source-backed invariants
+        run: |
+          python - <<'PY'
+          import json
+          data = json.load(open('iran_cities.json', encoding='utf-8'))
+          provenance = json.load(open('data/provenance.json', encoding='utf-8'))
+          canonical = provenance['canonical_dataset']
+          assert canonical['status'] == 'source-backed'
+          assert canonical['snapshot_year_jalali'] == 1402
+          assert len(data) == 31
+          assert sum(len(p['cities']) for p in data) == 1450
+          assert all(c.get('official_code') for p in data for c in p['cities'])
+          print('verified source-backed snapshot: 31 provinces / 1450 cities')
+          PY
 
   docker:
     runs-on: ubuntu-latest
@@ -70,17 +92,14 @@ jobs:
           exit 1
 
   rebuild-1402:
-    if: >-
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/agent/data-integrity-hardening' &&
-      !contains(github.event.head_commit.message, '[data-rebuild]')
+    if: github.event_name == 'workflow_dispatch' && inputs.rebuild_1402 == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/data-integrity-hardening
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -88,7 +107,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Download pinned SCI 1402 snapshot
+      - name: Download pinned SCI 1402 snapshot and data license
         run: |
           curl --fail --location --retry 3 \
             --output /tmp/iran-divisions-1402.json \
@@ -123,7 +142,7 @@ jobs:
       - name: Generate source-backed artifacts
         run: python scripts/generate_all.py
 
-      - name: Commit rebuilt data to PR branch
+      - name: Commit rebuilt data to selected branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -143,4 +162,4 @@ jobs:
             exit 0
           fi
           git commit -m "Rebuild canonical dataset from SCI 1402 snapshot [data-rebuild]"
-          git push origin HEAD:agent/data-integrity-hardening
+          git push origin HEAD:${{ github.ref_name }}
